@@ -1,0 +1,36 @@
+{
+  "name": "disanger",
+  "version": "1.0.0",
+  "description": "A website to discharge the anger.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server --mode development --open",
+    "test" : "node_modules/.bin/tape tests/*.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/meoke/disanger.git"
+  },
+  "author": "Paulina Dziadkiewicz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/meoke/disanger/issues"
+  },
+  "homepage": "https://github.com/meoke/disanger#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "babel-loader": "^8.1.0",
+    "html-webpack-plugin": "^4.3.0",
+    "tape": "^5.0.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "regenerator-runtime": "^0.13.5"
+  }
+}
