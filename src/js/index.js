@@ -1,5 +1,13 @@
 import x from './test';
-console.log('index.js zmieniony znowu paulina')
-const y = 23;
-console.log(x);
-console.log(`This y is ${y}`)
+import '../css/style.css';
+
+function showRelief() {
+    const input = document.getElementById("angerInput");
+    const inputLength = input.value.length;
+    
+    const relief = document.getElementById("relief");
+    relief.textContent = inputLength;
+}
+  
+const el = document.getElementById("angerInput");
+el.addEventListener("keyup", showRelief);

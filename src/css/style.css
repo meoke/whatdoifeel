@@ -1,3 +1,21 @@
-div{
-    background-color: red;
+header{
+    text-align: center;
+    margin: 5%;
 }
+
+#headerTo{
+    text-transform: uppercase;
+}
+
+em:nth-child(1){
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+em:nth-child(2){
+    font-family: 'Times New Roman', Times, serif;
+}
+
+em:nth-child(3){
+    font-family: 'Courier New', Courier, monospace;
+}
+
