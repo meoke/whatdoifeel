@@ -7,7 +7,7 @@
     "dev": "webpack --mode development",
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development --open",
-    "test": "node_modules/.bin/tape tests/*.test.js"
+    "test": "node_modules/.bin/tape --experimental-modules tests/**.test.mjs"
   },
   "repository": {
     "type": "git",
