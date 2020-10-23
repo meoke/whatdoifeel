@@ -1,4 +1,8 @@
-$arr = array('chuj','chuja', 'chujek', 'chuju', 'chujem', 'chujnia',
+const getStem = require('stemmer_pl')
+const fs = require('fs')
+// import {getFileSync, writeFileSync} from 'fs'
+
+const vulgarWords = ['chuj','chuja', 'chujek', 'chuju', 'chujem', 'chujnia',
 'chujowy', 'chujowa', 'chujowe', 'cipa', 'cipę', 'cipe', 'cipą',
 'cipie', 'dojebać','dojebac', 'dojebie', 'dojebał', 'dojebal',
 'dojebała', 'dojebala', 'dojebałem', 'dojebalem', 'dojebałam',
@@ -121,6 +125,19 @@ $arr = array('chuj','chuja', 'chujek', 'chuju', 'chujem', 'chujnia',
 'zapierdolila', 'zapierdolą', 'zapierdola', 'zapierniczać',
 'zapierniczający', 'zasrać', 'zasranym', 'zasrywać', 'zasrywający',
 'zesrywać', 'zesrywający', 'zjebać', 'zjebac', 'zjebał', 'zjebal',
-'zjebała', 'zjebala', 'zjebana', 'zjebią', 'zjebali', 'zjeby');
+'zjebała', 'zjebala', 'zjebana', 'zjebią', 'zjebali', 'zjeby'];
 
-http://marcinmazurek.com.pl/polskie-wulgaryzmy
+const stopWordsFilePath = 'data/stopwords_PL.txt'
+const stopWords = fs.readFileSync(stopWordsFilePath, 'utf-8').split(/\r\n|\n|\r/);
+
+
+function stemUniqueSave(words, outputPath){
+    const wordsStemmed = words.map(getStem)
+    const uniqueStemmedWords = new Set(wordsStemmed.map(getStem))
+    const toSave = Array.from(uniqueStemmedWords).join("\n")
+    fs.writeFileSync(outputPath, toSave);
+}
+
+
+stemUniqueSave(stopWords, 'data/stopwords_stem_PL.txt')
+stemUniqueSave(vulgarWords, 'data/vulgarWords_stem_PL.txt')

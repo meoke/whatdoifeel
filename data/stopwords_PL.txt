@@ -1,5 +1,3 @@
-https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt
-
 a
 aby
 ach
