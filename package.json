@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "fast-csv": "^4.3.2",
     "regenerator-runtime": "^0.13.7",
     "stemmer_pl": "^1.0.1"
   }

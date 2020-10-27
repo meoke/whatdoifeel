@@ -1,38 +1,67 @@
-const {readFileSync} = require('fs');
+// const {readFileSync, createReadStream} = require('fs');
+// const { EOL } = require('os');
+// const { parse, parseFile } = require('fast-csv');
+
+const fs = require('fs');
+const csv = require('@fast-csv/parse');
+
+export class AngerWord {
+    constructor(word, angerValue) {
+        this.word = word;
+        this.angerValue = angerValue;
+    }
+}
 
 export class AngerCounter {
-    static stopwords = AngerCounter.readWordsFile("data/stopwords_PL.txt")
-    static vulgarStems = AngerCounter.readWordsFile("data/vulgarWords_stem_PL.txt")
+    static words = AngerCounter.readWords()
 
-    static getScore(word) {
-        if(AngerCounter.isStopword(word)){
-            return 0;
+    static async getScore(word) {
+        const w = (await AngerCounter.words).find(a => a.word == word)
+        if (w === undefined){
+            return -1;
         }
-        if(AngerCounter.isVulgarStem(word)){
-            return 10;
-        }
-        return -1;
+        return w.angerValue;
     }
 
-    static isStopword(word) {
-        return AngerCounter.stopwords.includes(word);
+    static async readWords() {
+        let stopwords = AngerCounter.readTxtFile("data/stopwords_PL.txt").map(word => new AngerWord(word, 0))
+        let vulgarStems = AngerCounter.readTxtFile("data/vulgarWords_stem_PL.txt").map(word => new AngerWord(word, 10))
+        let emotionalStems = await AngerCounter.readCSVFile("data/emotionalWords.csv", "word", "meanAnger")
+        emotionalStems = emotionalStems.map(data => new AngerWord(data.word, parseFloat(data.meanAnger)))
+        return [...stopwords, ...vulgarStems, ...emotionalStems]
     }
 
-    static isVulgarStem(word) {
-        return AngerCounter.vulgarStems.includes(word);
-    }
-
-    static readWordsFile(fileName) {
+    static readTxtFile(fileName) {
         let words;
+
+        return fs.promises.readFile(fileName, {encoding: 'utf-8'});
+
+        fs.readFile(fileName, (err, data) => {
+            if (err) throw err;
+            console.log(data);
+          });
+
         try {
-            words = readFileSync(fileName, 'utf-8').split(/\r\n|\n|\r/);
-            console.log('words read')
+            words = fs.readFileSync(fileName, 'utf-8').split(/\r\n|\n|\r/);
         } catch(error) {
             throw new Error(`Could not read file: ${fileName}` + error.message)
         };
 
         return words
     }
+
+    static readCSVFile(fileName) {
+        return new Promise((resolve, reject) => {
+            let csvLines = []
+            csv.parseFile(fileName, { headers: true })
+                .on('error', error => reject(error))
+                .on('data', data => csvLines.push(data))
+                .on('end', () => resolve(csvLines));
+        }
+    )
+    }
 }
+
+
 
 export default AngerCounter
