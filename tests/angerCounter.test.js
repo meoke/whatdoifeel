@@ -5,14 +5,18 @@ const {readFile} = require('fs').promises;
 const csv = require('fast-csv');
 const {AngerCounter} = require('../src/js/angerCounter.js'); 
 
+var runAllTestExamples = process.argv[3] == 'true'
+
 suite('get Anger score', function(t){
     t.test('a stop word should score 0', function(t){
         readFile('data/stopwords_PL.txt', 'utf-8')
         .then((data) => {
-            const stopwords = data.split(/\r\n|\n|\r/);
+            let stopwords = data.split(/\r\n|\n|\r/);
+            stopwords = runAllTestExamples ? stopwords : stopwords.slice(0,5)
+    
             const expectedScore = 0;
 
-            const xs = stopwords.slice(0,5).map(word => {
+            const assertPromises = stopwords.map(word => {
                 const scorePromise = AngerCounter.getScore(word)
                 return scorePromise
                 .then(score => {
@@ -20,43 +24,54 @@ suite('get Anger score', function(t){
                 })
                 
             })
-            Promise.all(xs).then(()=> {
+            Promise.all(assertPromises).then(()=> {
                 t.end()
             })
-
-
         })
         .catch((error) => {throw error});
-
     });
 
-    // t.test('a vulgar word stem should score 10', function(t){
-    //     readFile('data/vulgarWords_stem_PL.txt', 'utf-8')
-    //     .then((data) => {
-    //         const stopwords = data.split(/\r\n|\n|\r/);
-    //         const expectedScore = 10;
 
-    //         for(let vulgarWordStem of stopwords.splice(0,10)){
-    //             t.equal(await AngerCounter.getScore(vulgarWordStem), expectedScore)
-    //         }
-    //     })
-    //     .catch((error) => {throw error});
+    t.test('a vulgar word stem should score 10', function(t){
+        readFile('data/vulgarWords_stem_PL.txt', 'utf-8')
+        .then((data) => {
+            let vulgarwords = data.split(/\r\n|\n|\r/);
+            vulgarwords = runAllTestExamples ? vulgarwords : vulgarwords.slice(0,5)
+            
+            const expectedScore = 10;
 
-    //     t.end();
-    // })
+            const assertPromises = vulgarwords.map(word => {
+                const scorePromise = AngerCounter.getScore(word)
+                return scorePromise
+                .then(score => {
+                    t.equal(score, expectedScore)
+                })
+                
+            })
+            Promise.all(assertPromises).then(()=> {
+                t.end()
+            })
+        })
+        .catch((error) => {throw error});
+    })
 
-    // t.test('an emotional word stem should score as specified in emotionalWords.csv', function(t){
-    //     readFile('data/emotionalWords_stem_PL.txt', 'utf-8')
-    //     .then((data) => {
-    //         const stopwords = data.split(/\r\n|\n|\r/);
-    //         const expectedScore = 10;
-
-    //         for(let vulgarWordStem of stopwords){
-    //             t.equal(AngerCounter.getScore(vulgarWordStem), expectedScore)
-    //         }
-    //     })
-    //     .catch((error) => {throw error});
-
-    //     t.end();
-    // })
+    t.test('an emotional word stem should score as specified in emotionalWords.csv', function(t){
+        let csvLines = [];
+        csv.parseFile("data/emotionalWords.csv", { headers: true })
+            .on('error', error => reject(error))
+            .on('data', data => {csvLines.push(data)})
+            .on('end', () => {
+                csvLines = runAllTestExamples ? csvLines : csvLines.slice(0,5)
+                const assertPromises = csvLines.map(csvLine => {
+                                    const scorePromise = AngerCounter.getScore(csvLine.word)
+                                    return scorePromise
+                                    .then(score => {
+                                        t.equal(String(score), csvLine.meanAnger)
+                                })  
+                })
+                Promise.all(assertPromises).then(()=> {
+                    t.end()
+                })
+            });
+    })
 });
