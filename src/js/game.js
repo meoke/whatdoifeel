@@ -1,7 +1,5 @@
 import AngerCounter from "./angerCounter";
 import GameState from "./gameState";
-import GameState from './gameState'
-import AngerCounter from './angerCounter'
 import RapidityCounter from './rapidityCounter'
 
 export class Game{
@@ -10,8 +8,18 @@ export class Game{
         this.counters = [new AngerCounter(), new RapidityCounter()]
     }
 
-    sendNewWord(word, timestamp) {
-        scores = this.counters.map(counter => counter.getScore(word, timestamp))
-        // niech counters przyjmują pary słowo, timestamp albo obiekt
+    sendInput(gameInput) {
+        score = this.counters.
+                    map(counter => counter.getScore(gameInput)).
+                    reduce((a,b)=>a+b, 0)
+        this.state.addPoints(score)
+        this.state.addInput(input)
+    }
+}
+
+export class GameInput{
+    constructor(word, timestamp){
+        this.word = word
+        this.timestamp = timestamp
     }
 }

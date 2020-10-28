@@ -4,10 +4,13 @@ const suite = require('tape-suite')
 const {readFile} = require('fs').promises;
 const csv = require('fast-csv');
 const {AngerCounter} = require('../src/js/angerCounter.js'); 
+const {GameInput} = require('../src/js/game')
 
 var runAllTestExamples = process.argv[3] == 'true'
 
 suite('get Anger score', function(t){
+    let ac = new AngerCounter()
+
     t.test('a stop word should score 0', function(t){
         readFile('data/stopwords_PL.txt', 'utf-8')
         .then((data) => {
@@ -17,7 +20,7 @@ suite('get Anger score', function(t){
             const expectedScore = 0;
 
             const assertPromises = stopwords.map(word => {
-                const scorePromise = AngerCounter.getScore(word)
+                const scorePromise = ac.getScore(new GameInput(word))
                 return scorePromise
                 .then(score => {
                     t.equal(score, expectedScore)
@@ -41,7 +44,7 @@ suite('get Anger score', function(t){
             const expectedScore = 10;
 
             const assertPromises = vulgarwords.map(word => {
-                const scorePromise = AngerCounter.getScore(word)
+                const scorePromise = ac.getScore(new GameInput(word))
                 return scorePromise
                 .then(score => {
                     t.equal(score, expectedScore)
@@ -63,7 +66,7 @@ suite('get Anger score', function(t){
             .on('end', () => {
                 csvLines = runAllTestExamples ? csvLines : csvLines.slice(0,5)
                 const assertPromises = csvLines.map(csvLine => {
-                                    const scorePromise = AngerCounter.getScore(csvLine.word)
+                                    const scorePromise = ac.getScore(new GameInput(csvLine.word))
                                     return scorePromise
                                     .then(score => {
                                         t.equal(String(score), csvLine.meanAnger)
@@ -73,5 +76,15 @@ suite('get Anger score', function(t){
                     t.end()
                 })
             });
+    })
+
+    t.test('unknown word should return score 0', function(t){
+        const expectedScore = 0
+        const scorePromise = ac.getScore(new GameInput("foo")).then(
+            actualScore => {
+                t.equal(actualScore, expectedScore)
+                t.end()
+            }
+        )
     })
 });

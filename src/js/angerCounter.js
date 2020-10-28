@@ -1,5 +1,6 @@
-const fs = require('fs');
-const csv = require('@fast-csv/parse');
+import * as fs from 'fs';
+import * as csv from '@fast-csv/parse';
+import {GameInput} from './game'
 
 export class AngerWord {
     constructor(word, angerValue) {
@@ -9,14 +10,19 @@ export class AngerWord {
 }
 
 export class AngerCounter {
-    static words = AngerCounter.readWords()
+    constructor(){
+        this.words = AngerCounter.readWords()
+    }
 
-    static async getScore(word) {
-        const w = (await AngerCounter.words).find(a => a.word == word)
-        if (w === undefined){
-            return -1;
+    async getScore(gameInput) {
+        if (!(gameInput instanceof GameInput)){
+            throw TypeError("AngerCounter/getScore accepts GameInput only.")
         }
-        return w.angerValue;
+        const emotionalWord = (await this.words).find(a => a.word == gameInput.word)
+        if (emotionalWord === undefined){
+            return 0;
+        }
+        return emotionalWord.angerValue;
     }
 
     static async readWords() {
