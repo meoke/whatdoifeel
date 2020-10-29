@@ -2,10 +2,16 @@ import * as fs from 'fs';
 import * as csv from '@fast-csv/parse';
 import {GameInput} from './game'
 
+const WordScores = {
+    vulgar: 10,
+    stopword: 0,
+    preevaluated: undefined,
+  }
+
 export class AngerWord {
     constructor(word, angerValue) {
         this.word = word;
-        this.angerValue = angerValue;
+        this.angerValue = angerValue
     }
 }
 
@@ -26,10 +32,12 @@ export class AngerCounter {
     }
 
     static async readWords() {
-        let stopwords = (await AngerCounter.readTxtFile("data/stopwords_PL.txt")).map(word => new AngerWord(word, 0))
-        let vulgarStems = (await AngerCounter.readTxtFile("data/vulgarWords_stem_PL.txt")).map(word => new AngerWord(word, 10))
-        let emotionalStems = await AngerCounter.readCSVFile("data/emotionalWords.csv", "word", "meanAnger")
-        emotionalStems = emotionalStems.map(data => new AngerWord(data.word, parseFloat(data.meanAnger)))
+        let stopwords = (await AngerCounter.readTxtFile("data/stopwords_PL.txt")).
+                                            map(word => new AngerWord(word, WordScores.stopword))
+        let vulgarStems = (await AngerCounter.readTxtFile("data/vulgarWords_stem_PL.txt")).
+                                              map(word => new AngerWord(word, WordScores.vulgar))
+        let emotionalStems = (await AngerCounter.readCSVFile("data/emotionalWords.csv", "word", "meanAnger"))
+                                                .map(data => new AngerWord(data.word, parseFloat(data.meanAnger)))
         return [...stopwords, ...vulgarStems, ...emotionalStems]
     }
 

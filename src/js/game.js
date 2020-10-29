@@ -15,6 +15,10 @@ export class Game{
         this.state.addPoints(score)
         this.state.addInput(input)
     }
+
+    get Score(){
+        return this.state.points
+    }
 }
 
 export class GameInput{
