@@ -1,4 +1,3 @@
-import x from './test';
 import '../css/style.css';
 
 function showRelief() {

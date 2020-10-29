@@ -9,21 +9,21 @@ export class Game{
     }
 
     sendInput(gameInput) {
-        score = this.counters.
-                    map(counter => counter.getScore(gameInput)).
-                    reduce((a,b)=>a+b, 0)
-        this.state.addPoints(score)
-        this.state.addInput(input)
+        const scorePromises = this.counters.map(counter => counter.getScore(gameInput))
+        Promise.all(scorePromises).then(results => {
+            const score = results.reduce((a,b)=>a+b, 0)
+            this.state.addPoints(score)
+            this.state.addInput(gameInput)
+        })
     }
 
     get Score(){
         return this.state.points
     }
-}
 
-export class GameInput{
-    constructor(word, timestamp){
-        this.word = word
-        this.timestamp = timestamp
+    get IsFinished(){
+        return this.state.points >= 1000
     }
 }
+
+export default Game

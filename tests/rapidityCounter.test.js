@@ -1,7 +1,7 @@
 require = require('esm')(module);
 const t = require('tape');
 const {RapidityCounter} = require('../src/js/rapidityCounter.js'); 
-const {GameInput} = require('../src/js/game')
+const {GameInput} = require('../src/js/gameInput')
 
 t.test('first getScore request should return 0', function(t){
     let rc = new RapidityCounter()

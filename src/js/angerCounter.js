@@ -1,6 +1,6 @@
 import * as fs from 'fs';
 import * as csv from '@fast-csv/parse';
-import {GameInput} from './game'
+import GameInput from './gameInput'
 
 const WordScores = {
     vulgar: 10,

@@ -1,4 +1,4 @@
-import {GameInput} from './game'
+import GameInput from './gameInput'
 
 export class RapidityCounter {
     constructor() {

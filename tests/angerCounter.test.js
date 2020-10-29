@@ -3,7 +3,7 @@ const t = require('tape');
 const {readFile} = require('fs').promises;
 const csv = require('fast-csv');
 const {AngerCounter} = require('../src/js/angerCounter.js'); 
-const {GameInput} = require('../src/js/game')
+const {GameInput} = require('../src/js/gameInput')
 
 var runAllTestExamples = process.argv[3] == 'true'
 

@@ -1,7 +1,9 @@
+import GameInput from './gameInput'
+
 export class GameState{
     constructor(){
         this.points = 0
-        this.words = []
+        this.inputs = []
     }
 
     addPoints(points) {
@@ -11,11 +13,11 @@ export class GameState{
         this.points += points
     }
 
-    addInput(input) {
-        if (typeof input !== "GameInput"){
+    addInput(gameInput) {
+        if (!(gameInput instanceof GameInput)){
             throw TypeError("GameState/AddInput expects GameInput type.")
         }
-        this.words.push(input)
+        this.inputs.push(gameInput)
     }
 }
 

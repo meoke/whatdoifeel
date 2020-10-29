@@ -6,7 +6,7 @@ t.test("Init Game State", function(t){
     gs = new GameState()
 
     t.equal(gs.points, 0, "Points equal 0")
-    t.equal(gs.words.length, 0, "Words list is empty.")
+    t.equal(gs.inputs.length, 0, "Game inputs list is empty.")
     t.end()
 })
 
