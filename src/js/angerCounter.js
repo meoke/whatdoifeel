@@ -2,16 +2,26 @@ import * as fs from 'fs';
 import * as csv from '@fast-csv/parse';
 import GameInput from './gameInput'
 
-const WordScores = {
-    vulgar: 10,
-    stopword: 0,
-    preevaluated: undefined,
+export const WordType = {
+    vulgar: 'vulgar',
+    stopword: 'stopword',
+    preevaluated: 'preevaluated',
   }
 
 export class AngerWord {
-    constructor(word, angerValue) {
+    constructor(word, wordScore, angerValue) {
         this.word = word;
-        this.angerValue = angerValue
+        switch(wordScore){
+            case WordType.vulgar:
+                this.meanAnger = 10;
+                break;
+            case WordType.stopword:
+                this.meanAnger = 0;
+                break;
+            case WordType.preevaluated:
+                this.meanAnger = Math.round(parseFloat(angerValue) * 10);
+                break;
+        }
     }
 }
 
@@ -20,25 +30,41 @@ export class AngerCounter {
         this.words = AngerCounter.readWords()
     }
 
-    async getScore(gameInput) {
+    async updateScore(gameInput) {
         if (!(gameInput instanceof GameInput)){
             throw TypeError("AngerCounter/getScore accepts GameInput only.")
         }
-        const emotionalWord = (await this.words).find(a => a.word == gameInput.word)
+        const words = await this.words
+        const emotionalWord = words.find(a => a.word == gameInput.word)
+        
         if (emotionalWord === undefined){
             return 0;
         }
-        return emotionalWord.angerValue;
+        return emotionalWord.meanAnger;
+    }
+
+    static async getStopWordsAsync(){
+        const words = AngerCounter.readTxtFile("data/stopwords_PL.txt");
+        return (await words).map(word => new AngerWord(word, WordType.stopword));
+    }
+
+    
+    static async getVulgarStemsAsync(){
+        const words = AngerCounter.readTxtFile("data/vulgarWords_stem_PL.txt");
+        return (await words).map(word => new AngerWord(word, WordType.vulgar));
+    }
+
+    static async getEmotionalStemsAsync(){
+        const words = AngerCounter.readCSVFile("data/emotionalWords.csv");
+        return (await words).map(stem => new AngerWord(stem.word, WordType.preevaluated, stem.meanAnger));
     }
 
     static async readWords() {
-        let stopwords = (await AngerCounter.readTxtFile("data/stopwords_PL.txt")).
-                                            map(word => new AngerWord(word, WordScores.stopword))
-        let vulgarStems = (await AngerCounter.readTxtFile("data/vulgarWords_stem_PL.txt")).
-                                              map(word => new AngerWord(word, WordScores.vulgar))
-        let emotionalStems = (await AngerCounter.readCSVFile("data/emotionalWords.csv", "word", "meanAnger"))
-                                                .map(data => new AngerWord(data.word, parseFloat(data.meanAnger)))
-        return [...stopwords, ...vulgarStems, ...emotionalStems]
+        const stopWords = AngerCounter.getStopWordsAsync()
+        const vulgarStems = AngerCounter.getVulgarStemsAsync()
+        const emotionalStems = AngerCounter.getEmotionalStemsAsync()
+        
+        return [...(await stopWords), ...(await vulgarStems), ...(await emotionalStems)]
     }
 
     static readTxtFile(fileName) {

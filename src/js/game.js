@@ -8,14 +8,16 @@ export class Game{
         this.counters = [new AngerCounter(), new RapidityCounter()]
     }
 
-    sendInput(gameInput) {
-        const scorePromises = this.counters.map(counter => counter.getScore(gameInput))
-        Promise.all(scorePromises).then(results => {
-            const score = results.reduce((a,b)=>a+b, 0)
-            this.state.addPoints(score)
-            this.state.addInput(gameInput)
-        })
+    async sendInput(gameInput) {
+        const scorePromises = this.counters.map(counter => counter.updateScore(gameInput))
+        const scores = await Promise.all(scorePromises)
+        
+        const score = scores.reduce( (a, b) => a + b, 0)
+        this.state.addPoints(score)
+        this.state.addInput(gameInput)
+        return score
     }
+
 
     get Score(){
         return this.state.points
