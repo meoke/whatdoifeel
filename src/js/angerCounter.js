@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as csv from '@fast-csv/parse';
 import GameInput from './gameInput'
+import getStem from 'stemmer_pl';
 
 export const WordType = {
     vulgar: 'vulgar',
@@ -35,7 +36,8 @@ export class AngerCounter {
             throw TypeError("AngerCounter/getScore accepts GameInput only.")
         }
         const words = await this.words
-        const emotionalWord = words.find(a => a.word == gameInput.word)
+        const inputStem = getStem(gameInput.word)
+        const emotionalWord = words.find(a => a.word == inputStem)
         
         if (emotionalWord === undefined){
             return 0;
@@ -55,7 +57,7 @@ export class AngerCounter {
     }
 
     static async getEmotionalStemsAsync(){
-        const words = AngerCounter.readCSVFile("data/emotionalWords.csv");
+        const words = AngerCounter.readCSVFile("data/emotionalStems.csv");
         return (await words).map(stem => new AngerWord(stem.word, WordType.preevaluated, stem.meanAnger));
     }
 

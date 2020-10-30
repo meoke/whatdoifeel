@@ -14,7 +14,7 @@ t.test('a stop word should score 0', function(t){
     .then((data) => {
         let ac = new AngerCounter()
         let stopwords = data.split(/\r\n|\n|\r/);
-        stopwords = runAllTestExamples ? stopwords : stopwords.slice(0,5)
+        stopwords = runAllTestExamples ? stopwords : stopwords.slice(0,10)
 
         const expectedScore = 0;
 
@@ -34,11 +34,11 @@ t.test('a stop word should score 0', function(t){
 });
 
 t.test('a vulgar word stem should score 10', function(t){
-    readFile('data/vulgarWords_stem_PL.txt', 'utf-8')
+    readFile('data/vulgarWords_PL.txt', 'utf-8')
     .then((data) => {
         let ac = new AngerCounter()
         let vulgarwords = data.split(/\r\n|\n|\r/);
-        vulgarwords = runAllTestExamples ? vulgarwords : vulgarwords.slice(0,1)
+        vulgarwords = runAllTestExamples ? vulgarwords : vulgarwords.slice(0,10)
         
         const expectedScore = 10;
 
@@ -63,16 +63,15 @@ t.test('an emotional word stem should score as specified in emotionalWords.csv',
         .on('error', error => reject(error))
         .on('data', data => {csvLines.push(data)})
         .on('end', () => {
-            csvLines = runAllTestExamples ? csvLines : csvLines.slice(0,5)
+            csvLines = runAllTestExamples ? csvLines : csvLines.slice(0,10)
             const assertPromises = csvLines.map(csvLine => {
                                 const scorePromise = ac.updateScore(new GameInput(csvLine.word))
                                 return scorePromise
                                 .then(score => {
-                                    t.equal(1,1)
-                                    // const pies = (f) => {
-                                    //     return Math.round(parseFloat(f) * 10)
-                                    // }
-                                    // t.equal(score, pies(csvLine.meanAnger), `word: ${csvLine.word}`)
+                                    const pies = (f) => {
+                                        return Math.round(parseFloat(f) * 10)
+                                    }
+                                    t.equal(score, pies(csvLine.meanAnger), `word: ${csvLine.word}`)
                             })  
             })
             Promise.all(assertPromises).then(()=> {
