@@ -17,6 +17,26 @@ t.test("Initiated Game is not finished", function(t){
     t.end()
 })
 
+t.test("Game with score == 1000 is finished", function(t){
+    let g = new Game()
+
+    const word = "value100"
+    g.sendInput(new GameInput(word, new Date())).then(() => {
+        t.equal(g.IsFinished, true)
+        t.end()
+    })
+})
+
+t.test("Game with score > 1000 is finished", function(t){
+    let g = new Game()
+
+    const word = "value110"
+    g.sendInput(new GameInput(word, new Date())).then(() => {
+        t.equal(g.IsFinished, true)
+        t.end()
+    })
+})
+
 t.test("Sending a stopword should not change the score", function(t){
     let g = new Game()
 
