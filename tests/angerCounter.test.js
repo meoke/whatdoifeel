@@ -1,13 +1,10 @@
-require = require('esm')(module);
-const t = require('tape');
-const {readFile} = require('fs').promises;
-const csv = require('fast-csv');
-const {AngerCounter} = require('../src/js/angerCounter.js'); 
-const {GameInput} = require('../src/js/gameInput')
+import t from 'tape'
+import {readFile} from 'fs/promises'
+import {csv} from 'fast-csv'
+import AngerCounter from '../src/js/angerCounter.js'
+import GameInput from '../src/js/gameInput'
 
 var runAllTestExamples = process.argv[3] == 'true'
-
-
 
 t.test('a stop word should score 0', function(t){
     readFile('data/stopwords_PL.txt', 'utf-8')

@@ -1,7 +1,6 @@
-require = require('esm')(module);
-const t = require('tape');
-const {GameInput} = require('../src/js/gameInput.js'); 
-const {Game} = require('../src/js/game.js'); 
+import t from 'tape'
+import GameInput from '../src/js/gameInput.js'
+import Game from '../src/js/game.js'
 
 t.test("Initiated Game should have score 0", function(t){
     let g = new Game()
