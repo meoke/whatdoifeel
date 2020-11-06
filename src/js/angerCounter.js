@@ -1,6 +1,6 @@
 import getStem from 'stemmer_pl';
 
-class AngerWord {
+export class AngerWord {
     constructor(word, type, angerValue) {
         this.word = word
         this.stem = getStem(word)
@@ -9,7 +9,7 @@ class AngerWord {
     }
 }
 
-const WordType = {
+export const WordType = {
     stopword: 'stopword',
     vulgar: 'vulgar',
     preevaluated: 'preevaluated',

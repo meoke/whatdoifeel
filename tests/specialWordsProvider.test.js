@@ -56,6 +56,8 @@ t.test("Reader returns correct list of vulgarWords", function(t){
 
 t.test("Reader returns correct list of preevaluated words and their values", function(t){
     const first10PredefinedWords = [
+        ['value100', 100],
+        ['value110', 110],
         ['rozkoszny', 1.4074074],
         ['świetny', 1.3703704],
         ['przyjaciel', 1.4444444],
@@ -67,7 +69,7 @@ t.test("Reader returns correct list of preevaluated words and their values", fun
         ['pomysł', 1.3333334],
         ['skowronek', 1.2222222]]
 
-    const preevaluatedWordsCount = 2902;
+    const preevaluatedWordsCount = 2904;
 
     wordsProvider.getPreevaluatedWords().then(actuaPreevaluatedWords => {
         t.equal(actuaPreevaluatedWords.length, preevaluatedWordsCount, 'Correct words count')
