@@ -1,17 +1,16 @@
-import GameInput from './gameInput'
+import GameState from './gameState'
 
 export class RapidityCounter {
-    constructor() {
-        this.lastTimeStamp = new Date(0)
-    }
-
-    updateScore(gameInput) {
-        if (!(gameInput instanceof GameInput)){
-            throw TypeError("RapidityCounter/getScore accepts GameInput only.")
+    getLastInputScore(gameState) {
+        if (!(gameState instanceof GameState)){
+            throw TypeError("RapidityCounter/getScore accepts GameState only.")
         }
-        const timestamp = gameInput.timestamp
-        const differenceMiliSec = timestamp - this.lastTimeStamp
-        this.lastTimeStamp = timestamp
+        if (gameState.inputs.length === 0 || gameState.inputs.length === 1) {
+            return 0
+        }
+        const lastTimeStamp = gameState.inputs[gameState.inputs.length-1].timestamp
+        const beforeLastTimeStamp = gameState.inputs[gameState.inputs.length-2].timestamp
+        const differenceMiliSec = lastTimeStamp - beforeLastTimeStamp
         return differenceMiliSec <= 0 ? 0 : Math.floor(10000/differenceMiliSec)
     }
 }
