@@ -8,13 +8,13 @@ else {
 }
 
 import Papa from 'papaparse';
-import {SpecialWord, WordType} from './specialWords'
+import {SpecialWord} from './specialWord'
 
 export async function getStopWords() {
     const stream = await fetchFileStream('https://raw.githubusercontent.com/meoke/disanger/master/data/stopwords_PL.csv')
     const stopWordsRows = await csvStreamToRows(stream)
     return stopWordsRows.map(row => {
-        return new SpecialWord(row.word, WordType.stopWord)
+        return new SpecialWord(row.word)
     })
 }
 
@@ -22,7 +22,7 @@ export async function getVulgarWords() {
     const stream = await fetchFileStream('https://raw.githubusercontent.com/meoke/disanger/master/data/vulgarWords_PL.csv')
     const vulgarWordsRows = await csvStreamToRows(stream)
     return vulgarWordsRows.map(row => {
-        return new SpecialWord(row.word, WordType.vulgar)
+        return new SpecialWord(row.word)
     })
 }
 
@@ -30,7 +30,7 @@ export async function getPreevaluatedWords() {
     const stream = await fetchFileStream('https://raw.githubusercontent.com/meoke/disanger/master/data/preevaluatedWords_PL.csv')
     const preevaluatedWordsRows = await csvStreamToRows(stream) 
     return preevaluatedWordsRows.map(row => {
-        return new SpecialWord(row.word, WordType.preevaluated, parseFloat(row.meanAnger))
+        return new SpecialWord(row.word, parseFloat(row.meanAnger))
     })
 }
 

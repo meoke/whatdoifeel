@@ -1,128 +1,75 @@
-import * as csv from '@fast-csv/parse';
-import GameInput from './gameInput'
 import getStem from 'stemmer_pl';
-// import { getFileStream } from './fileStreamProvider'
 
-export const WordType = {
+class AngerWord {
+    constructor(word, type, angerValue) {
+        this.word = word
+        this.stem = getStem(word)
+        this.type = type
+        this.angerValue = angerValue
+    }
+}
+
+const WordType = {
+    stopword: 'stopword',
     vulgar: 'vulgar',
-    stopWord: 'stopword',
     preevaluated: 'preevaluated',
 }
 
-class SpecialStem {
-    constructor(stem, type, meanAnger) {
-        this.stem = stem
-        this.type = type
-        this.meanAnger = meanAnger
-    }
-}
-export class AngerWord {
-    constructor(word, wordType, angerValue) {
-        this.word = word;
-        switch (wordType) {
-            case WordType.vulgar:
-                this.meanAnger = 10;
-                break;
-            case WordType.stopWord:
-                this.meanAnger = 0;
-                break;
-            case WordType.preevaluated:
-                this.meanAnger = Math.round(parseFloat(angerValue) * 10);
-                break;
-        }
-    }
-}
-
-// class MyClass {
-//     static data = (function() {
-//       console.log('static constructor called') // once!
-//       return "Data from file"
-//     })()
-//     static test = (a) => MyClass.data + a;
-//     
-// Usage
-//    
-// let a = MyClass.test(10);//    
-// let b = MyClass.test(20);//    
-// console.log(a);//   
-// console.log(b);// }
-
 export class AngerCounter {
-    static wordsStatic = (function() {
-
-    })()
-
-    constructor() {
-        this.words = AngerCounter.readWords()
-    }
-
-    async updateScore(gameInput) {
-        if (!(gameInput instanceof GameInput)) {
-            throw TypeError("AngerCounter/getScore accepts GameInput only.")
+    constructor(stopWords, vulgarWords, preevaluatedWords) {
+        const scores = {
+            stopWord: 0,
+            vulgar: 10,
         }
-        const words = await this.words
-        const inputStem = getStem(gameInput.word)
-        const emotionalWord = words.find(a => a.word == inputStem)
 
-        if (emotionalWord === undefined) {
-            return 0;
-        }
-        return emotionalWord.meanAnger;
+        const angerStopWords = this.buildAngerWordsCommonScore(stopWords, WordType.stopword, scores.stopWord)
+        const angerVulgarWords = this.buildAngerWordsCommonScore(vulgarWords, WordType.vulgar, scores.vulgar)
+        const angerPreevaluatedWords = this.buildAngerWordsArrayPredefinedScore(preevaluatedWords, WordType.preevaluated)
+        
+        this.angerWords = this.join([angerStopWords, angerVulgarWords, angerPreevaluatedWords])
     }
 
-    static async getStopWordsAsync() {
-        const words = AngerCounter.readTxtFile("data/stopwords_PL.txt");
-        return (await words).map(word => new AngerWord(word, WordType.stopWord));
-    }
-
-
-    static async getVulgarStemsAsync() {
-        const words = AngerCounter.readTxtFile("data/vulgarWords_stem_PL.txt");
-        return (await words).map(word => new AngerWord(word, WordType.vulgar));
-    }
-
-    static async getEmotionalStemsAsync() {
-        const words = AngerCounter.readCSVFile("data/emotionalStems.csv");
-        return (await words).map(stem => new AngerWord(stem.word, WordType.preevaluated, stem.meanAnger));
-    }
-
-    static async readWords() {
-        const stopWords = AngerCounter.getStopWordsAsync()
-        const vulgarStems = AngerCounter.getVulgarStemsAsync()
-        const emotionalStems = AngerCounter.getEmotionalStemsAsync()
-
-        return [...(await stopWords), ...(await vulgarStems), ...(await emotionalStems)]
-    }
-
-    static readTxtFile(fileName) {
-        return getFileStream(fileName).then(data => {
-            const words = txtContent.split(/\r\n|\n|\r/)
-            resolve(words)
-        }).catch(error => {
-            reject(error)
+    buildAngerWordsCommonScore(specialWords, type, commonScore) {
+        return specialWords.map(specialWord => {
+            return new AngerWord(specialWord.word, type, commonScore)
         })
-        // return new Promise((resolve, reject) => {
-        //         fs.promises.readFile(fileName, {encoding: 'utf-8'})
-        //                         .then(txtContent => {
-        //                             const words = txtContent.split(/\r\n|\n|\r/)
-        //                             resolve(words)
-        //                         })
-        //                         .catch(error => {
-        //                             reject(error)
-        //                         }                                
-        //                         )
-        //                     })
     }
 
-    static readCSVFile(fileName) {
-        return new Promise((resolve, reject) => {
-            let csvLines = []
-            csv.parseFile(fileName, { headers: true })
-                .on('error', error => reject(error))
-                .on('data', data => csvLines.push(data))
-                .on('end', () => resolve(csvLines));
+    buildAngerWordsArrayPredefinedScore(specialWords, type) {
+        return specialWords.map(specialWord => {
+            const angerValue = Math.round(parseFloat(specialWord.value) * 10);
+            return new AngerWord(specialWord.word, type, angerValue)
+        })
+    }
+
+    join(table) {
+        return table.flat()
+    }
+
+    getLastInputScore(gameState) {
+        if (gameState.inputs.length === 0) {
+            return 0
         }
-        )
+        const lastWord = gameState.getInputAtReversedIdx(1).word
+
+        const exactMatch = this.findExactMatch(lastWord)
+        if (exactMatch !== undefined){
+            return exactMatch.angerValue
+        }
+        const lastWordStem = getStem(lastWord)
+        const stemMatch = this.findStemMatch(lastWordStem)
+        if (stemMatch !== undefined){
+            return stemMatch.angerValue
+        }
+        return 0
+    }
+
+    findExactMatch(word) {
+        return this.angerWords.find(angerWord => angerWord.word === word)
+    }
+
+    findStemMatch(word) {
+        return this.angerWords.find(angerWord => angerWord.stem === word)
     }
 }
 

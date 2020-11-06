@@ -2,7 +2,6 @@
 require = require("esm")(module)
 const t = require('tape-catch')
 const wordsProvider = require('../src/js/specialWordsProvider')
-const {WordType} = require('../src/js/specialWords')
 
 t.test("Reader returns correct list of stopWords", function(t){
     const first10StopWords = ['a',
@@ -21,7 +20,6 @@ t.test("Reader returns correct list of stopWords", function(t){
         t.equal(actualStopWords.length, stopWordsCount, 'Correct words count')
         first10StopWords.forEach((expectedStopWord, idx) => {
             t.equal(actualStopWords[idx].word, expectedStopWord, `Expected: ${expectedStopWord}`)
-            t.equal(actualStopWords[idx].type, WordType.stopWord, `Is type StopWord`)
         })
     
         t.end()
@@ -48,7 +46,6 @@ t.test("Reader returns correct list of vulgarWords", function(t){
         t.equal(actualVulgarWords.length, vulgarWordsCount, 'Correct words count')
         first10VulgarWords.forEach((expectedVulgarWord, idx) => {
             t.equal(actualVulgarWords[idx].word, expectedVulgarWord, `Expected: ${expectedVulgarWord}`)
-            t.equal(actualVulgarWords[idx].type, WordType.vulgar, `Is type Vulgar`)
         })
     
         t.end()
@@ -57,7 +54,7 @@ t.test("Reader returns correct list of vulgarWords", function(t){
     })
 })
 
-t.test("Reader returns correct list of vulgarWords", function(t){
+t.test("Reader returns correct list of preevaluated words and their values", function(t){
     const first10PredefinedWords = [
         ['rozkoszny', 1.4074074],
         ['świetny', 1.3703704],
@@ -74,10 +71,9 @@ t.test("Reader returns correct list of vulgarWords", function(t){
 
     wordsProvider.getPreevaluatedWords().then(actuaPreevaluatedWords => {
         t.equal(actuaPreevaluatedWords.length, preevaluatedWordsCount, 'Correct words count')
-        first10PredefinedWords.forEach(([expectedVulgarWord, expectedMeanAnger], idx) => {
-            t.equal(actuaPreevaluatedWords[idx].word, expectedVulgarWord, `Expected: ${expectedVulgarWord}`)
-            t.equal(actuaPreevaluatedWords[idx].type, WordType.preevaluated, `Is type Vulgar`)
-            t.equal(actuaPreevaluatedWords[idx].meanAnger, expectedMeanAnger, `Correct mean anger`)
+        first10PredefinedWords.forEach(([expectedWord, expectedValue], idx) => {
+            t.equal(actuaPreevaluatedWords[idx].word, expectedWord, `Expected: ${expectedWord}`)
+            t.equal(actuaPreevaluatedWords[idx].value, expectedValue, `Correct value`)
         })
     
         t.end()

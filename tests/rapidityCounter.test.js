@@ -6,7 +6,7 @@ const {GameInput} = require ('../src/js/gameInput.js')
 const {GameState} = require ('../src/js/gameState.js')
 const {RapidityCounter} = require('../src/js/rapidityCounter.js')
 
-t.test('RapidityCounter returns 0 for 0 inputs', function(t){
+t.test('RapidityCounter/getLastInputScore returns 0 for 0 inputs', function(t){
     const rc = new RapidityCounter()
     const gs = new GameState()
     gs.inputs = []
@@ -17,7 +17,7 @@ t.test('RapidityCounter returns 0 for 0 inputs', function(t){
     t.end()
 })
 
-t.test('RapidityCounter returns 0 for first input', function(t){
+t.test('RapidityCounter/getLastInputScore returns 0 for first input', function(t){
     const rc = new RapidityCounter()
     const gs = new GameState()
     gs.inputs = [new GameInput("", new Date('1995-12-17T03:24:00'))]
@@ -28,7 +28,7 @@ t.test('RapidityCounter returns 0 for first input', function(t){
     t.end()
 })
 
-t.test('RapidityCounter returns 0 for time difference equal 0', function(t){
+t.test('RapidityCounter/getLastInputScore returns 0 for time difference equal 0', function(t){
     const rc = new RapidityCounter()
     const gs = new GameState()
     gs.inputs = [   new GameInput("", new Date('1995-12-17T03:24:00')),
@@ -40,7 +40,7 @@ t.test('RapidityCounter returns 0 for time difference equal 0', function(t){
     t.end()
 })
 
-t.test('RapidityCounter returns 0 for time difference smaller than 0', function(t){
+t.test('RapidityCounter/getLastInputScore returns 0 for time difference smaller than 0', function(t){
     const rc = new RapidityCounter()
     const gs = new GameState()
     gs.inputs = [   new GameInput("", new Date('1995-12-17T03:24:00')),
@@ -53,7 +53,7 @@ t.test('RapidityCounter returns 0 for time difference smaller than 0', function(
 })
 
 
-t.test('RapidityCounter returns correct value for two inputs in GameState', function(t){
+t.test('RapidityCounter/getLastInputScore returns correct value for two inputs in GameState', function(t){
     const dates = [ [new Date('1995-12-17T03:24:00'), new Date('1995-12-17T03:24:01'), 10],
                     [new Date('1995-12-17T03:24:00'), new Date('1995-12-17T03:25:00'), 0],
                     [new Date(200), new Date(700), 20]
@@ -69,7 +69,7 @@ t.test('RapidityCounter returns correct value for two inputs in GameState', func
     t.end()
 })
 
-t.test('RapidityCounter returns correct value for three inputs in GameState', function(t){
+t.test('RapidityCounter/getLastInputScore returns correct value for three inputs in GameState', function(t){
     const rc = new RapidityCounter()
     const gs = new GameState()
     gs.inputs = [   new GameInput("", new Date('1995-12-17T03:20:00')),
