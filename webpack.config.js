@@ -8,8 +8,9 @@ module.exports = {
         filename: 'js/bundle.js'
     },
     devServer: {
-        contentBase: './dist'
+        contentBase: './dist',
     },
+    devtool: "source-map",
     plugins: [
         new HtmlWebpackPlugin({
              filename: 'index.html',
@@ -34,5 +35,6 @@ module.exports = {
                 ]
             }
         ]
-    }
+    },
+    
 };

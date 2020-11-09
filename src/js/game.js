@@ -54,4 +54,4 @@ export class Game {
     }
 }
 
-export default Game
+export default createGame;
