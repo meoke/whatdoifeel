@@ -42,13 +42,6 @@ export async function getPreevaluatedWords() {
     })
 }
 
-// async function fetchFileStream(filePath) {
-//     return ""
-//     // const response = await fetchFile(filePath)
-//     // return response.body
-// } 
-
-
 async function csvStreamToRows(papaInput) {
     return new Promise((resolve, reject) => {Papa.parse(papaInput, {
         download: true,
