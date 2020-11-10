@@ -2,10 +2,10 @@
 require = require("esm")(module)
 const t = require('tape-catch')
 
-const wordsProvider = require('../src/js/specialWordsProvider.js')
-const {AngerCounter} = require('../src/js/angerCounter.js')
-const {GameInput} = require('../src/js/gameInput')
-const {GameState} = require('../src/js/gameState.js')
+const wordsProvider = require('../src/js/models/SpecialWordsProvider.js')
+const {AngerCounter} = require('../src/js/models/AngerCounter.js')
+const {GameInput} = require('../src/js/models/GameInput')
+const {GameState} = require('../src/js/models/GameState.js')
 
 async function getAngerCounter() {
     const stopwords = wordsProvider.getStopWords()

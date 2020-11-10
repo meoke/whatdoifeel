@@ -2,7 +2,7 @@
 require = require("esm")(module)
 const t = require('tape-catch')
 
-const {AngerWord, WordType} = require('../src/js/angerCounter.js')
+const {AngerWord, WordType} = require('../src/js/models/AngerCounter.js')
 
 t.test("AngerWord for a stopword has correct stem and value", function(t){
     const aw = new AngerWord("już", WordType.stopword, 0)

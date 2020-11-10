@@ -1,13 +1,12 @@
 import createGame from './models/Game'
-// import GameInput from './models/GameInput';
+import GameInput from './models/GameInput';
 
 import * as gameView from './views/game';
 import { elements } from './views/base';
-import GameInput from './models/GameInput';
 
 let game;
 
-elements.startGameBtn.addEventListener('click', async () => {
+elements.startGameBtn.on('click', async () => {
     try {
         game = await createGame();
         gameView.activateGameInput();
@@ -18,13 +17,18 @@ elements.startGameBtn.addEventListener('click', async () => {
     }
 })
 
-elements.inputGameText.addEventListener('keyup', event => {
-    if(event.keyCode !== 32){
+elements.inputGameText.on('keyup', event => {
+    if(event.key !== ' '){
         return;
     }
     const currentTime = new Date()
     const lastWord = gameView.extractLastWord(event.target.value)
     const score = game.sendInput(new GameInput(lastWord, currentTime))
-    gameView.renderGameScore(game.State)
     gameView.renderLastScore(score)
+    if(game.IsFinished) {
+        gameView.renderGameFinish(game.State)
+    }
+    else {
+        gameView.renderGameScore(game.State)
+    }
 })

@@ -2,9 +2,9 @@
 require = require("esm")(module)
 const t = require('tape-catch')
 
-const {GameInput} = require ('../src/js/gameInput.js')
-const {GameState} = require ('../src/js/gameState.js')
-const {RapidityCounter} = require('../src/js/rapidityCounter.js')
+const {GameInput} = require ('../src/js/models/GameInput.js')
+const {GameState} = require ('../src/js/models/GameState.js')
+const {RapidityCounter} = require('../src/js/models/RapidityCounter.js')
 
 t.test('RapidityCounter/getLastInputScore returns 0 for 0 inputs', function(t){
     const rc = new RapidityCounter()

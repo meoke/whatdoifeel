@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-global-assign
 require = require("esm")(module)
 const t = require('tape-catch')
-const wordsProvider = require('../src/js/specialWordsProvider')
+const wordsProvider = require('../src/js/models/SpecialWordsProvider')
 
 t.test("Reader returns correct list of stopWords", function(t){
     const first10StopWords = ['a',

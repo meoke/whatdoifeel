@@ -56,17 +56,14 @@ export class AngerCounter {
         const exactMatch = this.findExactMatch(lastWord)
         if (exactMatch !== undefined){
             const score =  exactMatch.angerValue
-            console.log(score)
             return score
         }
         const lastWordStem = getStem(lastWord)
         const stemMatch = this.findStemMatch(lastWordStem)
         if (stemMatch !== undefined){
             const score = stemMatch.angerValue
-            console.log(score)
             return score
         }
-        console.log(0)
         return 0
     }
 

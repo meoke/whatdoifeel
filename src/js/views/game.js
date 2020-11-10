@@ -1,29 +1,36 @@
-import { mark } from 'regenerator-runtime';
 import { elements } from './base';
 
 export const activateGameInput = () => {
-    elements.inputGameText.disabled = false
+    elements.inputGameText.prop('disabled', false);
+    elements.startGameBtn.hide();
 }
 
 export const renderGameScore = gameState => {
     const markup = `
         <span>Wynik: ${gameState.points}</span>
     `;
-    elements.scoreInfo.innerHTML = markup;
+    elements.scoreInfo.html(markup);
 };
 
 export const renderLastScore = lastScore => {
     const markup = `
         <span>Ostatni wynik: ${lastScore}</span>
     `;
-    elements.lastScoreInfo.innerHTML = markup;
+    elements.lastScoreInfo.html(markup);
 };
+
+export const renderGameFinish = gameState => {
+    const markup = `
+    <span>Gratulacje!: ${gameState.points}</span>
+    `;
+    elements.gameResult.html(markup);
+}
 
 export const renderError = message => {
     const markup = `
         Cannot run game at the moment :( ${message}
     `
-    elements.gameContainer.innerHTML = markup;
+    elements.gameContainer.html(markup);
 }
 
 export const extractLastWord = str => {

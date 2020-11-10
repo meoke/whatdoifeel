@@ -2,8 +2,8 @@
 require = require("esm")(module)
 const t = require('tape-catch')
 
-const {GameState} = require('../src/js/gameState.js')
-const {GameInput} = require('../src/js/gameInput.js')
+const {GameState} = require('../src/js/models/GameState.js')
+const {GameInput} = require('../src/js/models/GameInput.js')
 
 
 t.test("Init Game State", function (t) {

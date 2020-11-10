@@ -1,7 +1,10 @@
+import $ from "jquery";
+
 export const elements = {
-    gameContainer: document.querySelector('#gameContainer'),
-    startGameBtn: document.querySelector('#startGameBtn'),
-    inputGameText: document.querySelector('#angerInput'),
-    scoreInfo: document.querySelector('#scoreInfo'),
-    lastScoreInfo: document.querySelector('#lastScoreInfo'),
+    gameContainer: $('#gameContainer'),
+    startGameBtn: $('#startGameBtn'),
+    inputGameText: $('#angerInput'),
+    scoreInfo: $('#scoreInfo'),
+    lastScoreInfo: $('#lastScoreInfo'),
+    gameResult: $('#gameResult'),
 };
