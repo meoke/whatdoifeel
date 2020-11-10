@@ -1,7 +1,7 @@
-import AngerCounter from "./angerCounter";
-import GameState from "./gameState";
-import RapidityCounter from './rapidityCounter'
-import * as wordsProvider from './specialWordsProvider.js'
+import AngerCounter from "./AngerCounter";
+import GameState from "./GameState";
+import RapidityCounter from './RapidityCounter'
+import * as wordsProvider from './SpecialWordsProvider.js'
 
 export async function createGame() {
     const game = new Game();
@@ -10,7 +10,7 @@ export async function createGame() {
 
 }
 
-async function getAngerCounter() {
+async function createAngerCounter() {
     const stopwords = wordsProvider.getStopWords()
     const vulgarwords = wordsProvider.getVulgarWords()
     const preevaluatedWords = wordsProvider.getPreevaluatedWords()
@@ -22,7 +22,7 @@ async function getAngerCounter() {
 export class Game {
     async initialize() {
         this.state = new GameState()
-        this.counters = [await getAngerCounter(),
+        this.counters = [await createAngerCounter(),
                         new RapidityCounter()]
     }
 
@@ -30,6 +30,7 @@ export class Game {
         this._updateState(gameInput)
         const score = this._getScore()
         this._updateScore(score)
+        return score
     }
 
     _updateState(gameInput) {
@@ -43,6 +44,10 @@ export class Game {
 
     _updateScore(score) {
         this.state.addPoints(score)
+    }
+
+    get State() {
+        return this.state
     }
 
     get Score() {

@@ -13,7 +13,7 @@ else {
 }
 
 import Papa from 'papaparse';
-import {SpecialWord} from './specialWord'
+import {SpecialWord} from './SpecialWord'
 
 export async function getStopWords() {
     const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/stopwords_PL.csv'

@@ -1,4 +1,4 @@
-import GameState from './gameState'
+import GameState from './GameState'
 
 export class RapidityCounter {
     getLastInputScore(gameState) {
@@ -11,7 +11,8 @@ export class RapidityCounter {
         const lastTimeStamp = gameState.inputs[gameState.inputs.length-1].timestamp
         const beforeLastTimeStamp = gameState.inputs[gameState.inputs.length-2].timestamp
         const differenceMiliSec = lastTimeStamp - beforeLastTimeStamp
-        return differenceMiliSec <= 0 ? 0 : Math.floor(10000/differenceMiliSec)
+        const score = differenceMiliSec <= 0 ? 0 : Math.floor(10000/differenceMiliSec)
+        return score
     }
 }
 

@@ -15,6 +15,7 @@ export const WordType = {
     preevaluated: 'preevaluated',
 }
 
+
 export class AngerCounter {
     constructor(stopWords, vulgarWords, preevaluatedWords) {
         const scores = {
@@ -54,13 +55,18 @@ export class AngerCounter {
 
         const exactMatch = this.findExactMatch(lastWord)
         if (exactMatch !== undefined){
-            return exactMatch.angerValue
+            const score =  exactMatch.angerValue
+            console.log(score)
+            return score
         }
         const lastWordStem = getStem(lastWord)
         const stemMatch = this.findStemMatch(lastWordStem)
         if (stemMatch !== undefined){
-            return stemMatch.angerValue
+            const score = stemMatch.angerValue
+            console.log(score)
+            return score
         }
+        console.log(0)
         return 0
     }
 

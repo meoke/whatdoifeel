@@ -4,15 +4,17 @@
 <div>
     <header>
         Wyrzuć <span id="headerTo">to</span> z siebie.
+        Kto zwycięży <em>wściekłość</em>?
     </header>
-
     <main>
-        <p id="instruction">Pisz <em>szybko</em>, <em>dosadnie</em> i <em>wściekle</em>. O tu:</p>
-        
-        <input id="angerInput" type="text"></input>
-        <p>Ulga: <span id="relief"></span>%</p>
+        <div id="gameContainer">
+            <p id="instruction">Pisz <em>szybko</em>, <em>dosadnie</em> i <em>wściekle</em>. O tu:</p>
+            <input id="angerInput" type="text" disabled="true"></input>
+            <p id="scoreInfo"></p>
+            <p id="lastScoreInfo"></p>
+            <button id="startGameBtn">Zacznij grę!</button>
+        </div>
     </main>
-
     <footer>
         <span>Żadnych ciasteczek.</span>
     </footer>

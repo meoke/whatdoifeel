@@ -1,4 +1,4 @@
-import GameInput from './gameInput'
+import GameInput from './GameInput'
 
 export class GameState{
     constructor(){
