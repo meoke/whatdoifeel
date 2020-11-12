@@ -12,7 +12,7 @@ const { EmotionHue } = require('../src/js/models/EmotionHue.js')
 
 t.test("Game after initialization should Neutral Emotional State", function (t) {
     createGame().then(g => {
-        t.ok(_.isEqual(g.EmotionalStateHSV, new EmotionalStateHSV(EmotionHue.Neutral, 0, 0)))
+        t.deepEquals(g.EmotionalStateHSV, new EmotionalStateHSV(EmotionHue.Neutral, 0, 0))
         t.end()
     })
 })
@@ -20,7 +20,8 @@ t.test("Game after initialization should Neutral Emotional State", function (t) 
 t.test("Game when gets an unknown word it should affect Emotional State saturation", function (t) {
     createGame().then(g => {
         g.sendInput(new GameInput("Jestem", new Date()))
-        t.ok(_.isEqual(g.EmotionalStateHSV, new EmotionalStateHSV(EmotionHue.Neutral, 25, 1)))
+        t.deepEquals(g.EmotionalStateHSV, new EmotionalStateHSV(EmotionHue.Neutral, 25, 1))
+        // t.ok(_.isEqual(g.EmotionalStateHSV, new EmotionalStateHSV(EmotionHue.Neutral, 25, 1)))
         t.end()
     })
 })

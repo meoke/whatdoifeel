@@ -13,6 +13,7 @@ else {
 }
 
 import Papa from 'papaparse';
+import EmotionHue from "./EmotionHue";
 import {SpecialWord} from './SpecialWord'
 
 export async function getStopWords() {
@@ -38,8 +39,51 @@ export async function getPreevaluatedWords() {
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
-        return new SpecialWord(row.word, parseFloat(row.meanAnger))
+        const [word, emotionHue, value] = _parsePreevaluatedRow(row)
+        return new SpecialWord(word, emotionHue, value)
     })
+}
+
+function _parsePreevaluatedRow(row) {
+    const hueValues = 
+    [
+        parseFloat(row.meanHappy),
+        parseFloat(row.meanAnger),
+        parseFloat(row.meanSadness),
+        parseFloat(row.meanFear),
+        parseFloat(row.meanDisgust)
+    ]
+    const hueIndexes = {   0: EmotionHue.Happy, 
+        1: EmotionHue.Anger,
+        2: EmotionHue.Sadness,
+        3: EmotionHue.Fear,
+        4: EmotionHue.Disgust,
+    }
+    const maxHue = Math.max(...hueValues)
+    const i = hueValues.indexOf(maxHue);
+    return [row.word, hueIndexes[i], maxHue]
+}
+
+export async function getRosenbergWords() {
+    const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/rosenbergWords_PL.csv'
+    const papaInput = await toPapa(path)
+    const preevaluatedWordsRows = await csvStreamToRows(papaInput) 
+    return preevaluatedWordsRows.map(row => {
+        const [word, emotionHue] = _parseRosenbergRow(row)
+        return new SpecialWord(word, emotionHue)
+    })
+}
+
+function _parseRosenbergRow(row) {
+    const hueDict = 
+    {
+        "happiness": EmotionHue.Happy,
+        "anger": EmotionHue.Anger,
+        "sadness": EmotionHue.Sadness,
+        "fear": EmotionHue.Fear,
+        "disgust": EmotionHue.Disgust,
+    }
+    return [row.word, hueDict[row.emotion]]
 }
 
 async function csvStreamToRows(papaInput) {

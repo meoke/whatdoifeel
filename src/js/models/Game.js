@@ -18,8 +18,9 @@ export class Game {
         const stopwords = wordsProvider.getStopWords()
         const vulgarwords = wordsProvider.getVulgarWords()
         const preevaluatedWords = wordsProvider.getPreevaluatedWords()
-        return Promise.all([stopwords, vulgarwords, preevaluatedWords]).then(words => {
-            return new EmotionAnalyzer(words[0], words[1], words[2])
+        const rosenbergWords = wordsProvider.getRosenbergWords()
+        return Promise.all([stopwords, vulgarwords, preevaluatedWords, rosenbergWords]).then(words => {
+            return new EmotionAnalyzer(words[0], words[1], words[2], words[3])
         })
     }
 
