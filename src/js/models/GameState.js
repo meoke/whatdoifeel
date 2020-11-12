@@ -1,33 +1,25 @@
-import GameInput from './GameInput'
+import EmotionWord from './EmotionWord'
 
 export class GameState{
     constructor(){
-        this.points = 0
-        this.inputs = []
+        this.emotionWords = []
     }
 
-    addPoints(points) {
-        if (typeof points !== "number"){
-            throw TypeError("GameState/AddPoints expects numbers only.")
+    addEmotionWord(emotionWord) {
+        if (!(emotionWord instanceof EmotionWord)){
+            throw TypeError("GameState/addEmotionWord expects EmotionWord type.")
         }
-        this.points += points
-    }
-
-    addInput(gameInput) {
-        if (!(gameInput instanceof GameInput)){
-            throw TypeError("GameState/AddInput expects GameInput type.")
-        }
-        this.inputs.push(gameInput)
+        this.emotionWords.push(emotionWord)
     }
 
     getInputAtReversedIdx(idx) {
-        if(idx > this.inputs.length) {
-            throw Error(`Provided index is too big. Max: ${this.inputs.length}.`)
+        if(idx > this.emotionWords.length) {
+            throw Error(`Provided index is too big. Max: ${this.emotionWords.length}.`)
         }
         if(idx <= 0) {
             throw Error('Provided index must be > 0.')
         }
-        return this.inputs[this.inputs.length - idx]
+        return this.emotionWords[this.emotionWords.length - idx]
     }
 }
 

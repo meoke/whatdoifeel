@@ -1,56 +1,49 @@
 // eslint-disable-next-line no-global-assign
 require = require("esm")(module)
 const t = require('tape-catch')
+const _ = require('underscore')
 
 const {GameState} = require('../src/js/models/GameState.js')
 const {GameInput} = require('../src/js/models/GameInput.js')
+const { default: EmotionWord } = require("../src/js/models/EmotionWord.js")
+const { default: EmotionHue } = require("../src/js/models/EmotionHue.js")
+const { EmotionalSpecialWord } = require("../src/js/models/EmotionalStateHSV.js")
 
 
-t.test("Init Game State", function (t) {
+t.test("GameState after construction should be empty", function (t) {
   const gs = new GameState()
 
-  t.equal(gs.points, 0, "Points equal 0")
-  t.equal(gs.inputs.length, 0, "Game inputs list is empty.")
+  t.ok(_.isEqual(gs.emotionWords, []), "Game emotion words list is empty.")
   t.end()
 })
 
-t.test("Add points should change Game State", function (t) {
+t.test("GameState/addEmotionWord when gets EmotionWord should add it to its list of emotion words", function (t) {
   const gs = new GameState()
 
-  gs.addPoints(10)
-  t.equal(gs.points, 10, "Add 10")
+  gs.addEmotionWord(new EmotionWord("test", "test", EmotionHue.Neutral, 0))
+
+  const expectedEmotionalWords = [new EmotionWord("test", "test", EmotionHue.Neutral, 0)]
+  t.ok(_.isEqual(gs.emotionWords, expectedEmotionalWords))
   t.end()
 })
 
-t.test("Add points should not accept type other than number", function (t) {
+t.test("GameState/addEmotionWord when gets invalid type should throw error", function (t) {
   const gs = new GameState()
 
-  t.throws(() => gs.addPoints("TEST"), "GameState/AddPoints expects numbers only.")
-  t.end()
-})
-
-
-t.test("Add input should not accept type other than GameInput", function (t) {
-  const gs = new GameState()
-
-  t.throws(() => gs.addInput(0), "GameState/AddInput expects GameInput type.")
-  t.end()
-})
-
-t.test("Add input adds input to inputs", function (t) {
-  const gs = new GameState()
-  const gi = new GameInput("hello", new Date())
-  gs.addInput(gi)
-  t.equal(gs.inputs[0], gi)
+  t.throws(() => gs.addEmotionWord("TEST"), "GameState/addEmotionWord expects EmotionWord type.")
   t.end()
 })
 
 t.test("GameState/getInputAtReversedIdx returns correct value", function (t) {
   const gs = new GameState()
-  gs.inputs = [1,2,3]
-  t.equal(gs.getInputAtReversedIdx(1), 3)
-  t.equal(gs.getInputAtReversedIdx(2), 2)
-  t.equal(gs.getInputAtReversedIdx(3), 1)
+  const ew1 = new EmotionWord("1", "1", EmotionHue.Neutral, 0)
+  const ew2 = new EmotionWord("2", "2", EmotionHue.Neutral, 0)
+  const ew3 = new EmotionWord("3", "3", EmotionHue.Neutral, 0)
+  gs.emotionWords = [ew1, ew2, ew3]
+
+  t.equal(gs.getInputAtReversedIdx(1), ew3)
+  t.equal(gs.getInputAtReversedIdx(2), ew2)
+  t.equal(gs.getInputAtReversedIdx(3), ew1)
   t.throws(() => gs.getInputAtReversedIdx(10), "Provided index is too big. Max: 3.")
   t.throws(() => gs.getInputAtReversedIdx(-1), 'Provided index must be > 0.')
   t.throws(() => gs.getInputAtReversedIdx(0), 'Provided index must be > 0.')
