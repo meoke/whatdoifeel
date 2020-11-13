@@ -1,4 +1,4 @@
-﻿word,category,mean Happiness,mean Anger,mean Sadness,mean Fear,mean Disgust
+﻿word,category,meanHappiness,meanAnger,meanSadness,meanFear,meanDisgust
 rozkoszny,H,5.296296,1.4074074,1.4814814,1.5555556,1.3703704
 świetny,H,5.6666665,1.3703704,1.3703704,1.3703704,1.2222222
 przyjaciel,H,6.037037,1.4444444,1.6296296,1.5555556,1.037037
