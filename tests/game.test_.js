@@ -56,10 +56,10 @@ t.test("Game when gets an unknown word it should affect Emotional State saturati
 
         
 //         const cases = [// Happiness: 0, Anger: 1 *52, Sadness: 0, Fear: 0, Disgust: 1*60
-//                         [["ograniczać", "i", "znudzony", "kurwa"], new EmotionalStateHSV(EmotionHue.Disgust, 63, 24)],
+//                         [["ograniczać", "i", "znudzony", "kurwa"], new EmotionalStateHSV(EmotionHue.Anger, 63, 24)],
                         
 //                         // Happiness: 0, Anger: 0, Sadness: 60, Fear: 0, Disgust: 60
-//                         [["apatyczny", "znudzony", "kurwa"], new EmotionalStateHSV(EmotionHue.Sadness, 84, 23)],
+//                         [["apatyczny", "znudzony", "kurwa"], new EmotionalStateHSV(EmotionHue.Disgust, 84, 23)],
 
 //                         // Happiness: 60+60+42, Anger: 70, Sadness: 0, Fear: 0, Disgust: 0
 //                         [["ożywiony", "podekscytowany", "wzburzony", "kurwa", "i", "gramofon"], new EmotionalStateHSV(EmotionHue.Happiness, 67, 6)]

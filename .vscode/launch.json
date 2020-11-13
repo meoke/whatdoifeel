@@ -10,5 +10,11 @@
             "request": "launch",
             "file": "${workspaceFolder}/dist/index.html"
         },
+        {
+            "name": "Debug Node File",
+            "type": "node",
+            "request": "launch",
+            "program": "${file}"
+        },
     ]
 }

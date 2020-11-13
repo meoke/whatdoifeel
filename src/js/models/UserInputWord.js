@@ -1,8 +1,8 @@
-export class GameInput{
+export class UserInputWord{
     constructor(word, timestamp){
         this.word = word
         this.timestamp = timestamp
     }
 }
 
-export default GameInput
+export default UserInputWord
