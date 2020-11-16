@@ -34,3 +34,16 @@ t.test("Papa Parse returns object to Complete with data if no step function is p
     })
 })
 
+t.test("Papa Parse behaves strangely for large csv.", function(t) {
+    const csvString = "word,category,meanHappiness,meanAnger,meanSadness,meanFear,meanDisgust\nrozkoszny,H,5.296296,1.4074074,1.4814814,1.5555556,1.3703704"
+    const expectedParsed = [{'word': 'rozkoszny', 'category': 'H', 'meanHappiness': '5.296296', 'meanAnger': '1.4074074', 'meanSadness': '1.4814814', 'meanFear': '1.5555556', 'meanDisgust': '1.3703704'}]
+    Papa.parse(csvString, {
+        header: true,
+        complete: result => {
+            t.ok(_.isEqual(result.data, expectedParsed))
+            t.end()
+        }
+    })
+})
+
+
