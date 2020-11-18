@@ -1,91 +1,92 @@
 // eslint-disable-next-line no-global-assign
 require = require("esm")(module)
 const t = require('tape-catch')
+const _ = require('underscore')
 
-const { createGame } = require('../src/js/models/Game.js')
-const { GameInput } = require('../src/js/models/GameInput.js')
+const { createGame, GameInput } = require('../src/js/models/Game.js')
+const { EmoHue } = require('../src/js/models/EmoElement.js')
 
 
-t.test("Game after initialization should have score 0", function (t) {
+t.test("Game after initialization should Neutral Emotional State", function (t) {
     createGame().then(g => {
-        t.equal(g.Score, 0)
+        t.deepEquals(g.EmotionalStateHSV, [EmoHue.Neutral, 0, 0])
         t.end()
     })
 })
 
-t.test("Game after initialization is not finished", function (t) {
+t.test("Game when gets an unknown word it should affect Emotional State saturation", function (t) {
     createGame().then(g => {
-        t.equal(g.IsFinished, false)
+        g.sendInput(new GameInput("Jestem", new Date()))
+        t.deepEquals(g.EmotionalStateHSV, [EmoHue.Neutral, 25, 1])
         t.end()
     })
 })
 
-t.test("Game with score == 1000 is finished", function (t) {
-    createGame().then(g => {
-        const word = "value100"
-        g.sendInput(new GameInput(word, new Date()))
-        t.equal(g.IsFinished, true)
-        t.end()
-    })
-})
-
-t.test("Game with score > 1000 is finished", function (t) {
-    createGame().then(g => {
-        const word = "value110"
-        g.sendInput(new GameInput(word, new Date()))
-        t.equal(g.IsFinished, true)
-        t.end()
-    })
-})
-
-
-t.test("Game when gets a stopword should not change the score", function (t) {
+t.test("Game when gets a stopword it should affect Emotional State saturation", function (t) {
     createGame().then(g => {
         g.sendInput(new GameInput("i", new Date()))
-        t.equal(g.Score, 0)
+        t.deepEquals(g.EmotionalStateHSV, [EmoHue.Neutral, 25, 1])
         t.end()
     })
 })
 
-t.test("Game when gets a preevaluated word should change the score", function (t) {
+t.test("Game when gets a nawl word it should affect Emotional State saturation", function (t) {
+    createGame().then(g => {
+        g.sendInput(new GameInput("ograniczać", new Date())) // 52
+        t.deepEquals(g.EmotionalStateHSV, [EmoHue.Anger, 50, 1])
+        t.end()
+    })
+})
+
+t.test("Game when gets a rosenberg word it should affect Emotional State saturation", function (t) {
+    createGame().then(g => {
+        g.sendInput(new GameInput("markotny", new Date())) // 52
+        t.deepEquals(g.EmotionalStateHSV, [EmoHue.Sadness, 75, 1])
+        t.end()
+    })
+})
+
+t.test("Game when gets multiple words should correctly change the Emotional State", function (t) {
     createGame().then(g => {
         const frozenDate = new Date()
 
-        const inputWordScore1 = 52
-        const inputWordScore2 = 13
+        
+        const cases = [// Happiness: 0, Anger: 1 *52, Sadness: 0, Fear: 0, Disgust: 1*60
+                        [["ograniczać", "i", "znudzony", "kurwa"], [EmoHue.Anger, 62, 4]],
+                        
+                        // Happiness: 0, Anger: 0, Sadness: 60, Fear: 0, Disgust: 60
+                        [["apatyczna", "znudzony", "kurwa"], [EmoHue.Disgust, 83, 3]],
 
-        g.sendInput(new GameInput("ograniczać", frozenDate))
-        t.equal(g.Score, inputWordScore1, "Ograniczać adds 52 points")
-        g.sendInput(new GameInput("uroczy", frozenDate))
-        t.equal(g.Score, inputWordScore1 + inputWordScore2, "Uroczy adds 13 points")
+                        // Happiness: 60+60+42, Anger: 70, Sadness: 0, Fear: 0, Disgust: 0
+                        // [["ożywiony", "podekscytowany", "wzburzony", "kurwa", "i", "gramofon"], [EmoHue.Happy, 67, 6]]
+                    ]
+
+        for(let [inputWords, expectedEmotionalState] of cases) {
+            for(let word of inputWords) {
+                g.sendInput(new GameInput(word, frozenDate))
+            }
+            t.deepEquals(g.EmotionalStateHSV, expectedEmotionalState, inputWords.join(","))
+            g.clearState()
+        }
+
         t.end()
     })
 })
 
-t.test("Game whem gets an uknown word should not change the score", function (t) {
-    createGame().then(g => {
-        const frozenDate = new Date()
 
-        const previousScore = g.Score
-        g.sendInput(new GameInput("foo", frozenDate))
-        t.equal(g.Score, previousScore, "Score did not change")
-        t.end()
-    })
-})
+// t.test('Game when gets input converts it to EmotionWords and has correct EmotionState', function(t){
+//     createGame().then(g => {
+//         g.sendInput(new GameInput("Jestem", new Date()))
+//         g.sendInput(new GameInput("apatyczna", new Date()))
 
-t.test("Game when gets valued words and different timestamps should both affect the score", function (t) {
-    createGame().then(g => {
-
-
-        let previousScore = g.Score
-        g.sendInput(new GameInput("radosny", new Date("2020-10-10T02:00:00")))
-        t.equal(g.Score - previousScore, 16, "Ograniczać adds 52 points")
-        previousScore = g.Score
-        g.sendInput(new GameInput("kłamać", new Date("2020-10-10T02:00:02")))
-        const inputWordScore = 46
-        const inputRapidityScore = 5
-        const expectedScpore = previousScore + inputWordScore + inputRapidityScore
-        t.equal(g.Score, expectedScpore, "Uroczy adds 13 points")
-        t.end()
-    })
-})
+//         const expectedEmotionWords = [ new EmotionWord("Jestem", "Jestem", EmoHue.Unknown, 0),
+//                                        new EmotionWord("zakłopotona", "zakłpoton", EmoHue.Fear, 38)]
+//         const actualEmotionWords = g.state.emotionWords
+//         t.equal(actualEmotionWords, expectedEmotionWords)
+        
+//         const expectedEmotionalState = [EmoHue.Fear, 50, 22)
+//         const actualEmotionalState = g.EmotionalState
+//         t.equal(actualEmotionalState, expectedEmotionalState)
+//         t.end()
+//     })
+// })

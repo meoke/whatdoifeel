@@ -1,61 +1,47 @@
-import AngerCounter from "./AngerCounter";
-import GameState from "./GameState";
-import RapidityCounter from './RapidityCounter'
-import * as wordsProvider from './SpecialWordsProvider.js'
+import { EmoReference } from "./EmoReference";
+import { EmoState } from "./EmoState";
+import * as wordsProvider from './DictionaryWordsProvider.js'
+
+export class GameInput{
+    constructor(word, timestamp){
+        this.word = word
+        this.timestamp = timestamp
+    }
+}
 
 export async function createGame() {
     const game = new Game();
     await game.initialize();
     return game;
-
-}
-
-async function createAngerCounter() {
-    const stopwords = wordsProvider.getStopWords()
-    const vulgarwords = wordsProvider.getVulgarWords()
-    const preevaluatedWords = wordsProvider.getPreevaluatedWords()
-    return Promise.all([stopwords, vulgarwords, preevaluatedWords]).then(values => {
-        return new AngerCounter(values[0], values[1], values[2])
-    })
 }
 
 export class Game {
     async initialize() {
-        this.state = new GameState()
-        this.counters = [await createAngerCounter(),
-                        new RapidityCounter()]
+        this.state = new EmoState()
+        this.emoRef = await this._buildEmoReference()
+    }
+
+    async _buildEmoReference() {
+        const stopwords = wordsProvider.getStopWords()
+        const vulgarwords = wordsProvider.getVulgarWords()
+        const preevaluatedWords = wordsProvider.getNAWLWords()
+        const rosenbergWords = wordsProvider.getRosenbergWords()
+        return Promise.all([stopwords, vulgarwords, preevaluatedWords, rosenbergWords]).then(words => {
+            return new EmoReference(words[0], words[1], words[2], words[3])
+        })
     }
 
     sendInput(gameInput) {
-        this._updateState(gameInput)
-        const score = this._getScore()
-        this._updateScore(score)
-        return score
+        const emotionWord = this.emoRef.getEmoElement(gameInput.word)
+        this.state.addEmoElement(emotionWord)
     }
 
-    _updateState(gameInput) {
-        this.state.addInput(gameInput)
+    clearState() {
+        this.state = new EmoState()
     }
 
-    _getScore() {
-        const scores = this.counters.map(counter => counter.getLastInputScore(this.state))
-        return scores.reduce((a, b) => a + b, 0)
-    }
-
-    _updateScore(score) {
-        this.state.addPoints(score)
-    }
-
-    get State() {
-        return this.state
-    }
-
-    get Score() {
-        return this.state.points
-    }
-
-    get IsFinished() {
-        return this.state.points >= 1000
+    get EmotionalStateHSV() {
+        return [this.state.H, this.state.S, this.state.V]
     }
 }
 
