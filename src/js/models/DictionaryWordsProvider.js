@@ -19,7 +19,7 @@ import {DictionaryWord} from './DictionaryWord'
 async function getStopWords() {
     const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/stopwords_PL.csv'
     const papaInput = await toPapa(path)
-    const stopWordsRows = await csvStreamToRows(papaInput)
+    const stopWordsRows = await _csvStreamToRows(papaInput)
     return stopWordsRows.map(row => {
         return new DictionaryWord(row.word)
     })
@@ -28,7 +28,7 @@ async function getStopWords() {
 async function getVulgarWords() {
     const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/vulgarWords_PL.csv'
     const papaInput = await toPapa(path)
-    const vulgarWordsRows = await csvStreamToRows(papaInput)
+    const vulgarWordsRows = await _csvStreamToRows(papaInput)
     return vulgarWordsRows.map(row => {
         return new DictionaryWord(row.word)
     })
@@ -37,7 +37,7 @@ async function getVulgarWords() {
 async function getNAWLWords() {
     const path = 'https://raw.githubusercontent.com/meoke/disanger/hsv/data/nawlWords_PL.csv'
     const papaInput = await toPapa(path)
-    const preevaluatedWordsRows = await csvStreamToRows(papaInput) 
+    const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
         let w = Object.values(row)[0]
 
@@ -80,7 +80,7 @@ function _parseNAWLRow(row) {
 async function getRosenbergWords() {
     const path = 'https://raw.githubusercontent.com/meoke/disanger/hsv/data/rosenbergWords_PL.csv'
     const papaInput = await toPapa(path)
-    const preevaluatedWordsRows = await csvStreamToRows(papaInput) 
+    const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
         const [word, emotionHue] = _parseRosenbergRow(row)
         return new DictionaryWord(word, emotionHue)
@@ -99,7 +99,7 @@ function _parseRosenbergRow(row) {
     return [row.word, hueDict[row.hue]]
 }
 
-async function csvStreamToRows(papaInput) {
+async function _csvStreamToRows(papaInput) {
     return new Promise((resolve, reject) => {Papa.parse(papaInput, {
         download: true,
         header: true,
@@ -118,7 +118,8 @@ async function csvStreamToRows(papaInput) {
 
 const testAPI = {
     _parseNAWLRow: _parseNAWLRow,
-    _parseRosenbergRow: _parseRosenbergRow
+    _parseRosenbergRow: _parseRosenbergRow,
+    _csvStreamToRows: _csvStreamToRows
 }
 
 export {testAPI, getNAWLWords, getStopWords, getRosenbergWords, getVulgarWords}

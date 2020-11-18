@@ -1,4 +1,4 @@
-import EmotionWord from './EmotionWord'
+import EmotionWord from '../EmoElement'
 
 export class GameState{
     constructor(){
