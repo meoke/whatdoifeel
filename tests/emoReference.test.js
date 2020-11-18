@@ -43,24 +43,59 @@ t.test("EmoReference/_joinEmoStems joins into flat array", function (t) {
 })
 
 t.test("EmoReference/getEmoElement correctly recognizes given word hue and type", function(t) {
-    const testCases = [ {"word": "i", "type": EmoWordType.stopword, "hue": EmoHue.Neutral},
-                        // {"word": "zezować", "type": EmoWordType.nawl, "hue": EmoHue.Disgust},
-                        // {"word": "dyskomfort", "type": EmoWordType.rosenberg, "hue": EmoHue.Fear},
-                        // {"word": "kurwa", "type": EmoWordType.vulgar, "hue": EmoHue.Neutral},
-                        // {"word": "foo", "type": EmoWordType.uknown, "hue": EmoHue.Neutral},
-                        // {"word": "posiłek", "type": EmoWordType.nawl, "hue": EmoHue.Happy},
-                        // {"word": "pożegnanie", "type": EmoWordType.nawl, "hue": EmoHue.Sadness}
+    const testCases = [ 
+                        {"word": "i", "type": EmoWordType.stopword, "hue": EmoHue.Neutral},
+                        {"word": "zezować", "type": EmoWordType.nawl, "hue": EmoHue.Disgust},
+                        {"word": "dyskomfort", "type": EmoWordType.rosenberg, "hue": EmoHue.Fear},
+                        {"word": "kurwa", "type": EmoWordType.vulgar, "hue": EmoHue.Neutral},
+                        {"word": "foo", "type": EmoWordType.unknown, "hue": EmoHue.Neutral},
+                        {"word": "posiłek", "type": EmoWordType.nawl, "hue": EmoHue.Happy},
+                        {"word": "pożegnanie", "type": EmoWordType.nawl, "hue": EmoHue.Sadness}
                    ]
     _buildEmoReference().then(emoRef => {
         for(const tc of testCases) {
             const actualEmoElement = emoRef.getEmoElement(tc.word)
-            t.equal(actualEmoElement.word, tc.word, "Word")
-            t.equal(actualEmoElement.hue, tc.hue, "Hue")
-            t.equal(actualEmoElement.type, tc.type, "Type")
+            t.equal(actualEmoElement.word, tc.word, `Word ${tc.word}`)
+            t.equal(actualEmoElement.hue, tc.hue, `Hue of ${tc.word}`)
+            t.equal(actualEmoElement.type, tc.type, `Type of ${tc.word}`)
         }
         t.end()
     })
 
+})
+
+t.test("EmoReference/_findExactMatch finds exact match in default EmoReference", function(t) {
+    _buildEmoReference().then(emoRef => {
+        const wordToMatch = "jeż";
+        const expectedMatch = new testAPI.EmoStem(wordToMatch, EmoHue.Happy, EmoWordType.nawl)
+        const actualMatch = emoRef._findExactMatch(wordToMatch)
+
+        t.deepEquals(actualMatch, expectedMatch)
+        t.end()
+    })
+})
+
+t.test("EmoReference/_findExactMatch finds exact match in default EmoReference", function(t) {
+    _buildEmoReference().then(emoRef => {
+        const wordToMatch = "jeżeli";
+        const expectedMatch = new testAPI.EmoStem(wordToMatch, EmoHue.Neutral, EmoWordType.stopword)
+        const actualMatch = emoRef._findExactMatch(wordToMatch)
+
+        t.deepEquals(actualMatch, expectedMatch)
+        t.end()
+    })
+})
+
+t.test("EmoReference/_findExactMatch finds stem match in default EmoReference", function(t) {
+    _buildEmoReference().then(emoRef => {
+        const originalWord = "jeżeli"
+        const stemToMatch = "jeż";
+        const expectedMatch = new testAPI.EmoStem(originalWord, EmoHue.Neutral, EmoWordType.stopword)
+        const actualMatch = emoRef._findStemMatch(stemToMatch)
+
+        t.deepEquals(actualMatch, expectedMatch)
+        t.end()
+    })
 })
 
 async function _buildEmoReference() {

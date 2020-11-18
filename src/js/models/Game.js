@@ -24,7 +24,7 @@ export class Game {
     async _buildEmoReference() {
         const stopwords = wordsProvider.getStopWords()
         const vulgarwords = wordsProvider.getVulgarWords()
-        const preevaluatedWords = wordsProvider.getPreevaluatedWords()
+        const preevaluatedWords = wordsProvider.getNAWLWords()
         const rosenbergWords = wordsProvider.getRosenbergWords()
         return Promise.all([stopwords, vulgarwords, preevaluatedWords, rosenbergWords]).then(words => {
             return new EmoReference(words[0], words[1], words[2], words[3])
@@ -34,6 +34,10 @@ export class Game {
     sendInput(gameInput) {
         const emotionWord = this.emoRef.getEmoElement(gameInput.word)
         this.state.addEmoElement(emotionWord)
+    }
+
+    clearState() {
+        this.state = new EmoState()
     }
 
     get EmotionalStateHSV() {

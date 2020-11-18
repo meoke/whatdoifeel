@@ -10,6 +10,7 @@ class EmoStem {
     }
 }
 
+
 export class EmoReference {
     constructor(stopWords, vulgarWords, nawlWords, rosenbergWords) {
         const emoStopWords = EmoReference._buildEmoStems(stopWords, EmoWordType.stopword)
@@ -37,8 +38,6 @@ export class EmoReference {
 
     _getHueAndType(word) {
         const exactMatch = this._findExactMatch(word)
-        console.log(word)
-        console.log(this.emoStems.filter(emoStem => emoStem.originalWord === "i"))
         if (exactMatch !== undefined){
             return [exactMatch.hue, exactMatch.type]
         }

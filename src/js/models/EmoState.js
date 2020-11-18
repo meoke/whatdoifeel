@@ -8,13 +8,17 @@ export class EmoState {
     }
 
     get H() {
-        const possibleHues = [EmoHue.Anger, EmoHue.Disgust, EmoHue.Fear, EmoHue.Happy, EmoHue.Neutral, EmoHue.Sadness]
+        const possibleHues = [EmoHue.Anger, EmoHue.Disgust, EmoHue.Fear, EmoHue.Happy, EmoHue.Sadness]
+        const notNeutralWords = this.emoElements.filter(emoEl => emoEl.hue !== EmoHue.Neutral)
+        if (notNeutralWords.length === 0){
+            return EmoHue.Neutral
+        }
         return possibleHues.reduce(
             (acc, hue) => {
-                return (this.emoElements.filter(emoEl => emoEl.hue === hue).length >
-                    this.emoElements.filter(emoEl => emoEl.hue === acc).length ? hue : acc)
+                return (notNeutralWords.filter(emoEl => emoEl.hue === hue).length >
+                        notNeutralWords.filter(emoEl => emoEl.hue === acc).length ? hue : acc)
             },
-            EmoHue.Neutral)
+            EmoHue.Anger)
     }
 
     get S() {

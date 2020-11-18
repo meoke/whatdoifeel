@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-global-assign
 require = require("esm")(module)
 const t = require('tape-catch')
-const {EmoHue} = require("../src/js/models/EmoElement")
+const {EmoHue, EmoWordType} = require("../src/js/models/EmoElement")
 const wordsProvider = require('../src/js/models/DictionaryWordsProvider')
 
 t.test("Reader returns correct list of stopWords", function(t){
@@ -17,10 +17,12 @@ t.test("Reader returns correct list of stopWords", function(t){
     'ależ']
 
     const stopWordsCount = 350;
-    wordsProvider.getStopWords().then(actualStopWords => {
-        t.equal(actualStopWords.length, stopWordsCount, 'Correct words count')
+    const expectedHue = EmoHue.Neutral
+    wordsProvider.getStopWords().then(actualDictWords => {
+        t.equal(actualDictWords.length, stopWordsCount, 'Correct words count')
         first10StopWords.forEach((expectedStopWord, idx) => {
-            t.equal(actualStopWords[idx].word, expectedStopWord, `Expected: ${expectedStopWord}`)
+            t.equal(actualDictWords[idx].word, expectedStopWord, `Expected: ${expectedStopWord}`)
+            t.equal(actualDictWords[idx].hue, expectedHue, `Expected Neutral Hue`)
         })
     
         t.end()
@@ -42,11 +44,12 @@ t.test("Reader returns correct list of vulgarWords", function(t){
                                 'cipa']
 
     const vulgarWordsCount = 624;
-
-    wordsProvider.getVulgarWords().then(actualVulgarWords => {
-        t.equal(actualVulgarWords.length, vulgarWordsCount, 'Correct words count')
+    const expectedHue = EmoHue.Neutral
+    wordsProvider.getVulgarWords().then(actualDictWords => {
+        t.equal(actualDictWords.length, vulgarWordsCount, 'Correct words count')
         first10VulgarWords.forEach((expectedVulgarWord, idx) => {
-            t.equal(actualVulgarWords[idx].word, expectedVulgarWord, `Expected: ${expectedVulgarWord}`)
+            t.equal(actualDictWords[idx].word, expectedVulgarWord, `Expected: ${expectedVulgarWord}`)
+            t.equal(actualDictWords[idx].hue, expectedHue, `Expected neutral hue`)
         })
     
         t.end()
@@ -60,13 +63,13 @@ t.test("Reader returns correct list of NAWL words and their values", function(t)
         0: ['rozkoszny', EmoHue.Happy],
         194: ['absurd', EmoHue.Anger],
         261: ['pokutny', EmoHue.Sadness],
-        326: ['kopalnia', EmoHue.Fear],
-        492: ['obwisły', EmoHue.Disgust],
-        537: ['miotła', EmoHue.Neutral],
-        762: ['świnia', EmoHue.Disgust]
+        325: ['kopalnia', EmoHue.Fear],
+        491: ['obwisły', EmoHue.Disgust],
+        536: ['miotła', EmoHue.Neutral],
+        761: ['świnia', EmoHue.Disgust]
     }
 
-    const NAWLWordsCount = 2902;
+    const NAWLWordsCount = 2901;
 
     wordsProvider.getNAWLWords().then(actualNAWLWords => {
         t.equal(actualNAWLWords.length, NAWLWordsCount, 'Correct words count')

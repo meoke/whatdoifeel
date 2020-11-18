@@ -21,7 +21,7 @@ async function getStopWords() {
     const papaInput = await toPapa(path)
     const stopWordsRows = await _csvStreamToRows(papaInput)
     return stopWordsRows.map(row => {
-        return new DictionaryWord(row.word)
+        return new DictionaryWord(row.word, EmoHue.Neutral)
     })
 }
 
@@ -30,7 +30,7 @@ async function getVulgarWords() {
     const papaInput = await toPapa(path)
     const vulgarWordsRows = await _csvStreamToRows(papaInput)
     return vulgarWordsRows.map(row => {
-        return new DictionaryWord(row.word)
+        return new DictionaryWord(row.word, EmoHue.Neutral)
     })
 }
 
