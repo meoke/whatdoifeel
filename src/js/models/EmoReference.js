@@ -1,5 +1,5 @@
 import getStem from 'stemmer_pl';
-import {EmoElement, EmoWordType, EmotionHue} from './EmoElement'
+import {EmoElement, EmoWordType, EmoHue} from './EmoElement'
 
 class EmoStem {
     constructor(word, hue, type) {
@@ -10,33 +10,35 @@ class EmoStem {
     }
 }
 
-class EmoEngine {
+export class EmoReference {
     constructor(stopWords, vulgarWords, nawlWords, rosenbergWords) {
-        const emoStopWords = this._buildEmoStems(stopWords, EmoWordType.stopword)
-        const emoVulgar = this._buildEmoStems(vulgarWords, EmoWordType.vulgar)
-        const emoNAWL = this._buildEmoStems(nawlWords, EmoWordType.nawl)
-        const emoRosenberg = this._buildEmoStems(rosenbergWords, EmoWordType.rosenberg)
+        const emoStopWords = EmoReference._buildEmoStems(stopWords, EmoWordType.stopword)
+        const emoVulgar = EmoReference._buildEmoStems(vulgarWords, EmoWordType.vulgar)
+        const emoNAWL = EmoReference._buildEmoStems(nawlWords, EmoWordType.nawl)
+        const emoRosenberg = EmoReference._buildEmoStems(rosenbergWords, EmoWordType.rosenberg)
         
-        this.emoStems = this._joinEmoStems([emoStopWords, emoVulgar, emoNAWL, emoRosenberg])
+        this.emoStems = EmoReference._joinEmoStems([emoStopWords, emoVulgar, emoNAWL, emoRosenberg])
     }
 
-    _buildEmoStems(dictionaryWords, emoWordType) {
+    static _buildEmoStems(dictionaryWords, emoWordType) {
         return dictionaryWords.map(dictWord => {
             return new EmoStem(dictWord.word, dictWord.hue, emoWordType)
         })
     }
 
-    _joinEmoStems(table) {
+    static _joinEmoStems(table) {
         return table.flat()
     }
 
     getEmoElement(word) {
-        const [hue, type] = this._getHueAndType(word.word)
+        const [hue, type] = this._getHueAndType(word)
         return new EmoElement(word, hue, type)
     }
 
-    _getHueType(word) {
+    _getHueAndType(word) {
         const exactMatch = this._findExactMatch(word)
+        console.log(word)
+        console.log(this.emoStems.filter(emoStem => emoStem.originalWord === "i"))
         if (exactMatch !== undefined){
             return [exactMatch.hue, exactMatch.type]
         }
@@ -45,7 +47,7 @@ class EmoEngine {
         if (stemMatch !== undefined){
             return [stemMatch.hue, stemMatch.type]
         }
-        return [EmotionHue.Neutral, EmoWordType.unknown]
+        return [EmoHue.Neutral, EmoWordType.unknown]
     }
 
     _findExactMatch(word) {
@@ -57,4 +59,7 @@ class EmoEngine {
     }
 }
 
-export default EmoEngine
+export const testAPI = {
+    EmoStem: EmoStem
+}
+export default EmoReference

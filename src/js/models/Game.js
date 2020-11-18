@@ -1,6 +1,6 @@
-import { EmoEngine } from "./EmoEngine";
+import { EmoReference } from "./EmoReference";
 import { EmoState } from "./EmoState";
-import * as wordsProvider from './SpecialWordsProvider.js'
+import * as wordsProvider from './DictionaryWordsProvider.js'
 
 export class GameInput{
     constructor(word, timestamp){
@@ -18,22 +18,22 @@ export async function createGame() {
 export class Game {
     async initialize() {
         this.state = new EmoState()
-        this.emoEngine = await this._buildEmoEngine()
+        this.emoRef = await this._buildEmoReference()
     }
 
-    async _buildEmoEngine() {
+    async _buildEmoReference() {
         const stopwords = wordsProvider.getStopWords()
         const vulgarwords = wordsProvider.getVulgarWords()
         const preevaluatedWords = wordsProvider.getPreevaluatedWords()
         const rosenbergWords = wordsProvider.getRosenbergWords()
         return Promise.all([stopwords, vulgarwords, preevaluatedWords, rosenbergWords]).then(words => {
-            return new EmoEngine(words[0], words[1], words[2], words[3])
+            return new EmoReference(words[0], words[1], words[2], words[3])
         })
     }
 
     sendInput(gameInput) {
-        const emotionWord = this.emoEngine.getUserEmoElement(gameInput.word)
-        this.state.addEmotionWord(emotionWord)
+        const emotionWord = this.emoRef.getEmoElement(gameInput.word)
+        this.state.addEmoElement(emotionWord)
     }
 
     get EmotionalStateHSV() {

@@ -13,7 +13,7 @@ else {
 }
 
 import Papa from 'papaparse';
-import {EmotionHue} from "./EmotionHue";
+import {EmoHue} from "./EmoElement";
 import {DictionaryWord} from './DictionaryWord'
 
 async function getStopWords() {
@@ -41,8 +41,8 @@ async function getNAWLWords() {
     return preevaluatedWordsRows.map(row => {
         let w = Object.values(row)[0]
 
-        const [word, emotionHue, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness] = _parseNAWLRow(row)
-        return new DictionaryWord(w, emotionHue, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness)
+        const [word, EmoHue, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness] = _parseNAWLRow(row)
+        return new DictionaryWord(w, EmoHue, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness)
     })
 }
 
@@ -57,16 +57,16 @@ function _parseNAWLRow(row) {
         parseFloat(row["meanSadness"])
     ]
     if(row["category"] === "N"){
-        hue = EmotionHue.Neutral
+        hue = EmoHue.Neutral
     }
     else{
         
         const hueIndexes = {   
-            0: EmotionHue.Anger,
-            1: EmotionHue.Disgust,
-            2: EmotionHue.Fear,
-            3: EmotionHue.Happy, 
-            4: EmotionHue.Sadness
+            0: EmoHue.Anger,
+            1: EmoHue.Disgust,
+            2: EmoHue.Fear,
+            3: EmoHue.Happy, 
+            4: EmoHue.Sadness
         }
         const maxHue = Math.max(...hueValues)
         const i = hueValues.indexOf(maxHue);
@@ -82,19 +82,19 @@ async function getRosenbergWords() {
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
-        const [word, emotionHue] = _parseRosenbergRow(row)
-        return new DictionaryWord(word, emotionHue)
+        const [word, EmoHue] = _parseRosenbergRow(row)
+        return new DictionaryWord(word, EmoHue)
     })
 }
 
 function _parseRosenbergRow(row) {
     const hueDict = 
     {
-        "H": EmotionHue.Happy,
-        "A": EmotionHue.Anger,
-        "S": EmotionHue.Sadness,
-        "F": EmotionHue.Fear,
-        "D": EmotionHue.Disgust,
+        "H": EmoHue.Happy,
+        "A": EmoHue.Anger,
+        "S": EmoHue.Sadness,
+        "F": EmoHue.Fear,
+        "D": EmoHue.Disgust,
     }
     return [row.word, hueDict[row.hue]]
 }

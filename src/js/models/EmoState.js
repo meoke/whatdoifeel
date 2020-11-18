@@ -28,7 +28,7 @@ export class EmoState {
         const knownWordsSum = EmoState._sumArr(knownWordTypesFrequency)
         return knownWordsSum === 0 ?
             0 :
-            EmoState._weightedMean(knownWordTypesFrequency, [25, 50, 75, 100])
+            Math.floor(EmoState._weightedMean(knownWordTypesFrequency, [25, 50, 75, 100]))
     }
 
     get V() {
@@ -51,9 +51,9 @@ export class EmoState {
             / wSum
     }
 
-    addElement(emoElement) {
+    addEmoElement(emoElement) {
         if (!(emoElement instanceof EmoElement)) {
-            throw Error("Only userEmoElements can be added!")
+            throw Error("Only emoElements can be added to EmoState!")
         }
         this.emoElements.push(emoElement)
     }

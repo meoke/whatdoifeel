@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-global-assign
 require = require("esm")(module)
 const t = require('tape-catch')
-const {EmotionHue} = require("../src/js/models/EmotionHue")
+const {EmoHue} = require("../src/js/models/EmoElement")
 const wordsProvider = require('../src/js/models/DictionaryWordsProvider')
 
 t.test("Reader returns correct list of stopWords", function(t){
@@ -57,13 +57,13 @@ t.test("Reader returns correct list of vulgarWords", function(t){
 
 t.test("Reader returns correct list of NAWL words and their values", function(t){
     const exampleNAWLWords = {
-        0: ['rozkoszny', EmotionHue.Happy],
-        194: ['absurd', EmotionHue.Anger],
-        261: ['pokutny', EmotionHue.Sadness],
-        326: ['kopalnia', EmotionHue.Fear],
-        492: ['obwisły', EmotionHue.Disgust],
-        537: ['miotła', EmotionHue.Neutral],
-        762: ['świnia', EmotionHue.Disgust]
+        0: ['rozkoszny', EmoHue.Happy],
+        194: ['absurd', EmoHue.Anger],
+        261: ['pokutny', EmoHue.Sadness],
+        326: ['kopalnia', EmoHue.Fear],
+        492: ['obwisły', EmoHue.Disgust],
+        537: ['miotła', EmoHue.Neutral],
+        762: ['świnia', EmoHue.Disgust]
     }
 
     const NAWLWordsCount = 2902;
@@ -71,9 +71,9 @@ t.test("Reader returns correct list of NAWL words and their values", function(t)
     wordsProvider.getNAWLWords().then(actualNAWLWords => {
         t.equal(actualNAWLWords.length, NAWLWordsCount, 'Correct words count')
 
-        for(const [idx, [expectedWord, expectedEmotionHue]] of Object.entries(exampleNAWLWords)) {
+        for(const [idx, [expectedWord, expectedEmoHue]] of Object.entries(exampleNAWLWords)) {
             t.equal(actualNAWLWords[idx].word, expectedWord, `Expected: ${expectedWord}`)
-            t.equal(actualNAWLWords[idx].hue, expectedEmotionHue, `Correct hue`)
+            t.equal(actualNAWLWords[idx].hue, expectedEmoHue, `Correct hue`)
         }
     
         t.end()
@@ -91,7 +91,7 @@ t.test("DictionaryWords provider parses NAWL row to DictionaryRow value", functi
                 "meanFear": "1.5555556", 
                 "meanDisgust": "1.3703704"}
 
-    const expectedParsedValue = ["rozkoszny", EmotionHue.Happy, 1.4074074, 1.3703704, 1.5555556, 5.296296, 1.4814814]
+    const expectedParsedValue = ["rozkoszny", EmoHue.Happy, 1.4074074, 1.3703704, 1.5555556, 5.296296, 1.4814814]
     const actualParsedValue = wordsProvider.testAPI._parseNAWLRow(row)
 
     t.deepEquals(actualParsedValue, expectedParsedValue)
@@ -100,8 +100,8 @@ t.test("DictionaryWords provider parses NAWL row to DictionaryRow value", functi
 
 t.test("Reader returns correct list of Rosenberg words and their hues", function(t){
     const exampleRosenbergWords = {
-        0: ['werwa', EmotionHue.Happy],
-        86: ['spłoszona', EmotionHue.Fear]
+        0: ['werwa', EmoHue.Happy],
+        86: ['spłoszona', EmoHue.Fear]
     }
 
     const rosenbergWordsCount = 143;
@@ -109,9 +109,9 @@ t.test("Reader returns correct list of Rosenberg words and their hues", function
     wordsProvider.getRosenbergWords().then(actualRosenbergWords => {
         t.equal(actualRosenbergWords.length, rosenbergWordsCount, 'Correct words count')
 
-        for(const [idx, [expectedWord, expectedEmotionHue]] of Object.entries(exampleRosenbergWords)) {
+        for(const [idx, [expectedWord, expectedEmoHue]] of Object.entries(exampleRosenbergWords)) {
             t.equal(actualRosenbergWords[idx].word, expectedWord, `Expected: ${expectedWord}`)
-            t.equal(actualRosenbergWords[idx].hue, expectedEmotionHue, `Correct hue`)
+            t.equal(actualRosenbergWords[idx].hue, expectedEmoHue, `Correct hue`)
         }
     
         t.end()
@@ -125,7 +125,7 @@ t.test("DictionaryWords provider parses Rosenberg row to DictionaryRow value", f
                  "hue": "S"
                 }
 
-    const expectedParsedValue = ["apatyczny", EmotionHue.Sadness]
+    const expectedParsedValue = ["apatyczny", EmoHue.Sadness]
     const actualParsedValue = wordsProvider.testAPI._parseRosenbergRow(row)
 
     t.deepEquals(actualParsedValue, expectedParsedValue)
