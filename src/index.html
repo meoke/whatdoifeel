@@ -12,16 +12,22 @@
     </header>
     <main>
         <div id="gameContainer">
-            <p id="instruction">Użyj słów, by opisać, co czujesz. O tu:</p>
-            <input id="angerInput" type="text" disabled="true"></input>
+            <p id="instruction">Użyj słów, by opisać, co czujesz:</p>
+            <textarea id="angerInput" type="text" disabled="true"></textarea>
             <p id="scoreInfo"></p>
-            <p id="lastHueInfo"></p>
+            <div id="lastHueInfo">
+                <div id="anger"><p id="angerHeader" class="subheader">Anger</p></div>
+                <div id="disgust"><p id="disgustHeader" class="subheader">Disgust</p></div>
+                <div id="fear"><p id="fearHeader" class="subheader">Fear</p></div>
+                <div id="happy"><p id="happyHeader" class="subheader">Happy</p></div>
+                <div id="sadness"><p id="sadnessHeader" class="subheader">Sadness</p></div>
+            </div>
             <button id="startGameBtn">Zacznij grę!</button>
         </div>
         <div id="gameResult"></div>
+
     </main>
     <footer>
-        <span>Żadnych ciasteczek.</span>
     </footer>
 </div>
 </body>

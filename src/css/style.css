@@ -1,6 +1,16 @@
+:root {
+    --mainColor: #1e90ff;
+    --white: #ffffff;
+}
+
 header{
     text-align: center;
     margin: 5%;
+    color: var(--mainColor)
+}
+
+.subheader {
+    color: var(--mainColor)
 }
 
 #angerInput {
@@ -11,4 +21,14 @@ header{
 
 #angerInput:focus{
     outline: 0px;
+}
+
+.bold {
+    text-shadow: 0 0 2px var(--mainColor);
+    transition: 0.6s;
+}
+
+.unbold {
+    text-shadow: none;
+    transition: 0.6s;
 }

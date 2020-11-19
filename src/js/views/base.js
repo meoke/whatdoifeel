@@ -8,4 +8,10 @@ export const elements = {
     scoreInfo: $('#scoreInfo'),
     lastHueInfo: $('#lastHueInfo'),
     gameResult: $('#gameResult'),
+
+    angerHeader: $("#angerHeader"),
+    disgustHeader: $("#disgustHeader"),
+    fearHeader: $("#fearHeader"),
+    happyHeader: $("#happyHeader"),
+    sadnessHeader: $("#sadnessHeader"),
 };

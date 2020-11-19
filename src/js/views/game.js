@@ -1,4 +1,7 @@
 import { elements } from './base';
+import {EmoHue} from '../models/EmoElement'
+
+import * as _ from 'underscore'
 
 export const activateGameInput = () => {
     elements.inputGameText.prop('disabled', false);
@@ -6,9 +9,7 @@ export const activateGameInput = () => {
 }
 
 export const renderGameScore = emoState => {
-    const markup = `
-        <span>Wynik: H: ${emoState[0]}, S: ${emoState[1]}, V: ${emoState[2]}</span>
-    `;
+    console.log(emoState)
     const [hue, sat, val] = emoState
     const color = `hsl(${hue}, ${sat}%, ${val/2+50}%)`
     elements.inputGameText.animate( {
@@ -17,14 +18,37 @@ export const renderGameScore = emoState => {
 		borderRightColor: color,
 		borderTopColor: color
 	}, 1500 );
-    elements.scoreInfo.html(markup);
 };
 
 export const renderLastScore = lastHue => {
-    const markup = `
-        <span>Ostatni hue: ${lastHue}</span>
-    `;
-    elements.lastHueInfo.html(markup);
+    let elToAnimate;
+    switch(lastHue){
+        case EmoHue.Anger:
+            elToAnimate = elements.angerHeader;
+            break;
+        case EmoHue.Disgust:
+            elToAnimate = elements.disgustHeader;
+            break;
+        case EmoHue.Fear:
+            elToAnimate = elements.fearHeader;
+            break;
+        case EmoHue.Happy:
+            console.log(lastHue)
+            elToAnimate = elements.happyHeader;
+            break;
+        case EmoHue.Sadness:
+            elToAnimate = elements.sadnessHeader;
+            break;
+        default:
+            return
+    }
+
+    elToAnimate.addClass("bold")
+    setTimeout(() => {
+        elToAnimate.addClass("unbold")
+        elToAnimate.removeClass("bold")
+        elToAnimate.removeClass("unbold")
+    }, 500)
 };
 
 export const renderError = message => {
