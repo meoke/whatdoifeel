@@ -35,7 +35,7 @@ async function getVulgarWords() {
 }
 
 async function getNAWLWords() {
-    const path = 'https://raw.githubusercontent.com/meoke/disanger/hsv/data/nawlWords_PL.csv'
+    const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/nawlWords_PL.csv'
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
@@ -78,7 +78,7 @@ function _parseNAWLRow(row) {
 }
 
 async function getRosenbergWords() {
-    const path = 'https://raw.githubusercontent.com/meoke/disanger/hsv/data/rosenbergWords_PL.csv'
+    const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/rosenbergWords_PL.csv'
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {

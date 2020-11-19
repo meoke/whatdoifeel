@@ -5,26 +5,27 @@ export const activateGameInput = () => {
     elements.startGameBtn.hide();
 }
 
-export const renderGameScore = gameState => {
+export const renderGameScore = emoState => {
     const markup = `
-        <span>Wynik: ${gameState.points}</span>
+        <span>Wynik: H: ${emoState[0]}, S: ${emoState[1]}, V: ${emoState[2]}</span>
     `;
+    const [hue, sat, val] = emoState
+    const color = `hsl(${hue}, ${sat}%, ${val/2+50}%)`
+    elements.inputGameText.animate( {
+		borderBottomColor: color,
+		borderLeftColor: color,
+		borderRightColor: color,
+		borderTopColor: color
+	}, 1500 );
     elements.scoreInfo.html(markup);
 };
 
-export const renderLastScore = lastScore => {
+export const renderLastScore = lastHue => {
     const markup = `
-        <span>Ostatni wynik: ${lastScore}</span>
+        <span>Ostatni hue: ${lastHue}</span>
     `;
-    elements.lastScoreInfo.html(markup);
+    elements.lastHueInfo.html(markup);
 };
-
-export const renderGameFinish = gameState => {
-    const markup = `
-    <span>Gratulacje!: ${gameState.points}</span>
-    `;
-    elements.gameResult.html(markup);
-}
 
 export const renderError = message => {
     const markup = `

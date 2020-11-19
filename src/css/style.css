@@ -3,19 +3,12 @@ header{
     margin: 5%;
 }
 
-#headerTo{
-    text-transform: uppercase;
+#angerInput {
+    border-width: 4px;
+    border-style: solid;
+    border-radius: 5px;
 }
 
-em:nth-child(1){
-    font-family: Arial, Helvetica, sans-serif;
+#angerInput:focus{
+    outline: 0px;
 }
-
-em:nth-child(2){
-    font-family: 'Times New Roman', Times, serif;
-}
-
-em:nth-child(3){
-    font-family: 'Courier New', Courier, monospace;
-}
-

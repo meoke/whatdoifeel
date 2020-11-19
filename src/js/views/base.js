@@ -2,9 +2,10 @@ import $ from "jquery";
 
 export const elements = {
     gameContainer: $('#gameContainer'),
+    gameInstruction: $('#instruction'),
     startGameBtn: $('#startGameBtn'),
     inputGameText: $('#angerInput'),
     scoreInfo: $('#scoreInfo'),
-    lastScoreInfo: $('#lastScoreInfo'),
+    lastHueInfo: $('#lastHueInfo'),
     gameResult: $('#gameResult'),
 };

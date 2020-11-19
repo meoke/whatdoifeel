@@ -32,8 +32,9 @@ export class Game {
     }
 
     sendInput(gameInput) {
-        const emotionWord = this.emoRef.getEmoElement(gameInput.word)
-        this.state.addEmoElement(emotionWord)
+        const emoElement = this.emoRef.getEmoElement(gameInput.word)
+        this.state.addEmoElement(emoElement)
+        return emoElement.hue
     }
 
     clearState() {
