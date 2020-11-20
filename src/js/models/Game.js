@@ -1,6 +1,7 @@
 import { EmoReference } from "./EmoReference";
 import { EmoState } from "./EmoState";
 import * as wordsProvider from './DictionaryWordsProvider.js'
+import { EmoWordType } from "./EmoElement";
 
 export class GameInput{
     constructor(word, timestamp){
@@ -43,6 +44,10 @@ export class Game {
 
     get EmotionalStateHSV() {
         return [this.state.H, this.state.S, this.state.V]
+    }
+
+    get RosenbergWords() {
+        return this.emoRef.emoStems.filter(emoStem => emoStem.type === EmoWordType.rosenberg)
     }
 }
 

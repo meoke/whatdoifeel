@@ -3,9 +3,8 @@ import $ from "jquery";
 export const elements = {
     gameContainer: $('#gameContainer'),
     gameInstruction: $('#instruction'),
-    startGameBtn: $('#startGameBtn'),
+    toggleGameBtn: $('#toggleGameBtn'),
     inputGameText: $('#angerInput'),
-    scoreInfo: $('#scoreInfo'),
     lastHueInfo: $('#lastHueInfo'),
     gameResult: $('#gameResult'),
 
@@ -14,4 +13,11 @@ export const elements = {
     fearHeader: $("#fearHeader"),
     happyHeader: $("#happyHeader"),
     sadnessHeader: $("#sadnessHeader"),
+
+    angerColumn: $("#angerColumn"),
+    disgustColumn: $("#disgustColumn"),
+    fearColumn: $("#fearColumn"),
+    happyColumn1: $("#happyColumn1"),
+    happyColumn2: $("#happyColumn2"),
+    sadnessColumn: $("#sadnessColumn"),
 };

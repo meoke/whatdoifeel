@@ -3,13 +3,25 @@ import {createGame, GameInput} from './models/Game'
 import * as gameView from './views/game';
 import { elements } from './views/base';
 import '../css/style.css';
+import '../css/skeleton.css';
+import '../css/normalize.css';
 
 let game;
+let gameIsRunning = false;
 
-elements.startGameBtn.on('click', async () => {
+elements.toggleGameBtn.on('click', async () => {
     try {
-        game = await createGame();
-        gameView.activateGameInput();
+        if(gameIsRunning){
+            game.clearState();
+            gameView.clearGameInput();
+        }
+        else{
+            game = await createGame();
+            gameView.activateGameInput();
+            gameView.toggleBtnToRestartGame();
+            gameView.showRosenbergWords(game.RosenbergWords);
+            gameIsRunning = true;
+        }
         gameView.renderGameScore(game.EmotionalStateHSV);
     }
     catch {

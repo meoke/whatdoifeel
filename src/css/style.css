@@ -3,20 +3,21 @@
     --white: #ffffff;
 }
 
-header{
+/* header{
     text-align: center;
     margin: 5%;
     color: var(--mainColor)
-}
+}*/
 
 .subheader {
-    color: var(--mainColor)
+    color: var(--mainColor);
 }
 
 #angerInput {
     border-width: 4px;
     border-style: solid;
     border-radius: 5px;
+    height: 150px;
 }
 
 #angerInput:focus{
@@ -32,3 +33,35 @@ header{
     text-shadow: none;
     transition: 0.6s;
 }
+
+h1 {
+    color: var(--mainColor);
+    text-align: center;
+    padding-top: 50px;
+}
+
+#toggleGameBtn {
+    margin: auto;
+    display: block;
+}
+
+.add-padding {
+    padding-bottom: 50px;
+}
+
+.container {
+    width: 100%
+}
+
+.white {
+    color: white;
+}
+
+.x{
+    padding-left: 10px;
+}
+
+.vl {
+    border-left: 6px solid green;
+    height: 500px;
+  }
