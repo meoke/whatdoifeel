@@ -3,6 +3,10 @@
     --white: #ffffff;
 }
 
+body, a {
+    color: var(--mainColor);
+}
+
 /* header{
     text-align: center;
     margin: 5%;
@@ -68,4 +72,18 @@ h1 {
 
 .border-bottom {
     border-bottom: solid 1px var(--mainColor);
+}
+
+ul.menu{
+    padding: 50px 0px 0px 50px;
+    font-size: 2rem;
+    color: var(--mainColor);
+}
+
+li {
+    list-style-type: none;
+}
+
+ul li a {
+    color: var(--mainColor);
 }

@@ -29,7 +29,7 @@ async function getStopWords() {
 }
 
 async function getVulgarWords() {
-    const path = `${server}/vulgarWords_PL.csv`
+    const path = `${server}/dictionaries/vulgarWords_PL.csv`
     const papaInput = await toPapa(path)
     const vulgarWordsRows = await _csvStreamToRows(papaInput)
     return vulgarWordsRows.map(row => {
@@ -38,7 +38,7 @@ async function getVulgarWords() {
 }
 
 async function getNAWLWords() {
-    const path = `${server}/nawlWords_PL.csv`
+    const path = `${server}/dictionaries/nawlWords_PL.csv`
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
@@ -81,7 +81,7 @@ function _parseNAWLRow(row) {
 }
 
 async function getRosenbergWords() {
-    const path = `${server}/rosenbergWords_PL.csv`
+    const path = `${server}/dictionaries/rosenbergWords_PL.csv`
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {

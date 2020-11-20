@@ -18,6 +18,11 @@ module.exports = {
              template: './src/index.html',
              favicon: "./src/images/favicon3.png"
         }),
+        new HtmlWebpackPlugin({
+            filename: 'about.html',
+            template: './src/about.html',
+            favicon: "./src/images/favicon3.png"
+       }),
         new CopyWebpackPlugin({
             patterns: [{
                 from: "libs",
@@ -25,6 +30,10 @@ module.exports = {
             }, {
                 from: "dictionaries", 
                 to: "dictionaries"
+            },
+            {
+                from: "src/images", 
+                to: "images"
             }]
         }),
     ],
