@@ -22,6 +22,9 @@ module.exports = {
             patterns: [{
                 from: "libs",
                 to: "js",
+            }, {
+                from: "dictionaries", 
+                to: "dictionaries"
             }]
         }),
     ],

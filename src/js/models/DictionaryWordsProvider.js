@@ -1,15 +1,18 @@
 import {isNode} from "browser-or-node";
-let toPapa
-let fetchFile
+let toPapa;
+let fetchFile;
+let server;
 if (isNode) {
     fetchFile = require('node-fetch');
     toPapa = async path => {
         const response = await fetchFile(path)
         return response.body
     }
+    server = 'https://raw.githubusercontent.com/meoke/disanger/master'
 }
 else {
     toPapa = path => {return path}
+    server = '.'
 }
 
 import Papa from 'papaparse';
@@ -17,7 +20,7 @@ import {EmoHue} from "./EmoElement";
 import {DictionaryWord} from './DictionaryWord'
 
 async function getStopWords() {
-    const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/stopwords_PL.csv'
+    const path = `${server}/dictionaries/stopwords_PL.csv`
     const papaInput = await toPapa(path)
     const stopWordsRows = await _csvStreamToRows(papaInput)
     return stopWordsRows.map(row => {
@@ -26,7 +29,7 @@ async function getStopWords() {
 }
 
 async function getVulgarWords() {
-    const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/vulgarWords_PL.csv'
+    const path = `${server}/vulgarWords_PL.csv`
     const papaInput = await toPapa(path)
     const vulgarWordsRows = await _csvStreamToRows(papaInput)
     return vulgarWordsRows.map(row => {
@@ -35,7 +38,7 @@ async function getVulgarWords() {
 }
 
 async function getNAWLWords() {
-    const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/nawlWords_PL.csv'
+    const path = `${server}/nawlWords_PL.csv`
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
@@ -78,7 +81,7 @@ function _parseNAWLRow(row) {
 }
 
 async function getRosenbergWords() {
-    const path = 'https://raw.githubusercontent.com/meoke/disanger/master/data/rosenbergWords_PL.csv'
+    const path = `${server}/rosenbergWords_PL.csv`
     const papaInput = await toPapa(path)
     const preevaluatedWordsRows = await _csvStreamToRows(papaInput) 
     return preevaluatedWordsRows.map(row => {
