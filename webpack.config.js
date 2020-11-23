@@ -16,13 +16,13 @@ module.exports = {
         new HtmlWebpackPlugin({
              filename: 'index.html',
              template: './src/index.html',
-             favicon: "./src/images/favicon3.png"
+             favicon: "./src/images/favicon.png"
         }),
         new HtmlWebpackPlugin({
             filename: 'about.html',
             template: './src/about.html',
-            favicon: "./src/images/favicon3.png"
-       }),
+            favicon: "./src/images/favicon.png"
+        }),
         new CopyWebpackPlugin({
             patterns: [{
                 from: "libs",

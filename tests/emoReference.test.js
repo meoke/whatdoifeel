@@ -30,15 +30,77 @@ t.test("EmoReference/_buildEmoStems builds EmoStems with correct wordtype", func
     t.end()
 })
 
-t.test("EmoReference/_joinEmoStems joins into flat array", function (t) {
+t.test("EmoReference/_joinEmoStems joins into flat array all given elements if no repetition occurs", function (t) {
     const notJoined = [[new testAPI.EmoStem("foo", EmoHue.Anger, EmoWordType.rosenberg)],
                      [new testAPI.EmoStem("foo2", EmoHue.Happy, EmoWordType.vulgar)]]
 
     const expectedJoined = [new testAPI.EmoStem("foo", EmoHue.Anger, EmoWordType.rosenberg),
                             new testAPI.EmoStem("foo2", EmoHue.Happy, EmoWordType.vulgar)]
 
-    const actualJoined = EmoReference._joinEmoStems(notJoined)
+    const actualJoined = EmoReference._joinEmoStems(notJoined, EmoReference._getMostImportantFrom)
     t.deepEquals(actualJoined, expectedJoined)
+    t.end()
+})
+
+t.test("EmoReference/_joinEmoStems joins into flat array without repeated words. Order of importance: Rosenber, NAWL, vulgar, stopword.", function (t) {
+    const notJoined = [[new testAPI.EmoStem("01_rosenberg_vulgar", EmoHue.Anger, EmoWordType.rosenberg), 
+                        new testAPI.EmoStem("02_rosenberg_nawl", EmoHue.Anger, EmoWordType.nawl), 
+                        new testAPI.EmoStem("03_nawl_stopword", EmoHue.Anger, EmoWordType.nawl), 
+                        new testAPI.EmoStem("04_only_rosenberg", EmoHue.Anger, EmoWordType.rosenberg)],
+
+                       [new testAPI.EmoStem("01_rosenberg_vulgar", EmoHue.Happy, EmoWordType.vulgar), 
+                        new testAPI.EmoStem("02_rosenberg_nawl", EmoHue.Anger, EmoWordType.rosenberg), 
+                        new testAPI.EmoStem("03_nawl_stopword", EmoHue.Anger, EmoWordType.stopword), 
+                        new testAPI.EmoStem("05_only_nawl", EmoHue.Anger, EmoWordType.nawl),
+                        new testAPI.EmoStem("06_nawl_vulgar", EmoHue.Disgust, EmoWordType.vulgar)],
+                        
+                        [new testAPI.EmoStem("01_rosenberg_vulgar", EmoHue.Anger, EmoWordType.vulgar), 
+                        new testAPI.EmoStem("07_only_rosenberg", EmoHue.Anger, EmoWordType.rosenberg),
+                        new testAPI.EmoStem("06_nawl_vulgar", EmoHue.Anger, EmoWordType.nawl)]
+                    ]
+
+    const expectedJoined = [
+        new testAPI.EmoStem("01_rosenberg_vulgar", EmoHue.Anger, EmoWordType.rosenberg),
+        new testAPI.EmoStem("02_rosenberg_nawl", EmoHue.Anger, EmoWordType.rosenberg),
+        new testAPI.EmoStem("03_nawl_stopword", EmoHue.Anger, EmoWordType.nawl),
+        new testAPI.EmoStem("04_only_rosenberg", EmoHue.Anger, EmoWordType.rosenberg),
+        new testAPI.EmoStem("05_only_nawl", EmoHue.Anger, EmoWordType.nawl),
+        new testAPI.EmoStem("06_nawl_vulgar", EmoHue.Anger, EmoWordType.nawl),
+        new testAPI.EmoStem("07_only_rosenberg", EmoHue.Anger, EmoWordType.rosenberg)]
+
+    const actualJoined = EmoReference._joinEmoStems(notJoined, 
+                                                    EmoReference._getMostImportantFrom)
+    t.deepEquals(actualJoined, expectedJoined)
+    t.end()
+})
+
+t.test("EmoReference/_compoareWordType returns the most important emoStem by wordtype", function(t) {
+    const testCases = [{emoStems: [new testAPI.EmoStem("tc1A", EmoHue.Happy, EmoWordType.rosenberg),
+                                   new testAPI.EmoStem("tc1B", EmoHue.Happy, EmoWordType.nawl)],
+                        theMostImportantIdx: 0},
+
+                        {emoStems: [new testAPI.EmoStem("tc2A", EmoHue.Happy, EmoWordType.unknown),
+                         new testAPI.EmoStem("tc2B", EmoHue.Happy, EmoWordType.stopword),
+                         new testAPI.EmoStem("tc2C", EmoHue.Happy, EmoWordType.nawl)],
+                        theMostImportantIdx: 2},
+
+                         {emoStems: [new testAPI.EmoStem("tc3A", EmoHue.Happy, EmoWordType.rosenberg),
+                         new testAPI.EmoStem("tc3B", EmoHue.Happy, EmoWordType.rosenberg)],
+                         theMostImportantIdx: 0},
+
+                         {emoStems: [new testAPI.EmoStem("tc4B", EmoHue.Happy, undefined),
+                         new testAPI.EmoStem("tc4A", EmoHue.Happy, EmoWordType.rosenberg)],
+                         theMostImportantIdx: 1},
+                        
+                         {emoStems: [new testAPI.EmoStem("tc5A", EmoHue.Happy, undefined),
+                          new testAPI.EmoStem("tc5B", EmoHue.Happy, undefined)],
+                          theMostImportantIdx: 0},
+                    ]
+
+    for(const tc of testCases) {
+        const actualResult = EmoReference._getMostImportantFrom(tc.emoStems)
+        t.deepEquals(actualResult, tc.emoStems[tc.theMostImportantIdx])
+    }
     t.end()
 })
 
@@ -47,7 +109,7 @@ t.test("EmoReference/getEmoElement correctly recognizes given word hue and type"
                         {"word": "i", "type": EmoWordType.stopword, "hue": EmoHue.Neutral},
                         {"word": "zezować", "type": EmoWordType.nawl, "hue": EmoHue.Disgust},
                         {"word": "dyskomfort", "type": EmoWordType.rosenberg, "hue": EmoHue.Fear},
-                        {"word": "kurwa", "type": EmoWordType.vulgar, "hue": EmoHue.Neutral},
+                        {"word": "jebać", "type": EmoWordType.vulgar, "hue": EmoHue.Neutral},
                         {"word": "foo", "type": EmoWordType.unknown, "hue": EmoHue.Neutral},
                         {"word": "posiłek", "type": EmoWordType.nawl, "hue": EmoHue.Happy},
                         {"word": "pożegnanie", "type": EmoWordType.nawl, "hue": EmoHue.Sadness}

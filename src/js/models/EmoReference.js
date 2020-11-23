@@ -1,5 +1,6 @@
 import getStem from 'stemmer_pl';
-import {EmoElement, EmoWordType, EmoHue} from './EmoElement'
+import { EmoElement, EmoWordType, EmoHue } from './EmoElement'
+import _ from 'underscore'
 
 class EmoStem {
     constructor(word, hue, type) {
@@ -17,8 +18,10 @@ export class EmoReference {
         const emoVulgar = EmoReference._buildEmoStems(vulgarWords, EmoWordType.vulgar)
         const emoNAWL = EmoReference._buildEmoStems(nawlWords, EmoWordType.nawl)
         const emoRosenberg = EmoReference._buildEmoStems(rosenbergWords, EmoWordType.rosenberg)
-        
-        this.emoStems = EmoReference._joinEmoStems([emoStopWords, emoVulgar, emoNAWL, emoRosenberg])
+
+        this.emoStems = EmoReference._joinEmoStems([emoStopWords, emoVulgar, emoNAWL, emoRosenberg],
+            EmoReference._getMostImportantFrom
+            )
     }
 
     static _buildEmoStems(dictionaryWords, emoWordType) {
@@ -27,8 +30,33 @@ export class EmoReference {
         })
     }
 
-    static _joinEmoStems(table) {
-        return table.flat()
+    static _joinEmoStems(table, getMostImportant) {
+        const joined = table.flat()
+        const d = _.groupBy(joined, "originalWord")
+        const x = []
+        for(const obj in d) {
+            const a = getMostImportant(d[obj])
+            x.push(a)
+        }
+        return x.flat()
+    }
+
+    static _getMostImportantFrom(emoStems) {
+        const score = {
+            [EmoWordType.unknown]: 0,
+            [EmoWordType.stopword]: 1, 
+            [EmoWordType.vulgar]: 2, 
+            [EmoWordType.nawl]: 3, 
+            [EmoWordType.rosenberg]:4 
+        }
+        
+        const compFn = (scoredEmoStem1, scoredEmoStem2) => {
+            if(scoredEmoStem1.s === scoredEmoStem2.s)
+                return 0;
+            return scoredEmoStem1.s < scoredEmoStem2.s ? 1 : -1;
+        }
+
+        return emoStems.map(eS => {return {emoStem: eS, s: score[eS.type]}}).sort(compFn)[0].emoStem
     }
 
     getEmoElement(word) {
@@ -38,12 +66,12 @@ export class EmoReference {
 
     _getHueAndType(word) {
         const exactMatch = this._findExactMatch(word)
-        if (exactMatch !== undefined){
+        if (exactMatch !== undefined) {
             return [exactMatch.hue, exactMatch.type]
         }
         const wordStem = getStem(word)
         const stemMatch = this._findStemMatch(wordStem)
-        if (stemMatch !== undefined){
+        if (stemMatch !== undefined) {
             return [stemMatch.hue, stemMatch.type]
         }
         return [EmoHue.Neutral, EmoWordType.unknown]
