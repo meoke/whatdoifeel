@@ -10,16 +10,18 @@ export class GameInput{
     }
 }
 
-export async function createGame() {
-    const game = new Game();
-    await game.initialize();
-    return game;
-}
+// export async function createGame() {
+//     const game = new Game();
+//     await game.initialize();
+//     return game;
+// }
 
 export class Game {
-    async initialize() {
-        this.state = new EmoState()
-        this.emoRef = await this._buildEmoReference()
+    static async createGame() {
+        const game = new Game();
+        game.state = new EmoState()
+        game.emoRef = await game._buildEmoReference()
+        return game
     }
 
     async _buildEmoReference() {
@@ -51,4 +53,4 @@ export class Game {
     }
 }
 
-export default createGame;
+export default Game;

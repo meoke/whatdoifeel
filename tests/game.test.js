@@ -1,21 +1,20 @@
 // eslint-disable-next-line no-global-assign
 require = require("esm")(module)
 const t = require('tape-catch')
-const _ = require('underscore')
 
-const { createGame, GameInput } = require('../src/js/models/Game.js')
+const { Game, GameInput } = require('../src/js/models/Game.js')
 const { EmoHue } = require('../src/js/models/EmoElement.js')
 
 
 t.test("Game after initialization should Neutral Emotional State", function (t) {
-    createGame().then(g => {
+    Game.createGame().then(g => {
         t.deepEquals(g.EmotionalStateHSV, [EmoHue.Neutral, 0, 0])
         t.end()
     })
 })
 
 t.test("Game when gets an unknown word it should affect Emotional State saturation", function (t) {
-    createGame().then(g => {
+    Game.createGame().then(g => {
         g.sendInput(new GameInput("Jestem", new Date()))
         t.deepEquals(g.EmotionalStateHSV, [EmoHue.Neutral, 25, 1])
         t.end()
@@ -23,7 +22,7 @@ t.test("Game when gets an unknown word it should affect Emotional State saturati
 })
 
 t.test("Game when gets a stopword it should affect Emotional State saturation", function (t) {
-    createGame().then(g => {
+    Game.createGame().then(g => {
         g.sendInput(new GameInput("i", new Date()))
         t.deepEquals(g.EmotionalStateHSV, [EmoHue.Neutral, 25, 1])
         t.end()
@@ -31,7 +30,7 @@ t.test("Game when gets a stopword it should affect Emotional State saturation", 
 })
 
 t.test("Game when gets a nawl word it should affect Emotional State saturation", function (t) {
-    createGame().then(g => {
+    Game.createGame().then(g => {
         g.sendInput(new GameInput("ograniczać", new Date())) // 52
         t.deepEquals(g.EmotionalStateHSV, [EmoHue.Anger, 50, 1])
         t.end()
@@ -39,7 +38,7 @@ t.test("Game when gets a nawl word it should affect Emotional State saturation",
 })
 
 t.test("Game when gets a rosenberg word it should affect Emotional State saturation", function (t) {
-    createGame().then(g => {
+    Game.createGame().then(g => {
         g.sendInput(new GameInput("markotny", new Date())) // 52
         t.deepEquals(g.EmotionalStateHSV, [EmoHue.Sadness, 75, 1])
         t.end()
@@ -47,7 +46,7 @@ t.test("Game when gets a rosenberg word it should affect Emotional State saturat
 })
 
 t.test("Game when gets multiple words should correctly change the Emotional State", function (t) {
-    createGame().then(g => {
+    Game.createGame().then(g => {
         const frozenDate = new Date()
 
         

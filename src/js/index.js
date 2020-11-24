@@ -1,4 +1,4 @@
-import {createGame, GameInput} from './models/Game'
+import {Game, GameInput} from './models/Game'
 
 import * as gameView from './views/game';
 import { elements } from './views/base';
@@ -20,7 +20,7 @@ elements.toggleGameBtn.on('click', async () => {
             gameView.clearGameInput();
         }
         else{
-            game = await createGame();
+            game = await Game.createGame();
             gameView.activateGameInput();
             gameView.toggleBtnToRestartGame();
             gameView.showRosenbergWords(game.RosenbergWords);

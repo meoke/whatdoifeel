@@ -45,11 +45,7 @@ module.exports = (env, options) => {
                     {
                         from: "src/images",
                         to: "images"
-                    },
-                {
-                    from: "config.json",
-                    to: "config.json"
-                }]
+                    }]
             }),
         ],
         module: {
