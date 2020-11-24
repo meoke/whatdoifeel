@@ -2,6 +2,8 @@ import {createGame, GameInput} from './models/Game'
 
 import * as gameView from './views/game';
 import { elements } from './views/base';
+import config from './config'
+
 import '../css/style.css';
 import '../css/skeleton.css';
 import '../css/normalize.css';
@@ -26,8 +28,14 @@ elements.toggleGameBtn.on('click', async () => {
         }
         gameView.renderGameScore(game.EmotionalStateHSV);
     }
-    catch {
-        gameView.renderError("Problem z uruchomieniem gry.");
+    catch(e){
+        console.log(config)
+        if(config.mode === "production") {
+            gameView.renderError(`Nie można teraz uruchomić gry.`);
+        }
+        else{
+            console.error(`Game creation or refresh issue: ${e.message}`);
+        }
     }
 })
 

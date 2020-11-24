@@ -60,7 +60,7 @@ export class EmoReference {
     }
 
     getEmoElement(word) {
-        const [hue, type] = this._getHueAndType(word)
+        const [hue, type] = this._getHueAndType(word.toLowerCase())
         return new EmoElement(word, hue, type)
     }
 

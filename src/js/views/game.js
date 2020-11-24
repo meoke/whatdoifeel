@@ -1,13 +1,11 @@
 import { elements } from './base';
 import {EmoHue} from '../models/EmoElement'
 import $ from 'jquery'
-
-import * as _ from 'underscore'
+import 'jquery-color'
 
 export const activateGameInput = () => {
     elements.inputGameText.prop('disabled', false);
     elements.inputGameText.focus()
-
 }
 
 export const clearGameInput = () => {
@@ -15,11 +13,6 @@ export const clearGameInput = () => {
 }
 
 export const toggleBtnToRestartGame = () => {
-    // const btnVal = $('<span/>', {text: 'Od nowa     '}).append(
-    //     $( "<i/>", {
-    //         "class": "fas fa-undo",
-    //     })
-    // )
     const btnVal = $( "<i/>", {
             "class": "fas fa-undo",
         })
@@ -27,9 +20,8 @@ export const toggleBtnToRestartGame = () => {
 }
 
 export const renderGameScore = emoState => {
-    console.log(emoState)
     const [hue, sat, val] = emoState
-    const color = `hsl(${hue}, ${sat}%, ${val/2+50}%)`
+    const color = $.Color({ hue: hue, saturation: sat, value: val/2+50})
     elements.inputGameText.animate( {
 		borderBottomColor: color,
 		borderLeftColor: color,
@@ -71,17 +63,9 @@ export const renderLastScore = lastHue => {
 
 export const renderError = message => {
     const markup = `
-        Cannot run game at the moment :( ${message}
+        ${message}
     `
     elements.gameContainer.html(markup);
-}
-
-export const extractLastWord = str => {
-    if (typeof str !== "string"){
-        return ""
-    }
-    const words = str.trim().split(" ")
-    return words[words.length-1]
 }
 
 export const showRosenbergWords = (rosenbergWords) => {
