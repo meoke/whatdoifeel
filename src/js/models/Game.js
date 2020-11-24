@@ -23,13 +23,13 @@ export class Game {
     }
 
     async _buildEmoReference() {
-        const stopwords = wordsProvider.getStopWords()
-        const vulgarwords = wordsProvider.getVulgarWords()
-        const preevaluatedWords = wordsProvider.getNAWLWords()
-        const rosenbergWords = wordsProvider.getRosenbergWords()
-        return Promise.all([stopwords, vulgarwords, preevaluatedWords, rosenbergWords]).then(words => {
-            return new EmoReference(words[0], words[1], words[2], words[3])
-        })
+        const _stopwords = wordsProvider.getStopWords()
+        const _vulgarwords = wordsProvider.getVulgarWords()
+        const _nawlWords = wordsProvider.getNAWLWords()
+        const _rosenbergWords = wordsProvider.getRosenbergWords()
+        const [stopwords,vulgarwords,nawlWords,rosenbergWords] = await Promise.all([_stopwords, _vulgarwords, _nawlWords, _rosenbergWords])
+
+        return new EmoReference(stopwords, vulgarwords, nawlWords, rosenbergWords)
     }
 
     sendInput(gameInput) {

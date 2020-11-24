@@ -51,11 +51,11 @@ t.test("Game when gets multiple words should correctly change the Emotional Stat
         const frozenDate = new Date()
 
         
-        const cases = [// Happiness: 0, Anger: 1 *52, Sadness: 0, Fear: 0, Disgust: 1*60
-                        [["ograniczać", "i", "znudzony", "kurwa"], [EmoHue.Anger, 62, 4]],
+        const cases = [ // Anger NAWL, unknwon stopword, Disust rosenberg, unknown nawl  
+                        [["ograniczać", "i", "znudzony", "kurwa"], [EmoHue.Anger, 50, 4]],
                         
-                        // Happiness: 0, Anger: 0, Sadness: 60, Fear: 0, Disgust: 60
-                        [["apatyczna", "znudzony", "kurwa"], [EmoHue.Disgust, 83, 3]],
+                        // sadness rosenberg, disgust rosenberg, unknwon vulgar
+                        [["apatyczna", "znudzony", "jebać"], [EmoHue.Disgust, 83, 3]],
 
                         // Happiness: 60+60+42, Anger: 70, Sadness: 0, Fear: 0, Disgust: 0
                         // [["ożywiony", "podekscytowany", "wzburzony", "kurwa", "i", "gramofon"], [EmoHue.Happy, 67, 6]]
@@ -64,6 +64,7 @@ t.test("Game when gets multiple words should correctly change the Emotional Stat
         for(let [inputWords, expectedEmotionalState] of cases) {
             for(let word of inputWords) {
                 g.sendInput(new GameInput(word, frozenDate))
+                const a = 2
             }
             t.deepEquals(g.EmotionalStateHSV, expectedEmotionalState, inputWords.join(","))
             g.clearState()
