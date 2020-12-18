@@ -1,7 +1,6 @@
-import { EmoReference } from "./EmoReference";
-import { EmoState } from "./EmoState";
+import { RatedWordsReference } from "./RatedWordsReference";
+import { EmotionalState, WordTypes } from "./EmotionalState";
 import * as wordsProvider from './DictionaryWordsProvider.js'
-import { EmoWordType } from "./EmoElement";
 
 export class GameInput{
     constructor(word, timestamp){
@@ -10,17 +9,11 @@ export class GameInput{
     }
 }
 
-// export async function createGame() {
-//     const game = new Game();
-//     await game.initialize();
-//     return game;
-// }
-
 export class Game {
     static async createGame() {
         const game = new Game();
-        game.state = new EmoState()
-        game.emoRef = await game._buildEmoReference()
+        game.state = new EmotionalState()
+        game.ratedWordsRef = await game._buildEmoReference()
         return game
     }
 
@@ -31,25 +24,25 @@ export class Game {
         const _rosenbergWords = wordsProvider.getRosenbergWords()
         const [stopwords,vulgarwords,nawlWords,rosenbergWords] = await Promise.all([_stopwords, _vulgarwords, _nawlWords, _rosenbergWords])
 
-        return new EmoReference(stopwords, vulgarwords, nawlWords, rosenbergWords)
+        return new RatedWordsReference(stopwords, vulgarwords, nawlWords, rosenbergWords)
     }
 
     sendInput(gameInput) {
-        const emoElement = this.emoRef.getEmoElement(gameInput.word)
-        this.state.addEmoElement(emoElement)
+        const emoElement = this.ratedWordsRef.getEmoElement(gameInput.word)
+        this.state.addEmoCharge(emoElement)
         return emoElement.hue
     }
 
     clearState() {
-        this.state = new EmoState()
+        this.state = new EmotionalState()
     }
 
     get EmotionalStateHSV() {
-        return [this.state.H, this.state.S, this.state.V]
+        return this.state.getEmotionStateAsHSVColor()
     }
 
     get RosenbergWords() {
-        return this.emoRef.emoStems.filter(emoStem => emoStem.type === EmoWordType.rosenberg)
+        return this.ratedWordsRef.entries.filter(emoStem => emoStem.type === WordTypes.rosenberg)
     }
 }
 

@@ -29,7 +29,6 @@ elements.toggleGameBtn.on('click', async () => {
         gameView.renderGameScore(game.EmotionalStateHSV);
     }
     catch(e){
-        console.log(config)
         if(config.mode === "production") {
             gameView.renderError(`Nie można teraz uruchomić gry.`);
         }
@@ -63,8 +62,7 @@ elements.inputGameText.on('input', event => {
     const currentTime = new Date()
     const lastWord = getLastWord(inputVal);
 
-    console.log(lastWord)
     const hue = game.sendInput(new GameInput(lastWord, currentTime))
     gameView.renderLastScore(hue)
-    gameView.renderGameScore(game.EmotionalStateHSV);
+    gameView.renderGameScore(game.EmotionalStateHSL);
 })
