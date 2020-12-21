@@ -3,95 +3,55 @@ require = require("esm")(module)
 const t = require('tape-catch')
 
 const { Game, GameInput } = require('../src/js/models/Game.js')
-const { EmoHue } = require('../src/js/models/EmoElement.js')
-const { EmoStateHSV } = require("../src/js/models/EmoState.js")
 
-t.test("Game after initialization should Neutral Emotional State", function (t) {
-    Game.createGame().then(g => {
-        const actualEmoStateHSV = g.EmotionalStateHSV
-        t.deepEquals(actualEmoStateHSV, {H: EmoHue.Neutral, 0, 0))
-        t.end()
-    })
+t.test("Single word affects game state.", async function (t) {
+    const testCases = [
+        { name: "Game when gets an unknown word it should affect Emotional State HSV", input: "Jestem", expectedHSV: { H: 280, S: 25, V: 1 } },
+        { name: "Game when gets a stopword it should affect Emotional State HSV", input: "i", expectedHSV: { H: 280, S: 25, V: 1 } },
+        { name: "Game when gets a nawl word it should affect Emotional State HSV", input: "ograniczać", expectedHSV: { H: 0, S: 50, V: 1 } },
+        { name: "Game when gets a rosenberg word it should affect Emotional State HSV", input: "markotny", expectedHSV: { H: 210, S: 75, V: 1 } }
+    ];
+    for (const tc of testCases) {
+        const g = await Game.createGame()
+        g.sendInput(new GameInput(tc.input, new Date()));
+        const actualEmoStateHSV = g.EmotionalStateHSV;
+        t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
+    }
+    t.end();
 })
 
-t.test("Game when gets an unknown word it should affect Emotional State saturation", function (t) {
-    Game.createGame().then(g => {
-        g.sendInput(new GameInput("Jestem", new Date()))
-        const actualEmoStateHSV = g.EmotionalStateHSV
-        t.deepEquals(actualEmoStateHSV, new EmoStateHSV(EmoHue.Neutral, 25, 1))
-        t.end()
-    })
-})
 
-t.test("Game when gets a stopword it should affect Emotional State saturation", function (t) {
-    Game.createGame().then(g => {
-        g.sendInput(new GameInput("i", new Date()))
-        const actualEmoStateHSV = g.EmotionalStateHSV
-        t.deepEquals(actualEmoStateHSV, new EmoStateHSV(EmoHue.Neutral, 25, 1))
-        t.end()
-    })
-})
-
-t.test("Game when gets a nawl word it should affect Emotional State saturation", function (t) {
-    Game.createGame().then(g => {
-        g.sendInput(new GameInput("ograniczać", new Date())) // 52
-        const actualEmoStateHSV = g.EmotionalStateHSV
-        t.deepEquals(actualEmoStateHSV, new EmoStateHSV(EmoHue.Anger, 50, 1))
-        t.end()
-    })
-})
-
-t.test("Game when gets a rosenberg word it should affect Emotional State saturation", function (t) {
-    Game.createGame().then(g => {
-        g.sendInput(new GameInput("markotny", new Date())) // 52
-        const actualEmoStateHSV = g.EmotionalStateHSV
-        t.deepEquals(actualEmoStateHSV, new EmoStateHSV(EmoHue.Sadness, 75, 1))
-        t.end()
-    })
-})
-
-t.test("Game when gets multiple words should correctly change the Emotional State", function (t) {
-    Game.createGame().then(g => {
-        const frozenDate = new Date()
-
-        
-        const cases = [ // Anger NAWL, unknwon stopword, Disust rosenberg, unknown nawl  
-                        [["ograniczać", "i", "znudzony", "kurwa"], new EmoStateHSV(EmoHue.Anger, 50, 4)],
-                        
-                        // sadness rosenberg, disgust rosenberg, unknwon vulgar
-                        [["apatyczna", "znudzony", "jebać"], new EmoStateHSV(EmoHue.Disgust, 83, 3)]
-
-                        // Happiness: 60+60+42, Anger: 70, Sadness: 0, Fear: 0, Disgust: 0
-                        // [["ożywiony", "podekscytowany", "wzburzony", "kurwa", "i", "gramofon"], [EmoHue.Happy, 67, 6]]
-                    ]
-
-        for(let [inputWords, expectedEmotionalState] of cases) {
-            for(let word of inputWords) {
-                g.sendInput(new GameInput(word, frozenDate))
-            }
-            const actualEmoStateHSV = g.EmotionalStateHSV
-            t.deepEquals(actualEmoStateHSV, expectedEmotionalState, inputWords.join(","))
-            g.clearState()
+t.test("Game when gets multiple words should correctly change the Emotional State", async function (t) {
+    const testCases = [
+        {
+            name: "Anger NAWL, Unknwon Stopword, Disgust Rosenberg, Unknown Vulgar",
+            inputs: ["ograniczać", "i", "znudzony", "kurwa"],
+            expectedHSV: { H: 0, S: 62, V: 4 }
+        },
+        {
+            name: "Sadness Rosenberg, Disgust Rosenberg, Unknown Vulgar",
+            inputs: ["apatyczna", "znudzony", "jebać"],
+            expectedHSV: { H: 120, S: 83, V: 3 }
+        },
+        {
+            name: "Happiness Rosenberg, Happiness Rosenberg, Anger Rosenberg, Unknown Vulgar, Unknown Stopword, Happiness NAWL",
+            inputs: ["ożywiony", "podekscytowany", "wzburzony", "kurwa", "i", "gramofon"],
+            expectedHSV: { H: 60, S: 66, V: 6 }
+        },
+        {
+            name: "Happiness Rosenberg, Unknown Unknown",
+            inputs: ["uskrzydlony", "foo"],
+            expectedHSV: { H: 60, S: 37, V: 2 }
         }
+    ]
 
-        t.end()
-    })
+    for(const tc of testCases) {
+        const g = await Game.createGame();
+        for (const word of tc.inputs) {
+            g.sendInput(new GameInput(word, new Date()));
+        }
+        const actualEmoStateHSV = g.EmotionalStateHSV;
+        t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
+    }
+    t.end();
 })
-
-
-// t.test('Game when gets input converts it to EmotionWords and has correct EmotionState', function(t){
-//     createGame().then(g => {
-//         g.sendInput(new GameInput("Jestem", new Date()))
-//         g.sendInput(new GameInput("apatyczna", new Date()))
-
-//         const expectedEmotionWords = [ new EmotionWord("Jestem", "Jestem", EmoHue.Unknown, 0),
-//                                        new EmotionWord("zakłopotona", "zakłpoton", EmoHue.Fear, 38)]
-//         const actualEmotionWords = g.state.emotionWords
-//         t.equal(actualEmotionWords, expectedEmotionWords)
-        
-//         const expectedEmotionalState = [EmoHue.Fear, 50, 22)
-//         const actualEmotionalState = g.EmotionalState
-//         t.equal(actualEmotionalState, expectedEmotionalState)
-//         t.end()
-//     })
-// })

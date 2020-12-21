@@ -16,8 +16,8 @@ export class RatedWordsReference {
         const duplicatePriorities = {
             [WordTypes.unknown]: 0,
             [WordTypes.stopword]: 1, 
-            [WordTypes.vulgar]: 2, 
-            [WordTypes.nawl]: 3, 
+            [WordTypes.nawl]: 2, 
+            [WordTypes.vulgar]: 3, 
             [WordTypes.rosenberg]:4 
         }
 

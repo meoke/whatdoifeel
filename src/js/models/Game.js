@@ -1,6 +1,6 @@
 import { RatedWordsReference } from "./RatedWordsReference";
 import { EmotionalState, WordTypes } from "./EmotionalState";
-import * as wordsProvider from './DictionaryWordsProvider.js'
+import * as wordsProvider from './RatedWordsProvider.js'
 
 export class GameInput{
     constructor(word, timestamp){
@@ -28,8 +28,8 @@ export class Game {
     }
 
     sendInput(gameInput) {
-        const emoElement = this.ratedWordsRef.getEmoElement(gameInput.word)
-        this.state.addEmoCharge(emoElement)
+        const emoElement = this.ratedWordsRef.getEmotionalCharge(gameInput.word)
+        this.state.addEmotionalCharge(emoElement)
         return emoElement.hue
     }
 
