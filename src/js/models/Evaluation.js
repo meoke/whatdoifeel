@@ -28,9 +28,9 @@ export class Evaluation {
     }
 
     sendInput(gameInput) {
-        const emoElement = this.ratedWordsRef.getEmotionalCharge(gameInput.word)
-        this.state.addEmotionalCharge(emoElement)
-        return emoElement.hue
+        const emotionalCharge = this.ratedWordsRef.getEmotionalCharge(gameInput.word);
+        this.state.addEmotionalCharge(emotionalCharge);
+        return emotionalCharge.emotion;
     }
 
     clearState() {

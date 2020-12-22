@@ -1,4 +1,4 @@
-import {Game, GameInput} from './models/Game'
+import {Evaluation, EvaluationInput} from './models/Evaluation'
 
 import * as gameView from './views/game';
 import { elements } from './views/base';
@@ -10,23 +10,23 @@ import '../css/normalize.css';
 
 import _ from 'underscore';
 
-let game;
-let gameIsRunning = false;
+let evaluation;
+let evaluationIsRunning = false;
 
 elements.toggleGameBtn.on('click', async () => {
     try {
-        if(gameIsRunning){
-            game.clearState();
+        if(evaluationIsRunning){
+            evaluation.clearState();
             gameView.clearGameInput();
         }
         else{
-            game = await Game.createGame();
+            evaluation = await Evaluation.createEvaluation();
             gameView.activateGameInput();
             gameView.toggleBtnToRestartGame();
-            gameView.showRosenbergWords(game.RosenbergWords);
-            gameIsRunning = true;
+            gameView.showRosenbergWords(evaluation.RosenbergWords);
+            evaluationIsRunning = true;
         }
-        gameView.renderGameScore(game.EmotionalStateHSV);
+        gameView.renderGameScore(evaluation.EmotionalStateHSV);
     }
     catch(e){
         if(config.mode === "production") {
@@ -62,7 +62,7 @@ elements.inputGameText.on('input', event => {
     const currentTime = new Date()
     const lastWord = getLastWord(inputVal);
 
-    const hue = game.sendInput(new GameInput(lastWord, currentTime))
-    gameView.renderLastScore(hue)
-    gameView.renderGameScore(game.EmotionalStateHSL);
+    const emotion = evaluation.sendInput(new EvaluationInput(lastWord, currentTime))
+    gameView.renderLastScore(emotion)
+    gameView.renderGameScore(evaluation.EmotionalStateHSV);
 })

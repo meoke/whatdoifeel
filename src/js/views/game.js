@@ -1,5 +1,5 @@
 import { elements } from './base';
-import {EmoHue} from '../models/EmoElement'
+import {Emotions} from '../models/EmotionalState'
 import $ from 'jquery'
 import 'jquery-color'
 
@@ -19,8 +19,10 @@ export const toggleBtnToRestartGame = () => {
     elements.toggleGameBtn.html(btnVal)
 }
 
-export const renderGameScore = emoStateHSL => {
-    const color = $.Color({ hue: emoStateHSL.Hue, saturation: emoStateHSL.Saturation, lightness: emoStateHSL.Lightness})
+export const renderGameScore = emoStateHSV => {
+    console.log(emoStateHSV);
+    // const color = $.Color({ hue: emoStateHSV.H, saturation: emoStateHSV.S, lightness: emoStateHSV.V})
+    const color = $.Color("aqua")
     elements.inputGameText.animate( {
 		borderBottomColor: color,
 		borderLeftColor: color,
@@ -32,20 +34,20 @@ export const renderGameScore = emoStateHSL => {
 export const renderLastScore = lastHue => {
     let elToAnimate;
     switch(lastHue){
-        case EmoHue.Anger:
+        case Emotions.Anger:
             elToAnimate = elements.angerHeader;
             break;
-        case EmoHue.Disgust:
+        case Emotions.Disgust:
             elToAnimate = elements.disgustHeader;
             break;
-        case EmoHue.Fear:
+        case Emotions.Fear:
             elToAnimate = elements.fearHeader;
             break;
-        case EmoHue.Happy:
+        case Emotions.Happy:
             console.log(lastHue)
             elToAnimate = elements.happyHeader;
             break;
-        case EmoHue.Sadness:
+        case Emotions.Sadness:
             elToAnimate = elements.sadnessHeader;
             break;
         default:
@@ -68,12 +70,12 @@ export const renderError = message => {
 }
 
 export const showRosenbergWords = (rosenbergWords) => {
-    elements.angerColumn.append(pies(rosenbergWords, EmoHue.Anger));
-    elements.disgustColumn.append(pies(rosenbergWords, EmoHue.Disgust));
-    elements.fearColumn.append(pies(rosenbergWords, EmoHue.Fear));
-    elements.sadnessColumn.append(pies(rosenbergWords, EmoHue.Sadness));
+    elements.angerColumn.append(pies(rosenbergWords, Emotions.Anger));
+    elements.disgustColumn.append(pies(rosenbergWords, Emotions.Disgust));
+    elements.fearColumn.append(pies(rosenbergWords, Emotions.Fear));
+    elements.sadnessColumn.append(pies(rosenbergWords, Emotions.Sadness));
     
-    const happySpans = pies(rosenbergWords, EmoHue.Happy)
+    const happySpans = pies(rosenbergWords, Emotions.Happy)
     const halfLength = Math.floor(happySpans.length/2)
     const happyPart1 = happySpans.slice(0, halfLength)
     const happyPart2 = happySpans.slice(halfLength)
