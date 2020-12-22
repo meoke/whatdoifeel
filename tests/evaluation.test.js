@@ -2,18 +2,18 @@
 require = require("esm")(module)
 const t = require('tape-catch')
 
-const { Game, GameInput } = require('../src/js/models/Game.js')
+const { Evaluation, EvaluationInput } = require('../src/js/models/Evaluation.js')
 
-t.test("Single word affects game state.", async function (t) {
+t.test("Single word affects evaluation state.", async function (t) {
     const testCases = [
-        { name: "Game when gets an unknown word it should affect Emotional State HSV", input: "Jestem", expectedHSV: { H: 280, S: 25, V: 1 } },
-        { name: "Game when gets a stopword it should affect Emotional State HSV", input: "i", expectedHSV: { H: 280, S: 25, V: 1 } },
-        { name: "Game when gets a nawl word it should affect Emotional State HSV", input: "ograniczać", expectedHSV: { H: 0, S: 50, V: 1 } },
-        { name: "Game when gets a rosenberg word it should affect Emotional State HSV", input: "markotny", expectedHSV: { H: 210, S: 75, V: 1 } }
+        { name: "Evaluation when gets an unknown word it should affect Emotional State HSV", input: "Jestem", expectedHSV: { H: 280, S: 25, V: 1 } },
+        { name: "Evaluation when gets a stopword it should affect Emotional State HSV", input: "i", expectedHSV: { H: 280, S: 25, V: 1 } },
+        { name: "Evaluation when gets a nawl word it should affect Emotional State HSV", input: "ograniczać", expectedHSV: { H: 0, S: 50, V: 1 } },
+        { name: "Evaluation when gets a rosenberg word it should affect Emotional State HSV", input: "markotny", expectedHSV: { H: 210, S: 75, V: 1 } }
     ];
     for (const tc of testCases) {
-        const g = await Game.createGame()
-        g.sendInput(new GameInput(tc.input, new Date()));
+        const g = await Evaluation.createEvaluation()
+        g.sendInput(new EvaluationInput(tc.input, new Date()));
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
     }
@@ -21,7 +21,7 @@ t.test("Single word affects game state.", async function (t) {
 })
 
 
-t.test("Game when gets multiple words should correctly change the Emotional State", async function (t) {
+t.test("Evaluation when gets multiple words should correctly change the Emotional State", async function (t) {
     const testCases = [
         {
             name: "Anger NAWL, Unknwon Stopword, Disgust Rosenberg, Unknown Vulgar",
@@ -46,9 +46,9 @@ t.test("Game when gets multiple words should correctly change the Emotional Stat
     ]
 
     for(const tc of testCases) {
-        const g = await Game.createGame();
+        const g = await Evaluation.createEvaluation();
         for (const word of tc.inputs) {
-            g.sendInput(new GameInput(word, new Date()));
+            g.sendInput(new EvaluationInput(word, new Date()));
         }
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);

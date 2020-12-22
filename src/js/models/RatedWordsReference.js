@@ -26,8 +26,8 @@ export class RatedWordsReference {
                          .map(w => _.extend(w, {priority: duplicatePriorities[w.wordType]}))
                          .sortBy("priority")
                          .reverse()
-                          .uniq(false, _.iteratee('word'))
-                           .map(w => new RatedWordEntry(w.word, w.emotion, w.wordType))
+                         .uniq(false, _.iteratee('word'))
+                         .map(w => new RatedWordEntry(w.word, w.emotion, w.wordType))
                          .value()
     }
 

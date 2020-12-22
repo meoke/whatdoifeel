@@ -1,4 +1,4 @@
-import * as _ from 'underscore'
+import _ from 'underscore'
 
 export const Emotions = Object.freeze({
     Fear: 0,
@@ -71,15 +71,18 @@ export class EmotionalState {
                 [WordTypes.unknown]: 0
             }
 
-            const a = _.chain(this.emotionalCharges)
-                    .groupBy("wordType")
-                    .mapObject((emoElements, wordType) => {
-                        return Saturations[wordType] * emoElements.length
-                    })
-                    .values()
-                    .reduce((a, b) => a + b)
-                    .value()
-            return a === undefined ? 0 : Math.floor(a/this.emotionalCharges.length)
+            const saturationsSum = _.chain(this.emotionalCharges)
+                                    .groupBy("wordType")
+                                    .mapObject((emoElements, wordType) => {
+                                        return Saturations[wordType] * emoElements.length
+                                    })
+                                    .values()
+                                    .reduce((a, b) => a + b)
+                                    .value()
+            const saturationMean = saturationsSum === undefined ?
+                                   0 :
+                                   Math.floor(saturationsSum/this.emotionalCharges.length)
+            return saturationMean
         }
 
         const calculateValue = () => {

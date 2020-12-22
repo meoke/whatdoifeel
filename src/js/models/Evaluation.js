@@ -2,19 +2,19 @@ import { RatedWordsReference } from "./RatedWordsReference";
 import { EmotionalState, WordTypes } from "./EmotionalState";
 import * as wordsProvider from './RatedWordsProvider.js'
 
-export class GameInput{
+export class EvaluationInput{
     constructor(word, timestamp){
         this.word = word
         this.timestamp = timestamp
     }
 }
 
-export class Game {
-    static async createGame() {
-        const game = new Game();
-        game.state = new EmotionalState()
-        game.ratedWordsRef = await game._buildEmoReference()
-        return game
+export class Evaluation {
+    static async createEvaluation() {
+        const evaluation = new Evaluation();
+        evaluation.state = new EmotionalState()
+        evaluation.ratedWordsRef = await evaluation._buildEmoReference()
+        return evaluation
     }
 
     async _buildEmoReference() {
@@ -46,4 +46,4 @@ export class Game {
     }
 }
 
-export default Game;
+export default Evaluation;
