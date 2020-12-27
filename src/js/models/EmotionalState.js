@@ -17,6 +17,15 @@ export const WordTypes = Object.freeze({
     unknown: 4
 })
 
+export const EmotionHues = Object.freeze({
+    [Emotions.Fear]: 300,
+    [Emotions.Sadness]: 210,
+    [Emotions.Disgust]: 120,
+    [Emotions.Anger]: 0,
+    [Emotions.Happy]: 160,
+    [Emotions.Neutral]: 280
+})
+
 export class EmotionalCharge {
     constructor(word, emotion, wordType) {
         this.word = word
@@ -39,15 +48,6 @@ export class EmotionalState {
 
     getEmotionStateAsHSVColor() {
         const calculateHue = () => {
-            const Hues = {
-                [Emotions.Fear]: 300,
-                [Emotions.Sadness]: 210,
-                [Emotions.Disgust]: 120,
-                [Emotions.Anger]: 0,
-                [Emotions.Happy]: 60,
-                [Emotions.Neutral]: 280
-            }
-
             const topEmotion = _.chain(this.emotionalCharges)
                             .filter(el => el.emotion !== Emotions.Neutral)
                             .groupBy("emotion")
@@ -59,7 +59,7 @@ export class EmotionalState {
                             .first()
                             .value()
 
-            return topEmotion === undefined ? Hues[Emotions.Neutral] : Hues[parseInt(topEmotion.emotion)]
+            return topEmotion === undefined ? EmotionHues[Emotions.Neutral] : EmotionHues[parseInt(topEmotion.emotion)]
         }
 
         const calculateSaturation = () => {
@@ -86,7 +86,7 @@ export class EmotionalState {
         }
 
         const calculateValue = () => {
-            return this.emotionalCharges.length;
+            return 80 + this.emotionalCharges.length;
         }
 
         return {

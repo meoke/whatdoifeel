@@ -19,10 +19,8 @@ export const toggleBtnToRestartGame = () => {
     elements.toggleGameBtn.html(btnVal)
 }
 
-export const renderGameScore = emoStateHSV => {
-    console.log(emoStateHSV);
-    // const color = $.Color({ hue: emoStateHSV.H, saturation: emoStateHSV.S, lightness: emoStateHSV.V})
-    const color = $.Color("aqua")
+export const renderGameScore = ColorHSL => {
+    const color = $.Color({ hue: ColorHSL.H, saturation: ColorHSL.S, lightness: ColorHSL.L})
     elements.inputGameText.animate( {
 		borderBottomColor: color,
 		borderLeftColor: color,
