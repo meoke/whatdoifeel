@@ -1,17 +1,29 @@
-import {Evaluation, EvaluationInput} from './models/Evaluation'
-
-import * as gameView from './views/game';
-import { elements } from './views/base';
-import config from './config'
+import _ from 'underscore';
 
 import '../css/style.css';
 import '../css/skeleton.css';
 import '../css/normalize.css';
 
-import _ from 'underscore';
+import config from './config'
+import Controller from './controller'
+import {EvaluationFactory} from './models/Evaluation'
+import {EvaluationView} from './views/EvaluationView'
+
+const model = EvaluationFactory.createEvaluation();
+const view = EvaluationView();
+const controller = new Controller(model, view);
+
+
+import {Evaluation, EvaluationInput} from './models/Evaluation'
+
+import * as gameView from './views/game';
+import { elements } from './views/base';
+
+
 
 let evaluation;
 let evaluationIsRunning = false;
+
 
 elements.toggleGameBtn.on('click', async () => {
     try {
@@ -39,30 +51,15 @@ elements.toggleGameBtn.on('click', async () => {
 })
 
 elements.inputGameText.on('input', event => {
-    const wordsSeparators = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]/g;
-
-    const isWordSeparator = char => char.match(wordsSeparators)
-
-
-    const getLastOfNotEmptyStr = iterable => iterable[iterable.length - 1]
+    
 
     const inputVal = event.target.value
     if(_.isEmpty(inputVal))
         return;
 
-    const lastChar = getLastOfNotEmptyStr(inputVal)
-    if(!isWordSeparator(lastChar))
-        return;
+    
 
-    const getLastWord = str => {
-        const words = str.split(wordsSeparators).filter(a=>a)
-        return _.last(words);
-    }
-
-    const currentTime = new Date()
-    const lastWord = getLastWord(inputVal);
-
-    const emotion = evaluation.sendInput(new EvaluationInput(lastWord, currentTime))
+    
     gameView.renderLastScore(emotion)
     const HSV = evaluation.EmotionalStateHSV
     gameView.renderGameScore(HSVtoHSL(HSV.H, HSV.S/100, (80+HSV.V)/100));

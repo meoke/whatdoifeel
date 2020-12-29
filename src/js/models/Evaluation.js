@@ -2,18 +2,12 @@ import { RatedWordsReference } from "./RatedWordsReference";
 import { EmotionalState, WordTypes } from "./EmotionalState";
 import * as wordsProvider from './RatedWordsProvider.js'
 
-export class EvaluationInput{
-    constructor(word, timestamp){
-        this.word = word
-        this.timestamp = timestamp
-    }
-}
-
-export class Evaluation {
+export class EvaluationFactory {
     static async createEvaluation() {
         const evaluation = new Evaluation();
         evaluation.state = new EmotionalState()
         evaluation.ratedWordsRef = await evaluation._buildEmoReference()
+        evaluation.onEmotionalStateChange = () => {console.log("Emotional State Changed")}
         return evaluation
     }
 
@@ -26,23 +20,29 @@ export class Evaluation {
 
         return new RatedWordsReference(stopwords, vulgarwords, nawlWords, rosenbergWords)
     }
+}
 
-    sendInput(gameInput) {
-        const emotionalCharge = this.ratedWordsRef.getEmotionalCharge(gameInput.word);
+class Evaluation {
+    sendInput(word) {
+        const emotionalCharge = this.ratedWordsRef.getEmotionalCharge(word);
         this.state.addEmotionalCharge(emotionalCharge);
-        return emotionalCharge.emotion;
+        this.onEmotionalStateChange(this.state.getEmotionStateAsHSVColor());
     }
 
     clearState() {
         this.state = new EmotionalState()
     }
 
-    get EmotionalStateHSV() {
-        return this.state.getEmotionStateAsHSVColor()
-    }
+    // get EmotionalStateHSV() {
+    //     return this.state.getEmotionStateAsHSVColor()
+    // }
 
     get RosenbergWords() {
         return this.ratedWordsRef.entries.filter(emoStem => emoStem.type === WordTypes.rosenberg)
+    }
+
+    bindOnStateChange(callback) {
+        this.onEmotionalStateChange = callback;
     }
 }
 
