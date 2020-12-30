@@ -39,46 +39,34 @@ export class Controller {
         const wordsSeparators = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]/g;
 
         const isWordSeparator = char => char.match(wordsSeparators)
-
-        const lastChar = _.last(inputValue)
-        if(!isWordSeparator(lastChar))
+        if(!isWordSeparator(_.last(inputValue)))
             return;
 
-        const getLastWord = str => {
-            const words = str.split(wordsSeparators).filter(a=>a)
-            return _.last(words);
+        const getLastWord = () => {
+            return _.chain(inputValue.split(wordsSeparators)).filter(a=>a).last().value();
         }
 
         const lastWord = getLastWord(inputValue);
-
-        this.evaluationModel.addFeeling(lastWord);
+        if(!_.isEmpty(lastWord)){
+            this.evaluationModel.addFeeling(lastWord);
+        }
     }
 
     onStateChange = HSV => {
-        const HSL = this._HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
-        this.evaluationView.renderEmotionalState(HSL.H, HSL.S, HSL.L);
-    }
-
-    // H from [0,360], S from [0,1], V from [0,1]
-    /**
-     * HSVtoHSL takes HSV color and returns it as HSL.
-     * The return value is object with properties H, S, L corresponding 
-     * to Hue, Saturation and Lightness from HSL color model.
-     * @param {number} H - Hue from range [0,360]
-     * @param {number} S - Saturation from range [0,1]
-     * @param {number} V - Value from range [0,1]
-     * @returns {object} Object with properties H, S and L from HSL model.
-     */
-    _HSVtoHSL(H, S, V) {
-        const lightness = V*(1-S/2);
-        const saturation = (lightness === 0 || lightness === 1) ?
-                            0 :
-                            V-lightness / _.min([lightness, 1-lightness])
-        return {
-            H: H,
-            S: saturation,
-            L: lightness
+        const HSVtoHSL = (H, S, V) => { 
+            // H from [0,360], S from [0,1], V from [0,1]
+            const lightness = V*(1-S/2);
+            const saturation = (lightness === 0 || lightness === 1) ?
+                                0 :
+                                (V-lightness) / _.min([lightness, 1-lightness])
+            return {
+                H: H,
+                S: saturation,
+                L: lightness
+            }
         }
+        const HSL = HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
+        this.evaluationView.renderEmotionalState(HSL.H, HSL.S, HSL.L);
     }
 }
 

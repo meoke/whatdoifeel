@@ -6,17 +6,8 @@ import '../css/normalize.css';
 
 import Controller from './Controller'
 import {EmotionalStateEvaluationFactory} from './models/EmotionalStateEvaluation'
-import {EvaluationView} from './views/EvaluationView'
+import {Evaluation as EvaluationView} from './views/Evaluation'
 
-const modelFactory = new EmotionalStateEvaluationFactory();
-const view = new EvaluationView();
-
-let app;
-try{
-    app = new Controller(modelFactory, view);
-}
-catch(e){
-    config.mode === "production" ?
-    window.location.replace(window.location.host + "/error.html") :
-    console.error(`Game creation or refresh issue: ${e.message}`);
-}
+const evaluationModelFactory = new EmotionalStateEvaluationFactory();
+const evaluationView = new EvaluationView();
+const app = new Controller(evaluationModelFactory, evaluationView);

@@ -22,7 +22,7 @@ export class EmotionalStateEvaluationFactory {
     }
 }
 
-class EmotionalStateEvaluation {
+export class EmotionalStateEvaluation {
     get EmotionalStateHSV() {
         return this.state.getEmotionStateAsHSVColor()
     }

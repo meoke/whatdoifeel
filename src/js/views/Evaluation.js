@@ -2,7 +2,7 @@ import $ from "jquery";
 import 'jquery-color';
 import _ from 'underscore';
 
-export class EvaluationView {
+export class Evaluation {
     constructor() {
         this.elements = {
             evaluationContainer: $('#evaluationContainer'),
