@@ -44,7 +44,7 @@ h1 {
     padding-top: 50px;
 }
 
-#toggleGameBtn {
+.toggleEvaluationBtn {
     margin: auto;
     display: block;
 }
@@ -86,4 +86,8 @@ li {
 
 ul li a {
     color: var(--mainColor);
+}
+
+#restartEvaluationBtn{
+    display: none;
 }

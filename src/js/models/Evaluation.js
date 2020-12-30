@@ -3,10 +3,10 @@ import { EmotionalState, WordTypes } from "./EmotionalState";
 import * as wordsProvider from './RatedWordsProvider.js'
 
 export class EvaluationFactory {
-    static async createEvaluation() {
+    async createEvaluation() {
         const evaluation = new Evaluation();
         evaluation.state = new EmotionalState()
-        evaluation.ratedWordsRef = await evaluation._buildEmoReference()
+        evaluation.ratedWordsRef = await this._buildEmoReference()
         evaluation.onEmotionalStateChange = () => {console.log("Emotional State Changed")}
         return evaluation
     }
@@ -30,7 +30,8 @@ class Evaluation {
     }
 
     clearState() {
-        this.state = new EmotionalState()
+        this.state = new EmotionalState();
+        this.onEmotionalStateChange(this.state.getEmotionStateAsHSVColor());
     }
 
     // get EmotionalStateHSV() {
