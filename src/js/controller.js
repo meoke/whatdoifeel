@@ -5,49 +5,42 @@ import config from './config'
 
 export class Controller {
     constructor(evaluationModelFactory, evaluationView) {
-        this.evaluationModelFactory = evaluationModelFactory;
-        console.log("konstruktor", this.evaluationModelFactory)
         this.evaluationModel;
+        this.evaluationModelFactory = evaluationModelFactory;
 
         this.evaluationView = evaluationView;
-        this.evaluationView.bindEvaluationStartBtn(this.onEvaluationStart.bind(this));
-        this.evaluationView.bindRestartBtn(this.onEvaluationRestart.bind(this));
-        this.evaluationView.bindInputChange(this.onInputChange.bind(this));
+        this.evaluationView.bindStartEvaluationBtn(this.onEvaluationStart);
+        this.evaluationView.bindRestartEvaluationBtn(this.onEvaluationRestart);
+        this.evaluationView.bindFeelingsInputChange(this.onInputChange);
     }
 
-    async onEvaluationStart() {
-        console.log(this);
-        
+    onEvaluationStart = async () => {
         try{
-            this.evaluationModel =  await this.evaluationModelFactory.createEvaluation();
+            this.evaluationModel = await this.evaluationModelFactory.createEvaluation(this.onStateChange);
         }
         catch(e) {
             config.mode === "production" ?
-            this.evaluationView.renderError("Nie można uruchomić gry...") :
+            this.evaluationView.renderError("Problem z pobraniem słownika emocji.") :
             console.error(`Game creation or refresh issue: ${e.message}`);
         }
 
-        this.evaluationModel.bindOnStateChange(this.onStateChange.bind(this));
-        
-        this.evaluationView.activateGameInput();
-        this.evaluationView.toggleBtnToRestartGame();
+        this.evaluationView.activateFeelingsInput();
+        this.evaluationView.replaceStartBtnWithRestartBtn();
         const rosenbergWords = this.evaluationModel.RosenbergWords
         this.evaluationView.showRosenbergWords(rosenbergWords);
     }
 
-    onEvaluationRestart() {
-        this.evaluationModel.clearState();
-        this.evaluationView.clearGameInput();
+    onEvaluationRestart = () => {
+        this.evaluationModel.restartEvaluation();
+        this.evaluationView.clearFeelingsInput();
     }
 
-    onInputChange(inputValue) {
+    onInputChange = inputValue => {
         const wordsSeparators = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]/g;
 
         const isWordSeparator = char => char.match(wordsSeparators)
 
-        const getLastOfNotEmptyStr = iterable => iterable[iterable.length - 1]
-
-        const lastChar = getLastOfNotEmptyStr(inputValue)
+        const lastChar = _.last(inputValue)
         if(!isWordSeparator(lastChar))
             return;
 
@@ -56,49 +49,35 @@ export class Controller {
             return _.last(words);
         }
 
-        const currentTime = new Date()
         const lastWord = getLastWord(inputValue);
 
-        this.evaluationModel.sendInput(lastWord, currentTime);
+        this.evaluationModel.addFeeling(lastWord);
     }
 
-    onStateChange(HSV) {
-        const HSL = this._HSVtoHSL(HSV);
-        this.evaluationView.renderGameScore(HSL.H, HSL.S/100, HSL.V/100);
+    onStateChange = HSV => {
+        const HSL = this._HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
+        this.evaluationView.renderEmotionalState(HSL.H, HSL.S, HSL.L);
     }
 
     // H from [0,360], S from [0,1], V from [0,1]
     /**
-     * HSVtoHSL takes Hue, Saturation and Value values from HSV color model.
-     * It converts the color to HSL model.
-     * The return value is object with properties corresponding to Hue, Saturation and Lightness from HSL color model.
+     * HSVtoHSL takes HSV color and returns it as HSL.
+     * The return value is object with properties H, S, L corresponding 
+     * to Hue, Saturation and Lightness from HSL color model.
      * @param {number} H - Hue from range [0,360]
      * @param {number} S - Saturation from range [0,1]
      * @param {number} V - Value from range [0,1]
      * @returns {object} Object with properties H, S and L from HSL model.
      */
     _HSVtoHSL(H, S, V) {
-        const HSL_hue = H;
-        const HSL_lightness = V*(1-S/2);
-        let HSL_saturation;
-        if(HSL_lightness === 0 || HSL_lightness === 1){
-            HSL_saturation = 0
-            console.log("zero")
-        }
-        else {
-            const a = V-HSL_lightness
-            const b = _.min([HSL_lightness, 1-HSL_lightness])
-            console.log(a, b)
-            HSL_saturation = a / b
-        }
-        // const HSL_saturation = (HSL_lightness === 0 || HSL_lightness === 1) ?
-        //                         0 :
-        //                         (V-HSL_lightness) / _.min(HSL_lightness, 1-HSL_lightness)
-        console.log(H, S, V, "->", HSL_hue, HSL_saturation, HSL_lightness)
+        const lightness = V*(1-S/2);
+        const saturation = (lightness === 0 || lightness === 1) ?
+                            0 :
+                            V-lightness / _.min([lightness, 1-lightness])
         return {
-            H: HSL_hue,
-            S: HSL_saturation,
-            L: HSL_lightness
+            H: H,
+            S: saturation,
+            L: lightness
         }
     }
 }

@@ -1,7 +1,7 @@
-import { elements } from './base';
-import {Emotions} from '../models/EmotionalState'
-import $ from 'jquery'
-import 'jquery-color'
+// import { elements } from './base';
+// import {Emotions} from '../models/EmotionalState'
+// import $ from 'jquery'
+// import 'jquery-color'
 
 // export const activateGameInput = () => {
 //     elements.inputGameText.prop('disabled', false);
@@ -12,12 +12,12 @@ import 'jquery-color'
 //     elements.inputGameText.val("");
 // }
 
-export const toggleBtnToRestartGame = () => {
-    const btnVal = $( "<i/>", {
-            "class": "fas fa-undo",
-        })
-    elements.toggleGameBtn.html(btnVal)
-}
+// export const toggleBtnToRestartGame = () => {
+//     const btnVal = $( "<i/>", {
+//             "class": "fas fa-undo",
+//         })
+//     elements.toggleGameBtn.html(btnVal)
+// }
 
 // export const renderGameScore = ColorHSL => {
 //     const color = $.Color({ hue: ColorHSL.H, saturation: ColorHSL.S, lightness: ColorHSL.L})
@@ -42,7 +42,6 @@ export const toggleBtnToRestartGame = () => {
 //             elToAnimate = elements.fearHeader;
 //             break;
 //         case Emotions.Happy:
-//             console.log(lastHue)
 //             elToAnimate = elements.happyHeader;
 //             break;
 //         case Emotions.Sadness:

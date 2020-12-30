@@ -43,11 +43,11 @@
         <h1 class="add-padding">Jak się dziś czujesz?</h1>
     </header>
     <main>
-        <div id="gameContainer"  class="container">
+        <div id="evaluationContainer"  class="container">
             <p id="instruction">Użyj słów, o tu:</p>
             
             <div class="add-padding">
-                <textarea id="angerInput" type="text" disabled="true" class="u-full-width add-padding"></textarea>
+                <textarea id="feelingsInput" type="text" disabled="true" class="u-full-width add-padding"></textarea>
                 <button id="startEvaluationBtn" class="toggleEvaluationBtn">Start!</button>
                 <button id="restartEvaluationBtn" class="toggleEvaluationBtn"><i class="fas fa-undo"></i></button>
             </div>
@@ -55,7 +55,7 @@
                 <div class="four columns border-bottom">Potrzeby zaspokojone</div>
                 <div class="eight columns border-bottom">Potrzeby niezaspokojone</div>
             </div>
-            <div id="lastHueInfo" class="add-padding container u-max-full-width words-container">
+            <div id="rosenbergFeelings" class="add-padding container u-max-full-width words-container">
                 <div id="happyColumn1" class="x two columns u-max-full-width"><p id="happyHeader" class="subheader">Szczęście</p></div>
                 <div id="happyColumn2" class="x two columns u-max-full-width"><p class="white">Empty</p></div>
                 
@@ -65,7 +65,6 @@
                 <div id="sadnessColumn" class="x two columns u-max-full-width"><p id="sadnessHeader" class="subheader">Smutek</p></div>
             </div>
         </div>
-        <div id="gameResult"></div>
 
     </main>
     <footer>

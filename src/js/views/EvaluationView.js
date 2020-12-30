@@ -2,49 +2,45 @@ import $ from "jquery";
 import 'jquery-color';
 import _ from 'underscore';
 
-const elements = {
-    gameContainer: $('#gameContainer'),
-    gameInstruction: $('#instruction'),
-    startEvaluationBtn: $('#startEvaluationBtn'),
-    restartEvaluationBtn: $('#restartEvaluationBtn'),
-    inputGameText: $('#angerInput'),
-    lastHueInfo: $('#lastHueInfo'),
-    gameResult: $('#gameResult'),
-
-    angerHeader: $("#angerHeader"),
-    disgustHeader: $("#disgustHeader"),
-    fearHeader: $("#fearHeader"),
-    happyHeader: $("#happyHeader"),
-    sadnessHeader: $("#sadnessHeader"),
-
-    angerColumn: $("#angerColumn"),
-    disgustColumn: $("#disgustColumn"),
-    fearColumn: $("#fearColumn"),
-    happyColumn1: $("#happyColumn1"),
-    happyColumn2: $("#happyColumn2"),
-    sadnessColumn: $("#sadnessColumn"),
-};
-
 export class EvaluationView {
     constructor() {
+        this.elements = {
+            evaluationContainer: $('#evaluationContainer'),
+            evaluationInstruction: $('#instruction'),
+            startEvaluationBtn: $('#startEvaluationBtn'),
+            restartEvaluationBtn: $('#restartEvaluationBtn'),
+            feelingsInput: $('#feelingsInput'),
+            rosenbergFeelings: $('#rosenbergFeelings'),
         
+            angerHeader: $("#angerHeader"),
+            disgustHeader: $("#disgustHeader"),
+            fearHeader: $("#fearHeader"),
+            happyHeader: $("#happyHeader"),
+            sadnessHeader: $("#sadnessHeader"),
+        
+            angerColumn: $("#angerColumn"),
+            disgustColumn: $("#disgustColumn"),
+            fearColumn: $("#fearColumn"),
+            happyColumn1: $("#happyColumn1"),
+            happyColumn2: $("#happyColumn2"),
+            sadnessColumn: $("#sadnessColumn"),
+        }
     }
 
-    bindEvaluationStartBtn(handler) {
-        elements.startEvaluationBtn.on('click', () => {
+    bindStartEvaluationBtn(handler) {
+        this.elements.startEvaluationBtn.on('click', () => {
             handler();
         })
     }
 
-    bindRestartBtn(handler) {
-        elements.restartEvaluationBtn.on('click', () => {
-
+    bindRestartEvaluationBtn(handler) {
+        this.elements.restartEvaluationBtn.on('click', () => {
             handler();
         })
     }
 
-    bindInputChange(handler) {
-        elements.inputGameText.on('input', event => {
+    bindFeelingsInputChange(handler) {
+        this.elements.feelingsInput.on('input', event => {
             const inputValue = event.target.value;
             if(_.isEmpty(inputValue))
                 return;
@@ -52,20 +48,21 @@ export class EvaluationView {
         })
     }
 
-    renderError(errorMessage) {
-        const markup = `${errorMessage}`
-        elements.gameContainer.html(markup);
+    renderErrorMessage(errorMessage) {
+        const markup = `<h2>Wystąpił błąd...</h2>
+                        <p>${errorMessage}</p>
+                        <p>Odśwież stronę i spróbuj ponownie!</p>`
+        this.elements.evaluationContainer.html(markup);
     }
 
-    activateGameInput() {
-        elements.inputGameText.prop('disabled', false);
-        elements.inputGameText.focus()
+    activateFeelingsInput() {
+        this.elements.feelingsInput.prop('disabled', false);
+        this.elements.feelingsInput.focus();
     }
 
-    toggleBtnToRestartGame () {
-        console.log(elements)
-        elements.startEvaluationBtn.hide();
-        elements.restartEvaluationBtn.show();
+    replaceStartBtnWithRestartBtn () {
+        this.elements.startEvaluationBtn.hide();
+        this.elements.restartEvaluationBtn.css('display', 'block');
     }
 
     showRosenbergWords (rosenbergWords) {
@@ -90,13 +87,13 @@ export class EvaluationView {
         // elements.happyColumn2.append(happyPart2);
     }
 
-    clearGameInput() {
-        elements.inputGameText.val("");
+    clearFeelingsInput() {
+        this.elements.feelingsInput.val("");
     }
 
-    renderGameScore(ColorHSL) {
-        const color = $.Color({ hue: ColorHSL.H, saturation: ColorHSL.S, lightness: ColorHSL.L})
-        elements.inputGameText.animate( {
+    renderEmotionalState(H, S, L) {
+        const color = $.Color({ hue: H, saturation: S, lightness: L})
+        this.elements.feelingsInput.animate( {
             borderBottomColor: color,
             borderLeftColor: color,
             borderRightColor: color,
@@ -104,8 +101,8 @@ export class EvaluationView {
         }, 1500 );
     }
 
-    renderLastScore (lastHue) {
-        console.log(lastHue);
+    renderEmotion(emotion) {
+        console.log(emotion);
         // let elToAnimate;
         // switch(lastHue){
         //     case Emotions.Anger:
@@ -118,7 +115,6 @@ export class EvaluationView {
         //         elToAnimate = elements.fearHeader;
         //         break;
         //     case Emotions.Happy:
-        //         console.log(lastHue)
         //         elToAnimate = elements.happyHeader;
         //         break;
         //     case Emotions.Sadness:
