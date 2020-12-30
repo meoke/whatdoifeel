@@ -2,8 +2,12 @@
 require = require("esm")(module)
 const t = require('tape-catch')
 
-const { Evaluation, EvaluationInput } = require('../src/js/models/Evaluation.js')
+const { EmotionalStateEvaluationFactory } = require('../src/js/models/EmotionalStateEvaluation.js')
 const { EmotionHues, Emotions } = require('../src/js/models/EmotionalState.js')
+
+async function createEvaluation() {
+    return await (new EmotionalStateEvaluationFactory()).createEvaluation(()=>{});
+}
 
 t.test("Single word affects evaluation state.", async function (t) {
     const testCases = [
@@ -13,8 +17,8 @@ t.test("Single word affects evaluation state.", async function (t) {
         { name: "Evaluation when gets a rosenberg word it should affect Emotional State HSV", input: "markotny", expectedHSV: { H: 210, S: 75, V: 81 } }
     ];
     for (const tc of testCases) {
-        const g = await Evaluation.createEvaluation()
-        g.sendInput(new EvaluationInput(tc.input, new Date()));
+        const g = await createEvaluation()
+        g.addFeeling(tc.input);
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
     }
@@ -47,9 +51,9 @@ t.test("Evaluation when gets multiple words should correctly change the Emotiona
     ]
 
     for(const tc of testCases) {
-        const g = await Evaluation.createEvaluation();
+        const g = await createEvaluation();
         for (const word of tc.inputs) {
-            g.sendInput(new EvaluationInput(word, new Date()));
+            g.addFeeling(word);
         }
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
