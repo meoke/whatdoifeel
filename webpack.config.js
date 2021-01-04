@@ -31,16 +31,6 @@ module.exports = (env, options) => {
                 template: './src/index.html',
                 favicon: "./src/images/favicon.png"
             }),
-            new HtmlWebpackPlugin({
-                filename: 'about.html',
-                template: './src/about.html',
-                favicon: "./src/images/favicon.png"
-            }),
-            new HtmlWebpackPlugin({
-                filename: 'error.html',
-                template: './src/error.html',
-                favicon: "./src/images/favicon.png"
-            }),
             new CopyWebpackPlugin({
                 patterns: [
                     {

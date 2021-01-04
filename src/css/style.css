@@ -7,25 +7,20 @@ body, a {
     color: var(--mainColor);
 }
 
-/* header{
+h1 {
+    color: var(--mainColor);
     text-align: center;
-    margin: 5%;
-    color: var(--mainColor)
-}*/
+    padding-top: 50px;
+}
 
 .subheader {
     color: var(--mainColor);
 }
 
-#feelingsInput {
-    border-width: 10px;
-    border-style: solid;
-    border-radius: 5px;
-    height: 150px;
-}
-
-#angerInput:focus{
-    outline: 0px;
+#aboutButton {
+    padding: 50px 0px 0px 50px;
+    font-size: 2rem;
+    color: var(--mainColor);
 }
 
 .bold {
@@ -38,10 +33,15 @@ body, a {
     transition: 0.6s;
 }
 
-h1 {
-    color: var(--mainColor);
-    text-align: center;
-    padding-top: 50px;
+#feelingsInput {
+    border-width: 10px;
+    border-style: solid;
+    border-radius: 5px;
+    height: 150px;
+}
+
+#feelingsInput:focus{
+    outline: 0px;
 }
 
 .toggleEvaluationBtn {
@@ -49,12 +49,12 @@ h1 {
     display: block;
 }
 
-.add-padding {
-    padding-bottom: 50px;
+#restartEvaluationBtn{
+    display: none;
 }
 
-.container {
-    width: 100%
+.add-padding {
+    padding-bottom: 50px;
 }
 
 .white {
@@ -65,29 +65,33 @@ h1 {
     padding-left: 10px;
 }
 
-.vl {
-    border-left: 6px solid green;
-    height: 500px;
-  }
-
 .border-bottom {
     border-bottom: solid 1px var(--mainColor);
 }
 
-ul.menu{
-    padding: 50px 0px 0px 50px;
-    font-size: 2rem;
-    color: var(--mainColor);
+#evaluationContainer {
+    padding:0px 200px 0px 200px;
+    transition: margin-left 0.5s;
 }
 
-li {
-    list-style-type: none;
+#aboutContainer {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    background-color: white;
+    top: 0;
+    left: -40px;
+    overflow-x: hidden;
+    transition: 0.5s;
+    border-right: 2px solid var(--mainColor);
+    padding: 20px;
 }
 
-ul li a {
-    color: var(--mainColor);
-}
-
-#restartEvaluationBtn{
-    display: none;
+#aboutContainer .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
 }
