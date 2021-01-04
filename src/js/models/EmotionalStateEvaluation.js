@@ -23,13 +23,21 @@ export class EmotionalStateEvaluationFactory {
 }
 
 export class EmotionalStateEvaluation {
+     /**
+     * Get emotional state presented as color encoded in HSV model.
+     * @returns {object} Object with properties H, S, V that correspond to Hue, Saturation, Value 
+     */
     get EmotionalStateHSV() {
         return this.state.getEmotionStateAsHSVColor()
     }
 
+    /**
+     * Get list of Polish emotionally charged words as defined by Marschall Rosenberg.
+     * @returns {Array} Array of RatedWordEntry objects. 
+     */
     get RosenbergWords() {
         return this.ratedWordsRef.entries.filter(emoStem => 
-                                                 emoStem.type === WordTypes.rosenberg)
+                                                 emoStem.wordType === WordTypes.rosenberg)
     }
 
     addFeeling(word) {

@@ -1,7 +1,8 @@
 
 import _ from 'underscore';
 import config from './config'
-
+import { Emotions } from './models/EmotionalState';
+import {EmotionHeader} from './views/Evaluation'
 
 export class Controller {
     constructor(evaluationModelFactory, evaluationView) {
@@ -27,7 +28,13 @@ export class Controller {
         this.evaluationView.activateFeelingsInput();
         this.evaluationView.replaceStartBtnWithRestartBtn();
         const rosenbergWords = this.evaluationModel.RosenbergWords
-        this.evaluationView.showRosenbergWords(rosenbergWords);
+        this.evaluationView.showRosenbergWords(this._parseRosenbergWordsModelToView(rosenbergWords));
+    }
+
+    _parseRosenbergWordsModelToView(rosenbergWords) {
+        const o = {}
+        o[EmotionHeader.Anger] = rosenbergWords.filter(w => w.emotion === Emotions.Anger).map(w => w.originalWord);
+        return o;
     }
 
     onEvaluationRestart = () => {
@@ -43,7 +50,8 @@ export class Controller {
             return;
 
         const getLastWord = () => {
-            return _.chain(inputValue.split(wordsSeparators)).filter(a=>a).last().value();
+            return _.chain(inputValue.split(wordsSeparators))
+                    .filter(a=>a).last().value();
         }
 
         const lastWord = getLastWord(inputValue);

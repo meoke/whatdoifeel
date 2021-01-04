@@ -2,6 +2,14 @@ import $ from "jquery";
 import 'jquery-color';
 import _ from 'underscore';
 
+export const EmotionHeader = Object.freeze({
+    "Anger": 0,
+    "Disgust": 1,
+    "Fear": 2,
+    "Happiness": 3,
+    "Sadness": 4
+});
+
 export class Evaluation {
     constructor() {
         this.elements = {
@@ -15,14 +23,14 @@ export class Evaluation {
             angerHeader: $("#angerHeader"),
             disgustHeader: $("#disgustHeader"),
             fearHeader: $("#fearHeader"),
-            happyHeader: $("#happyHeader"),
+            happinessHeader: $("#happinessHeader"),
             sadnessHeader: $("#sadnessHeader"),
         
             angerColumn: $("#angerColumn"),
             disgustColumn: $("#disgustColumn"),
             fearColumn: $("#fearColumn"),
-            happyColumn1: $("#happyColumn1"),
-            happyColumn2: $("#happyColumn2"),
+            happinessColumn1: $("#happinessColumn1"),
+            happinessColumn2: $("#happinessColumn2"),
             sadnessColumn: $("#sadnessColumn"),
         }
     }
@@ -65,7 +73,18 @@ export class Evaluation {
         this.elements.restartEvaluationBtn.css('display', 'block');
     }
 
+    _createSpan(text) {
+        return $(`<span>${text}</span>`, {"style": "display: block"});
+    }
+    /**
+     * 
+     * @param {Map} rosenbergWords EmotionHeader values to Array of String values
+     *  
+     */
     showRosenbergWords (rosenbergWords) {
+        const getColumnContent = (words) => {
+            return _.map(words, w => this._createSpan(w));
+        };
         // const pies = (rosenbergWords, type) => {
         //     const a = rosenbergWords.filter(w => w.hue === type)
         //     return a.map(hw => $( "<span/>", {
@@ -73,11 +92,11 @@ export class Evaluation {
         //         "style": "display: block"
         //     }))
         // }
-
-        // elements.angerColumn.append(pies(rosenbergWords, Emotions.Anger));
-        // elements.disgustColumn.append(pies(rosenbergWords, Emotions.Disgust));
-        // elements.fearColumn.append(pies(rosenbergWords, Emotions.Fear));
-        // elements.sadnessColumn.append(pies(rosenbergWords, Emotions.Sadness));
+        
+        this.elements.angerColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Anger]));
+        this.elements.disgustColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Disgust]));
+        this.elements.fearColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Fear]));
+        this.elements.sadnessColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Sadness]));
         
         // const happySpans = pies(rosenbergWords, Emotions.Happy)
         // const halfLength = Math.floor(happySpans.length/2)
