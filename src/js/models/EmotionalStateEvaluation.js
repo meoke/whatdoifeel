@@ -17,7 +17,6 @@ export class EmotionalStateEvaluationFactory {
         const _nawlWords = wordsProvider.getNAWLWords()
         const _rosenbergWords = wordsProvider.getRosenbergWords()
         const [stopwords,vulgarwords,nawlWords,rosenbergWords] = await Promise.all([_stopwords, _vulgarwords, _nawlWords, _rosenbergWords])
-
         return new RatedWordsReference(stopwords, vulgarwords, nawlWords, rosenbergWords)
     }
 }
@@ -37,7 +36,7 @@ export class EmotionalStateEvaluation {
      */
     get RosenbergWords() {
         return this.ratedWordsRef.entries.filter(emoStem => 
-                                                 emoStem.wordType === WordTypes.rosenberg)
+                                                 emoStem.wordType === WordTypes.rosenberg) 
     }
 
     addFeeling(word) {

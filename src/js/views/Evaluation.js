@@ -73,9 +73,10 @@ export class Evaluation {
         this.elements.restartEvaluationBtn.css('display', 'block');
     }
 
-    _createSpan(text) {
-        return $(`<span>${text}</span>`, {"style": "display: block"});
+    _createDiv(text) {
+        return $(`<div>${text}</div>`);
     }
+
     /**
      * 
      * @param {Map} rosenbergWords EmotionHeader values to Array of String values
@@ -83,27 +84,21 @@ export class Evaluation {
      */
     showRosenbergWords (rosenbergWords) {
         const getColumnContent = (words) => {
-            return _.map(words, w => this._createSpan(w));
+            return _.map(words, w => this._createDiv(w));
         };
-        // const pies = (rosenbergWords, type) => {
-        //     const a = rosenbergWords.filter(w => w.hue === type)
-        //     return a.map(hw => $( "<span/>", {
-        //         "text": hw.originalWord,
-        //         "style": "display: block"
-        //     }))
-        // }
         
-        this.elements.angerColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Anger]));
-        this.elements.disgustColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Disgust]));
-        this.elements.fearColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Fear]));
-        this.elements.sadnessColumn.append(getColumnContent(rosenbergWords[EmotionHeader.Sadness]));
+        this.elements.angerColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.Anger)));
+        this.elements.disgustColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.Disgust)));
+        this.elements.fearColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.Fear)));
+        this.elements.sadnessColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.Sadness)));
         
-        // const happySpans = pies(rosenbergWords, Emotions.Happy)
-        // const halfLength = Math.floor(happySpans.length/2)
-        // const happyPart1 = happySpans.slice(0, halfLength)
-        // const happyPart2 = happySpans.slice(halfLength)
-        // elements.happyColumn1.append(happyPart1);
-        // elements.happyColumn2.append(happyPart2);
+        const happinessWords = rosenbergWords.get(EmotionHeader.Happiness)
+        console.log(rosenbergWords)
+        const happyParts = _.chunk(happinessWords, Math.floor(happinessWords.length/2));
+        if(happyParts.length >=2){
+            this.elements.happinessColumn1.append(getColumnContent(happyParts[0]))
+            this.elements.happinessColumn2.append(getColumnContent(happyParts[1]))
+        }
     }
 
     clearFeelingsInput() {

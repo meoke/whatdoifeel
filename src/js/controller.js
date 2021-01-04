@@ -25,16 +25,32 @@ export class Controller {
             console.error(`Game creation or refresh issue: ${e.message}`);
         }
 
+        this._prepareEvaluationBoard();
+        this._displayWordingHints();
+    }
+
+    _prepareEvaluationBoard() {
         this.evaluationView.activateFeelingsInput();
         this.evaluationView.replaceStartBtnWithRestartBtn();
-        const rosenbergWords = this.evaluationModel.RosenbergWords
-        this.evaluationView.showRosenbergWords(this._parseRosenbergWordsModelToView(rosenbergWords));
+    }
+
+    _displayWordingHints() {
+        const rosenbergWordsModel = this.evaluationModel.RosenbergWords
+        const rosenbergWordsMap = this._parseRosenbergWordsModelToView(rosenbergWordsModel)
+        this.evaluationView.showRosenbergWords(rosenbergWordsMap);
     }
 
     _parseRosenbergWordsModelToView(rosenbergWords) {
-        const o = {}
-        o[EmotionHeader.Anger] = rosenbergWords.filter(w => w.emotion === Emotions.Anger).map(w => w.originalWord);
-        return o;
+        const filterByEmotion = emotion => {
+            return rosenbergWords.filter(w => w.emotion === emotion).map(w => w.originalWord);
+        }
+        const rosenbergWordsMap = new Map();
+        rosenbergWordsMap.set(EmotionHeader.Anger, filterByEmotion(Emotions.Anger));
+        rosenbergWordsMap.set(EmotionHeader.Disgust, filterByEmotion(Emotions.Disgust));
+        rosenbergWordsMap.set(EmotionHeader.Fear, filterByEmotion(Emotions.Fear));
+        rosenbergWordsMap.set(EmotionHeader.Happiness, filterByEmotion(Emotions.Happy));
+        rosenbergWordsMap.set(EmotionHeader.Sadness, filterByEmotion(Emotions.Sadness));
+        return rosenbergWordsMap;
     }
 
     onEvaluationRestart = () => {
