@@ -33,6 +33,12 @@ export class Evaluation {
             happinessColumn2: $("#happinessColumn2"),
             sadnessColumn: $("#sadnessColumn"),
         }
+
+        this.elements.feelingsInput.on('keydown', e => {
+            if( e.key === "Backspace"){
+                e.preventDefault();
+            }
+        })
     }
 
     bindStartEvaluationBtn(handler) {
