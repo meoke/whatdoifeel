@@ -3,26 +3,17 @@
     --white: #ffffff;
 }
 
-body, a {
+a, h1, h2, h3, h6, .linkBtn {
     color: var(--mainColor);
 }
 
 h1 {
-    color: var(--mainColor);
     text-align: center;
-    padding-top: 50px;
+    font-family: 'Caveat', cursive;
 }
 
-.subheader {
-    color: var(--mainColor);
-}
-
-#aboutButton {
-    padding: 50px 0px 0px 50px;
-    font-size: 2rem;
-    color: var(--mainColor);
-}
-
+/* 
+show last emotion
 .bold {
     text-shadow: 0 0 2px var(--mainColor);
     transition: 0.6s;
@@ -31,13 +22,12 @@ h1 {
 .unbold {
     text-shadow: none;
     transition: 0.6s;
-}
-
+} */
 #feelingsInput {
-    border-width: 10px;
+    border-width: 5px;
     border-style: solid;
     border-radius: 5px;
-    height: 150px;
+    height: 150px; 
 }
 
 #feelingsInput:focus{
@@ -53,45 +43,72 @@ h1 {
     display: none;
 }
 
-.add-padding {
-    padding-bottom: 50px;
+#wordsHints {
+    overflow: hidden; 
+    height: 0; opacity: 0;
+    transition: height 0ms 400ms, opacity 400ms 0ms;
 }
 
-.white {
-    color: white;
+#wordsHints.visible {
+    height: auto; opacity: 1;
+    transition: height 0ms 0ms, opacity 600ms 0ms;
 }
 
-.x{
-    padding-left: 10px;
+#happinessColumn2 {
+    visibility: hidden;
 }
 
 .border-bottom {
     border-bottom: solid 1px var(--mainColor);
 }
 
-#evaluationContainer {
-    padding:0px 200px 0px 200px;
-    transition: margin-left 0.5s;
-}
+@media only screen and (min-width: 768px) {
+    #evaluationContainer>h1 {
+        font-size: 4em;
+    }
 
-#aboutContainer {
-    height: 100%;
-    width: 0;
-    position: fixed;
-    z-index: 1;
-    background-color: white;
-    top: 0;
-    left: -40px;
-    overflow-x: hidden;
-    transition: 0.5s;
-    border-right: 2px solid var(--mainColor);
-    padding: 20px;
-}
+    #aboutButton {
+        margin: 50px 0px 0px 50px;
+        font-size: 2rem;
+    }
 
-#aboutContainer .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
+    #evaluationContainer {
+        padding:0px 200px 0px 200px;
+        transition: margin-left 0.5s;
+    }
+    
+    #aboutContainer {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        background-color: white;
+        top: 0;
+        left: -40px;
+        overflow-x: hidden;
+        transition: 0.5s;
+        border-right: 2px solid var(--mainColor);
+        padding: 20px;
+    }
+    
+    #aboutContainer .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+
+    #feelingsInput {
+        border-width: 10px;
+        height: 150px;
+    }
+
+    .add-padding-bottom {
+        padding-bottom: 50px;
+    }
+
+    .add-padding-left{
+        padding-left: 10px;
+    }
 }

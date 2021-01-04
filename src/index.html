@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <!-- Basic Page Needs
@@ -18,6 +19,8 @@
     <!-- <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css"> -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@100;200&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat&display=swap" rel="stylesheet">
 
     <!-- CSS
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
@@ -36,7 +39,7 @@
 
 <body>
     <div>
-        <button id="aboutButton">About</button>
+        <button id="aboutButton" class="linkBtn">About</button>
         <main>
             <div id="aboutContainer">
                 <a href="javascript:void(0)" class="closebtn">&times;</a>
@@ -49,20 +52,25 @@
                 </div>
                 <div>
                     <h2>Jak używać?</h2>
-                    <p>Kliknij przycisk START. W miejscu na tekst opisz, co aktualnie czujesz. Używaj własnych słów, możesz też skorzystać z podpowiedzi na dole strony. </p>
-                    <p>Znawcy języka określili ładunek emocjonalny wielu słów. Słowa, które wpiszesz są analizowane a emocje, które wyrażają wpływają na kolor ramki tekstu.</p>
+                    <p>Kliknij przycisk START. W miejscu na tekst opisz, co aktualnie czujesz. Używaj własnych słów,
+                        możesz też skorzystać z podpowiedzi na dole strony. </p>
+                    <p>Znawcy języka określili ładunek emocjonalny wielu słów. Słowa, które wpiszesz są analizowane a
+                        emocje, które wyrażają wpływają na kolor ramki tekstu.</p>
                     <p>To tylko tyle i aż tyle :)</p>
                 </div>
                 <div>
                     <h2>Szczegóły techniczne</h2>
                     <p>Analiza słów odbywa się w Twojej przeglądarce internetowej.</p>
                     <p>Określenie ładunków emocjonalnych słów pochodzi z następujących źródeł:
-                        <ul>
-                            <li><a href="https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt">Stop-słowa</a></li>
-                            <li><a href="http://marcinmazurek.com.pl/polskie-wulgaryzmy">Wulgaryzmy</a></li>
-                            <li><a href="https://exp.lobi.nencki.gov.pl/nawl-analysis">Nencki Affective Word List</a></li>
-                            <li><a href="http://bakcylwiedzy.pl/wp-content/uploads/2015/09/lista-uczu%C4%87_M.Rosenberg.pdf">Emocje wg M.Rosenberga</a></li>
-                        </ul>
+                    <ul>
+                        <li><a href="https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt">Stop-słowa</a>
+                        </li>
+                        <li><a href="http://marcinmazurek.com.pl/polskie-wulgaryzmy">Wulgaryzmy</a></li>
+                        <li><a href="https://exp.lobi.nencki.gov.pl/nawl-analysis">Nencki Affective Word List</a></li>
+                        <li><a
+                                href="http://bakcylwiedzy.pl/wp-content/uploads/2015/09/lista-uczu%C4%87_M.Rosenberg.pdf">Emocje
+                                wg M.Rosenberga</a></li>
+                    </ul>
                     </p>
                     <p>Repozytorium projektu: <a href="github.com/meoke/disanger">github.com/meoke/disanger</a></p>
 
@@ -73,37 +81,43 @@
                 </div>
             </div>
             <div id="evaluationContainer">
-                <h1 class="add-padding">Jak się dziś czuję?</h1>
+                <h1>Jak się dziś czuję?</h1>
                 <p id="instruction">Użyj słów, o tu:</p>
-                <div class="add-padding">
+                <div class="add-padding-bottom">
                     <textarea id="feelingsInput" type="text" disabled="true"
-                        class="u-full-width add-padding"></textarea>
+                        class="u-full-width add-padding-bottom"></textarea>
                     <button id="startEvaluationBtn" class="toggleEvaluationBtn">Start!</button>
                     <button id="restartEvaluationBtn" class="toggleEvaluationBtn"><i class="fas fa-undo"></i></button>
                 </div>
-                <div class="container u-max-full-width words-container add-padding ">
-                    <div class="four columns border-bottom">Potrzeby zaspokojone</div>
-                    <div class="eight columns border-bottom">Potrzeby niezaspokojone</div>
-                </div>
-                <div id="rosenbergFeelings" class="add-padding container u-max-full-width words-container">
-                    <div id="happinessColumn1" class="x two columns u-max-full-width">
-                        <p id="happinessHeader" class="subheader">Szczęście</p>
+                <div id="wordsHints">
+                    <div class="container u-max-full-width words-container add-padding-bottom ">
+                        <div class="four columns border-bottom">
+                            <h6>Potrzeby zaspokojone</h6>
+                        </div>
+                        <div class="eight columns border-bottom">
+                            <h6>Potrzeby niezaspokojone</h6>
+                        </div>
                     </div>
-                    <div id="happinessColumn2" class="x two columns u-max-full-width">
-                        <p class="white">Empty</p>
-                    </div>
+                    <div id="rosenbergFeelings" class="add-padding-bottom container u-max-full-width words-container">
+                        <div id="happinessColumn1" class="add-padding-left two columns u-max-full-width">
+                            <h3 id="happinessHeader">Szczęście</h3>
+                        </div>
+                        <div class="add-padding-left two columns u-max-full-width">
+                            <h3 id="happinessColumn2" class="white">Empty</h3>
+                        </div>
 
-                    <div id="angerColumn" class="x two columns u-max-full-width">
-                        <p id="angerHeader" class="subheader">Złość</p>
-                    </div>
-                    <div id="disgustColumn" class="x two columns u-max-full-width">
-                        <p id="disgustHeader" class="subheader">Obrzydzenie</p>
-                    </div>
-                    <div id="fearColumn" class="x two columns u-max-full-width">
-                        <p id="fearHeader" class="subheader">Strach</p>
-                    </div>
-                    <div id="sadnessColumn" class="x two columns u-max-full-width">
-                        <p id="sadnessHeader" class="subheader">Smutek</p>
+                        <div id="angerColumn" class="add-padding-left two columns u-max-full-width">
+                            <h3 id="angerHeader">Złość</h3>
+                        </div>
+                        <div id="disgustColumn" class="add-padding-left two columns u-max-full-width">
+                            <h3 id="disgustHeader">Wstręt<h3>
+                        </div>
+                        <div id="fearColumn" class="add-padding-left two columns u-max-full-width">
+                            <h3 id="fearHeader">Strach</h3>
+                        </div>
+                        <div id="sadnessColumn" class="add-padding-left two columns u-max-full-width">
+                            <h3 id="sadnessHeader">Smutek</h3>
+                        </div>
                     </div>
                 </div>
             </div>

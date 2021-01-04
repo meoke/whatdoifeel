@@ -19,6 +19,7 @@ export class Evaluation {
             restartEvaluationBtn: $('#restartEvaluationBtn'),
             feelingsInput: $('#feelingsInput'),
             rosenbergFeelings: $('#rosenbergFeelings'),
+            wordsHints: $('#wordsHints'),
         
             angerHeader: $("#angerHeader"),
             disgustHeader: $("#disgustHeader"),
@@ -89,6 +90,8 @@ export class Evaluation {
      *  
      */
     showRosenbergWords (rosenbergWords) {
+        this.elements.wordsHints.addClass('visible');
+
         const getColumnContent = (words) => {
             return _.map(words, w => this._createDiv(w));
         };
