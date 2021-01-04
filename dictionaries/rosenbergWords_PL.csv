@@ -20,7 +20,7 @@ energiczna,H
 pobudzona,H
 zrelaksowana,H
 silna,H
-pogodna,
+pogodna,H
 swobodna,H
 błogość,H
 zainteresowana,H
@@ -71,7 +71,7 @@ rozpromieniona,H
 poruszona,H
 apatyczna,S
 markotna,S
-odrętwiała,
+odrętwiała,F
 oklapnięta,S
 osowiała,S
 otępiała,S
@@ -101,12 +101,12 @@ znudzona,D
 pusta,D
 niezadowolona,S
 nieszczęśliwa,S
-rozczarowana,
+rozczarowana,D
 ociężała,S
 osamotniona,S
 zasmucona,S
 zatroskana,S
-przygnębiona,
+przygnębiona,S
 załamana,S
 zmartwiona,S
 zafrasowana,S
