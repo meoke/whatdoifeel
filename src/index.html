@@ -39,29 +39,31 @@
 
 <body>
     <div>
-        <button id="aboutButton" class="linkBtn">About</button>
+        <button id="aboutButton" class="linkBtn">Info</button>
         <main>
-            <div id="aboutContainer">
-                <a href="javascript:void(0)" class="closebtn">&times;</a>
-                <div>
+            <div id="aboutContainer" class="row">
+                <div class="three columns">
+                    <a id="closeAboutBtn" class="button closebtn" href="#">x</a>
                     <h2>O projekcie</h2>
-                    <p>Jesteś w miejscu, gdzie możesz potrenować wyrażanie swojego samopoczucia.</p>
+                    <p>Jesteś w miejscu, w którym możesz potrenować wyrażanie swojego samopoczucia.</p>
                     <p>Co czujesz? Jak ubrać to w słowa? Po co...?</p>
                     <p>Emocje to nasz skarb. Chwila refleksji nad samym sobą to pierwszy krok do usłyszenia swoich
                         potrzeb.</p>
                 </div>
-                <div>
-                    <h2>Jak używać?</h2>
-                    <p>Kliknij przycisk START. W miejscu na tekst opisz, co aktualnie czujesz. Używaj własnych słów,
-                        możesz też skorzystać z podpowiedzi na dole strony. </p>
-                    <p>Znawcy języka określili ładunek emocjonalny wielu słów. Słowa, które wpiszesz są analizowane a
+                <div class="three columns">
+                    <h3>Jak używać?</h3>
+                    <p>Kliknij przycisk <i>Start</i>. W miejscu na tekst opisz, co aktualnie czujesz. Używaj własnych
+                        słów,
+                        możesz też skorzystać z podpowiedzi na dole strony (pochodzą z opracowania M.Rosenberga). </p>
+                    <p>Słowa, które wpisujesz są analizowane pod tym kątem ich ładunku emocjonalnego, a
                         emocje, które wyrażają wpływają na kolor ramki tekstu.</p>
                     <p>To tylko tyle i aż tyle :)</p>
                 </div>
-                <div>
-                    <h2>Szczegóły techniczne</h2>
-                    <p>Analiza słów odbywa się w Twojej przeglądarce internetowej.</p>
-                    <p>Określenie ładunków emocjonalnych słów pochodzi z następujących źródeł:
+                <div class="three columns">
+                    <h3>Szczegóły techniczne</h3>
+                    <p>Tekst, który wpisujesz nie jest nigdzie wysyłany - analiza odbywa się w Twojej przeglądarce
+                        internetowej.</p>
+                    <p>Źródła słowników słów nacechowanych emocjonalnie:
                     <ul>
                         <li><a href="https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt">Stop-słowa</a>
                         </li>
@@ -73,20 +75,19 @@
                     </ul>
                     </p>
                     <p>Repozytorium projektu: <a href="github.com/meoke/disanger">github.com/meoke/disanger</a></p>
-
-                    <div>
-                        <h2>Kontakt do autora</h2>
-                        <p><a href="mailto:pedziadkiewicz@gmail.com">pedziadkiewicz@gmail.com</a></p>
-                    </div>
+                </div>
+                <div class="three columns">
+                    <h3>Kontakt</h3>
+                    <p><a href="mailto:pedziadkiewicz@gmail.com">pedziadkiewicz@gmail.com</a></p>
                 </div>
             </div>
             <div id="evaluationContainer">
-                <h1>Jak się dziś czuję?</h1>
+                <h1>Co teraz czuję?</h1>
                 <p id="instruction">Użyj słów, o tu:</p>
                 <div class="add-padding-bottom">
                     <textarea id="feelingsInput" type="text" disabled="true"
                         class="u-full-width add-padding-bottom"></textarea>
-                    <button id="startEvaluationBtn" class="toggleEvaluationBtn">Start!</button>
+                    <button id="startEvaluationBtn" class="button-primary toggleEvaluationBtn">Start!</button>
                     <button id="restartEvaluationBtn" class="toggleEvaluationBtn"><i class="fas fa-undo"></i></button>
                 </div>
                 <div id="wordsHints">

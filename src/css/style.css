@@ -1,15 +1,34 @@
 :root {
-    --mainColor: #1e90ff;
-    --white: #ffffff;
-}
-
-a, h1, h2, h3, h6, .linkBtn {
-    color: var(--mainColor);
+    --mainColor: #33C3F0;
 }
 
 h1 {
     text-align: center;
     font-family: 'Caveat', cursive;
+    color: var(--mainColor);
+}
+
+#evaluationContainer {
+    padding:0px 100px 0px 100px;
+}
+/* /*  */
+#aboutContainer {
+    /* height: 200px; */
+    /* position: absolute; */
+    /* bottom: 0; */
+    /* padding: 20px; */
+    /* display: flex;
+    width: 1000px;
+    overflow: auto; */
+    /* white-space: nowrap; */
+} 
+/* 
+#aboutContainer>div {
+    flex-basis: 250px;
+} */
+
+#aboutButton, #closeAboutBtn {
+    display: none;
 }
 
 /* 
@@ -23,6 +42,7 @@ show last emotion
     text-shadow: none;
     transition: 0.6s;
 } */
+
 #feelingsInput {
     border-width: 5px;
     border-style: solid;
@@ -63,6 +83,10 @@ show last emotion
 }
 
 @media only screen and (min-width: 768px) {
+    #aboutButton, #closeAboutBtn {
+        display: block;
+    }
+
     #evaluationContainer>h1 {
         font-size: 4em;
     }
@@ -78,26 +102,30 @@ show last emotion
     }
     
     #aboutContainer {
-        height: 100%;
-        width: 0;
-        position: fixed;
+        display: none;
+        height: 350px;
+        width: 100%;
+        /* position: fixed; */
+        /* floa */
         z-index: 1;
         background-color: white;
         top: 0;
-        left: -40px;
+        /* left: -40px; */
         overflow-x: hidden;
-        transition: 0.5s;
+        /* transition: 0.5s; */
         border-right: 2px solid var(--mainColor);
         padding: 20px;
     }
     
-    #aboutContainer .closebtn {
+    /* #aboutContainer .closebtn {
         position: absolute;
-        top: 0;
         right: 25px;
-        font-size: 36px;
         margin-left: 50px;
     }
+
+    #aboutContainer>div:last-child {
+        padding-bottom: 20px;
+    } */
 
     #feelingsInput {
         border-width: 10px;

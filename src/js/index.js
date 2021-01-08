@@ -16,14 +16,10 @@ const app = new Controller(evaluationModelFactory, evaluationView);
 
 function _setupEventHandlers() {
     $('.closebtn').on('click', e => {
-        document.getElementById("aboutContainer").style.width = "0";
-        document.getElementById("evaluationContainer").style.marginLeft = "0";
-        document.getElementById("aboutContainer").style.left = "-40px";
+        $("#aboutContainer").hide("slow");
     })
     
     $('#aboutButton').on('click', e => {
-        document.getElementById("aboutContainer").style.width = "350px";
-        document.getElementById("aboutContainer").style.left = "0px";
-        document.getElementById("evaluationContainer").style.marginLeft = "350px";
+        $( "#aboutContainer" ).show( "slow")
     })
 }
