@@ -17,7 +17,7 @@ export class Controller {
 
     onEvaluationStart = async () => {
         try{
-            this.evaluationModel = await this.evaluationModelFactory.createEvaluation(this.onStateChange);
+            this.evaluationModel = await this.evaluationModelFactory.createEvaluation();
         }
         catch(e) {
             config.mode === "production" ?
@@ -32,6 +32,7 @@ export class Controller {
     _prepareEvaluationBoard() {
         this.evaluationView.activateFeelingsInput();
         this.evaluationView.replaceStartBtnWithRestartBtn();
+        this.onStateChange();
     }
 
     _displayWordingHints() {
@@ -76,21 +77,23 @@ export class Controller {
         }
     }
 
-    onStateChange = HSV => {
-        const HSVtoHSL = (H, S, V) => { 
-            // H from [0,360], S from [0,1], V from [0,1]
-            const lightness = V*(1-S/2);
-            const saturation = (lightness === 0 || lightness === 1) ?
-                                0 :
-                                (V-lightness) / _.min([lightness, 1-lightness])
-            return {
-                H: H,
-                S: saturation,
-                L: lightness
-            }
-        }
-        const HSL = HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
+    onStateChange = () => {
+        const HSV = this.evaluationModel.EmotionalStateHSV;
+        const HSL = this._HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
         this.evaluationView.renderEmotionalState(HSL.H, HSL.S, HSL.L);
+    }
+
+    _HSVtoHSL = (H, S, V) => { 
+        // H from [0,360], S from [0,1], V from [0,1]
+        const lightness = V*(1-S/2);
+        const saturation = (lightness === 0 || lightness === 1) ?
+                            0 :
+                            (V-lightness) / _.min([lightness, 1-lightness])
+        return {
+            H: H,
+            S: saturation,
+            L: lightness
+        }
     }
 }
 

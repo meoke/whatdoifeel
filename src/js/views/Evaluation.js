@@ -72,7 +72,7 @@ export class Evaluation {
 
     activateFeelingsInput() {
         this.elements.feelingsInput.prop('disabled', false);
-        this.elements.feelingsInput.focus();
+        this.elements.feelingsInput.trigger("focus")
     }
 
     replaceStartBtnWithRestartBtn () {
