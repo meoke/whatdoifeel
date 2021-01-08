@@ -16,10 +16,13 @@ const app = new Controller(evaluationModelFactory, evaluationView);
 
 function _setupEventHandlers() {
     $('.closebtn').on('click', e => {
-        $("#aboutContainer").hide("slow");
+        $("#aboutContainer").hide("slow", () => {
+            $("#aboutButton").show("slow");
+        });
     })
     
     $('#aboutButton').on('click', e => {
-        $( "#aboutContainer" ).show( "slow")
+        $("#aboutButton").hide("slow");
+        $( "#aboutContainer" ).show("slow");
     })
 }

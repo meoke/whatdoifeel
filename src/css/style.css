@@ -11,6 +11,10 @@ h1 {
 #evaluationContainer {
     padding:0px 100px 0px 100px;
 }
+
+#closeAboutBtn {
+    width: 100%;
+}
 /* /*  */
 #aboutContainer {
     /* height: 200px; */
@@ -27,9 +31,9 @@ h1 {
     flex-basis: 250px;
 } */
 
-#aboutButton, #closeAboutBtn {
-    display: none;
-}
+/* #aboutButton, #closeAboutBtn {
+    display: bloc;
+} */
 
 /* 
 show last emotion
@@ -82,40 +86,34 @@ show last emotion
     border-bottom: solid 1px var(--mainColor);
 }
 
+#aboutContainer {
+    display: none;
+    padding: 2rem;
+    border-bottom: 1px solid var(--mainColor);
+}
+
+#aboutButton {
+    margin: 40px 0px 0px 50px;
+    font-size: 2rem;
+}
+
 @media only screen and (min-width: 768px) {
-    #aboutButton, #closeAboutBtn {
+    /* #aboutButton, #closeAboutBtn {
         display: block;
-    }
+    } */
 
     #evaluationContainer>h1 {
         font-size: 4em;
     }
 
-    #aboutButton {
-        margin: 50px 0px 0px 50px;
-        font-size: 2rem;
-    }
+
 
     #evaluationContainer {
         padding:0px 200px 0px 200px;
         transition: margin-left 0.5s;
     }
     
-    #aboutContainer {
-        display: none;
-        height: 350px;
-        width: 100%;
-        /* position: fixed; */
-        /* floa */
-        z-index: 1;
-        background-color: white;
-        top: 0;
-        /* left: -40px; */
-        overflow-x: hidden;
-        /* transition: 0.5s; */
-        border-right: 2px solid var(--mainColor);
-        padding: 20px;
-    }
+
     
     /* #aboutContainer .closebtn {
         position: absolute;
