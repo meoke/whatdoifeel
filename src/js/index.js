@@ -4,7 +4,7 @@ import '../css/style.css';
 import '../css/skeleton.css';
 import '../css/normalize.css';
 
-import Controller from './Controller'
+import Controller from './controller'
 import {EmotionalStateEvaluationFactory} from './models/EmotionalStateEvaluation'
 import {Evaluation as EvaluationView} from './views/Evaluation'
 
