@@ -57,6 +57,7 @@ export class Controller {
     onEvaluationRestart = () => {
         this.evaluationModel.restartEvaluation();
         this.evaluationView.clearFeelingsInput();
+        this.onStateChange();
     }
 
     onInputChange = inputValue => {
@@ -75,6 +76,7 @@ export class Controller {
         if(!_.isEmpty(lastWord)){
             this.evaluationModel.addFeeling(lastWord);
         }
+        this.onStateChange();
     }
 
     onStateChange = () => {
