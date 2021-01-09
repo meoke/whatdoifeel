@@ -14,4 +14,5 @@ module.exports = {
   'rules': {
     'eqeqeq': 'error'
   },
+  'parser': "babel-eslint",
 };

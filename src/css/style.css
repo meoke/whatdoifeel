@@ -1,33 +1,42 @@
 :root {
-    --mainColor: #1e90ff;
-    --white: #ffffff;
+    --mainColor: #33C3F0;
 }
 
-body, a {
-    color: var(--mainColor);
-}
-
-/* header{
+h1 {
     text-align: center;
-    margin: 5%;
-    color: var(--mainColor)
-}*/
-
-.subheader {
+    font-family: 'Caveat', cursive;
     color: var(--mainColor);
 }
 
-#angerInput {
-    border-width: 4px;
-    border-style: solid;
-    border-radius: 5px;
-    height: 150px;
+#evaluationContainer {
+    padding:0px 100px 0px 100px;
 }
 
-#angerInput:focus{
-    outline: 0px;
+#closeAboutBtn {
+    width: 100%;
 }
+/* /*  */
+#aboutContainer {
+    /* height: 200px; */
+    /* position: absolute; */
+    /* bottom: 0; */
+    /* padding: 20px; */
+    /* display: flex;
+    width: 1000px;
+    overflow: auto; */
+    /* white-space: nowrap; */
+} 
+/* 
+#aboutContainer>div {
+    flex-basis: 250px;
+} */
 
+/* #aboutButton, #closeAboutBtn {
+    display: bloc;
+} */
+
+/* 
+show last emotion
 .bold {
     text-shadow: 0 0 2px var(--mainColor);
     transition: 0.6s;
@@ -36,54 +45,96 @@ body, a {
 .unbold {
     text-shadow: none;
     transition: 0.6s;
+} */
+
+#feelingsInput {
+    border-width: 5px;
+    border-style: solid;
+    border-radius: 5px;
+    height: 150px; 
 }
 
-h1 {
-    color: var(--mainColor);
-    text-align: center;
-    padding-top: 50px;
+#feelingsInput:focus{
+    outline: 0px;
 }
 
-#toggleGameBtn {
+.toggleEvaluationBtn {
     margin: auto;
     display: block;
 }
 
-.add-padding {
-    padding-bottom: 50px;
+#restartEvaluationBtn{
+    display: none;
 }
 
-.container {
-    width: 100%
+#wordsHints {
+    overflow: hidden; 
+    height: 0; opacity: 0;
+    transition: height 0ms 400ms, opacity 400ms 0ms;
 }
 
-.white {
-    color: white;
+#wordsHints.visible {
+    height: auto; opacity: 1;
+    transition: height 0ms 0ms, opacity 600ms 0ms;
 }
 
-.x{
-    padding-left: 10px;
+#happinessColumn2 {
+    visibility: hidden;
 }
-
-.vl {
-    border-left: 6px solid green;
-    height: 500px;
-  }
 
 .border-bottom {
     border-bottom: solid 1px var(--mainColor);
 }
 
-ul.menu{
-    padding: 50px 0px 0px 50px;
+#aboutContainer {
+    display: none;
+    padding: 2rem;
+    border-bottom: 1px solid var(--mainColor);
+}
+
+#aboutButton {
+    margin: 40px 0px 0px 50px;
     font-size: 2rem;
-    color: var(--mainColor);
 }
 
-li {
-    list-style-type: none;
-}
+@media only screen and (min-width: 768px) {
+    /* #aboutButton, #closeAboutBtn {
+        display: block;
+    } */
 
-ul li a {
-    color: var(--mainColor);
+    #evaluationContainer>h1 {
+        font-size: 4em;
+    }
+
+
+
+    #evaluationContainer {
+        padding:0px 200px 0px 200px;
+        transition: margin-left 0.5s;
+    }
+    
+
+    
+    /* #aboutContainer .closebtn {
+        position: absolute;
+        right: 25px;
+        margin-left: 50px;
+    }
+
+    #aboutContainer>div:last-child {
+        padding-bottom: 20px;
+    } */
+
+    #feelingsInput {
+        border-width: 10px;
+        height: 150px;
+    }
+
+    .add-padding-bottom {
+        padding-bottom: 50px;
+    }
+
+    .add-padding-left{
+        padding-left: 10px;
+    }
 }
