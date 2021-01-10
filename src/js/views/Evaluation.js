@@ -86,8 +86,6 @@ export class Evaluation {
      *  
      */
     showRosenbergWords (rosenbergWords) {
-        this.elements.wordsHints.addClass('visible');
-
         const getColumnContent = (words) => {
             return _.map(words, w => this._createDiv(w));
         };
@@ -98,12 +96,13 @@ export class Evaluation {
         this.elements.sadnessColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.Sadness)));
         
         const happinessWords = rosenbergWords.get(EmotionHeader.Happiness)
-        console.log(rosenbergWords)
         const happyParts = _.chunk(happinessWords, Math.floor(happinessWords.length/2));
         if(happyParts.length >=2){
             this.elements.happinessColumn1.append(getColumnContent(happyParts[0]))
             this.elements.happinessColumn2.append(getColumnContent(happyParts[1]))
         }
+
+        this.elements.wordsHints.show("slow");
     }
 
     clearFeelingsInput() {

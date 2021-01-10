@@ -8,32 +8,18 @@ h1 {
     color: var(--mainColor);
 }
 
+
 #evaluationContainer {
-    padding:0px 100px 0px 100px;
+    padding:20px 20px 20px 20px;
 }
 
 #closeAboutBtn {
     width: 100%;
 }
-/* /*  */
-#aboutContainer {
-    /* height: 200px; */
-    /* position: absolute; */
-    /* bottom: 0; */
-    /* padding: 20px; */
-    /* display: flex;
-    width: 1000px;
-    overflow: auto; */
-    /* white-space: nowrap; */
-} 
-/* 
-#aboutContainer>div {
-    flex-basis: 250px;
-} */
 
-/* #aboutButton, #closeAboutBtn {
-    display: bloc;
-} */
+.white {
+    opacity: 0;
+}
 
 /* 
 show last emotion
@@ -67,21 +53,6 @@ show last emotion
     display: none;
 }
 
-#wordsHints {
-    overflow: hidden; 
-    height: 0; opacity: 0;
-    transition: height 0ms 400ms, opacity 400ms 0ms;
-}
-
-#wordsHints.visible {
-    height: auto; opacity: 1;
-    transition: height 0ms 0ms, opacity 600ms 0ms;
-}
-
-#happinessColumn2 {
-    visibility: hidden;
-}
-
 .border-bottom {
     border-bottom: solid 1px var(--mainColor);
 }
@@ -89,7 +60,6 @@ show last emotion
 #aboutContainer {
     display: none;
     padding: 2rem;
-    border-bottom: 1px solid var(--mainColor);
 }
 
 #aboutButton {
@@ -97,10 +67,24 @@ show last emotion
     font-size: 2rem;
 }
 
+#wordsHints {
+    display: none;
+    overflow:scroll;
+    width:100%;
+}
+
+#wordsColumn {
+width: 150vw;
+}
+
 @media only screen and (min-width: 768px) {
-    /* #aboutButton, #closeAboutBtn {
-        display: block;
-    } */
+
+    #wordsHints{
+        overflow: auto;
+    }
+    #wordsColumn {
+        width: 100%;
+        }
 
     #evaluationContainer>h1 {
         font-size: 4em;
@@ -109,22 +93,9 @@ show last emotion
 
 
     #evaluationContainer {
-        padding:0px 200px 0px 200px;
-        transition: margin-left 0.5s;
+        padding:20px 200px 20px 200px;
     }
     
-
-    
-    /* #aboutContainer .closebtn {
-        position: absolute;
-        right: 25px;
-        margin-left: 50px;
-    }
-
-    #aboutContainer>div:last-child {
-        padding-bottom: 20px;
-    } */
-
     #feelingsInput {
         border-width: 10px;
         height: 150px;

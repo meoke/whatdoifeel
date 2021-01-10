@@ -42,23 +42,24 @@
         <button id="aboutButton" class="linkBtn">Info</button>
         <main>
             <div id="aboutContainer" class="row">
-                <div class="three columns">
+                <div class="three columns u-max-full-width">
                     <a id="closeAboutBtn" class="button closebtn" href="#">x</a>
-                    <h2>O projekcie</h2>
+                    <h3 class="shrink">O projekcie</h3>
                     <p>Jesteś w miejscu, w którym możesz potrenować wyrażanie swojego samopoczucia.</p>
                     <p>Co czujesz? Jak ubrać to w słowa? Po co...?</p>
                     <p>Emocje to nasz skarb. Chwila refleksji nad samym sobą to pierwszy krok do usłyszenia swoich
                         potrzeb.</p>
                 </div>
-                <div class="three columns">
-                    <h3>Jak używać?</h3>
+                <div class="three columns u-max-full-width">
+                    <h4>Jak używać?</h4>
                     <p>Kliknij <i>Start</i>. W miejscu na tekst opisz, co aktualnie czujesz. Używaj własnych
                         słów lub skorzystaj z podpowiedzi na dole strony (pochodzą z opracowania M.Rosenberga). </p>
-                    <p>Słowa, które wpisujesz, są analizowane pod kątem ich dominującego ładunku emocjonalnego. Wpływa on na kolor ramki tekstu.</p>
+                    <p>Słowa, które wpisujesz, są analizowane pod kątem ich dominującego ładunku emocjonalnego. Wpływa
+                        on na kolor ramki tekstu.</p>
                     <p>To tylko tyle i aż tyle :)</p>
                 </div>
-                <div class="three columns">
-                    <h3>Źrodła</h3>
+                <div class="three columns u-max-full-width">
+                    <h4>Źrodła</h4>
                     <p>Słowniki słów nacechowanych emocjonalnie:
                     <ul>
                         <li><a href="https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt">Stop-słowa</a>
@@ -70,10 +71,10 @@
                                 wg M.Rosenberga</a></li>
                     </ul>
                     </p>
-                    
+
                 </div>
-                <div class="three columns">
-                    <h3>Kontakt</h3>
+                <div class="three columns u-max-full-width">
+                    <h4>Kontakt</h4>
                     <p><a href="mailto:pedziadkiewicz@gmail.com">pedziadkiewicz@gmail.com</a></p>
                     <p>Repozytorium projektu: <a href="github.com/meoke/disanger">github.com/meoke/disanger</a></p>
                 </div>
@@ -88,38 +89,28 @@
                     <button id="restartEvaluationBtn" class="toggleEvaluationBtn"><i class="fas fa-undo"></i></button>
                 </div>
                 <div id="wordsHints">
-                    <div class="container u-max-full-width words-container add-padding-bottom ">
-                        <div class="four columns border-bottom">
-                            <h6>Potrzeby zaspokojone</h6>
-                        </div>
-                        <div class="eight columns border-bottom">
-                            <h6>Potrzeby niezaspokojone</h6>
-                        </div>
-                    </div>
-                    <div id="rosenbergFeelings" class="add-padding-bottom container u-max-full-width words-container">
-                        <div id="happinessColumn1" class="add-padding-left two columns u-max-full-width">
-                            <h3 id="happinessHeader">Szczęście</h3>
-                        </div>
-                        <div class="add-padding-left two columns u-max-full-width">
-                            <h3 id="happinessColumn2" class="white">Empty</h3>
-                        </div>
-
-                        <div id="angerColumn" class="add-padding-left two columns u-max-full-width">
-                            <h3 id="angerHeader">Złość</h3>
-                        </div>
-                        <div id="disgustColumn" class="add-padding-left two columns u-max-full-width">
-                            <h3 id="disgustHeader">Wstręt<h3>
-                        </div>
-                        <div id="fearColumn" class="add-padding-left two columns u-max-full-width">
-                            <h3 id="fearHeader">Strach</h3>
-                        </div>
-                        <div id="sadnessColumn" class="add-padding-left two columns u-max-full-width">
-                            <h3 id="sadnessHeader">Smutek</h3>
-                        </div>
+                    <div id="wordsColumn" class="row">
+                                <div id="happinessColumn1" class="two columns u-max-full-width">
+                                    <h3 id="happinessHeader">Szczęście</h3>
+                                </div>
+                                <div id="happinessColumn2" class="two columns u-max-full-width">
+                                    <h3 id="happinessHeader2" class="white">Empty</h3>
+                                </div>
+                                <div id="angerColumn" class=" two columns u-max-full-width">
+                                    <h3 id="angerHeader">Złość</h3>
+                                </div>
+                                <div id="disgustColumn" class="two columns u-max-full-width">
+                                    <h3 id="disgustHeader">Wstręt<h3>
+                                </div>
+                                <div id="fearColumn" class="two columns u-max-full-width">
+                                    <h3 id="fearHeader">Strach</h3>
+                                </div>
+                                <div id="sadnessColumn" class="two columns u-max-full-width">
+                                    <h3 id="sadnessHeader">Smutek</h3>
+                                </div>
                     </div>
                 </div>
             </div>
-
         </main>
         <footer>
 
