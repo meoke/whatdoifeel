@@ -42,7 +42,7 @@ export const EmotionHue = Object.freeze({
     [Emotion.SADNESS]: 210,
     [Emotion.DISGUST]: 120,
     [Emotion.ANGER]: 0,
-    [Emotion.HAPPY]: 60,
+    [Emotion.HAPPY]: 45,
     [Emotion.NEUTRAL]: 280
 });
 
