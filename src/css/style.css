@@ -5,12 +5,27 @@
 h1 {
     text-align: center;
     font-family: 'Caveat', cursive;
-    color: var(--mainColor);
 }
 
+#happinessColumn1 > h3{
+    color: hsl(60, 100%, 50%)
+}
+
+#angerColumn > h3{
+    color: hsl(0, 100%, 50%)
+}
+#disgustColumn > h3{
+    color: hsl(120, 100%, 50%)
+}
+#fearColumn > h3{
+    color: hsl(300, 100%, 50%)
+}
+#sadnessColumn > h3{
+    color: hsl(210, 100%, 50%)
+}
 
 #evaluationContainer {
-    padding:20px 20px 20px 20px;
+    padding:20px;
 }
 
 #closeAboutBtn {
@@ -21,21 +36,8 @@ h1 {
     opacity: 0;
 }
 
-/* 
-show last emotion
-.bold {
-    text-shadow: 0 0 2px var(--mainColor);
-    transition: 0.6s;
-}
-
-.unbold {
-    text-shadow: none;
-    transition: 0.6s;
-} */
-
 #feelingsInput {
     border-width: 5px;
-    border-style: solid;
     border-radius: 5px;
     height: 150px; 
 }
@@ -69,28 +71,30 @@ show last emotion
 
 #wordsHints {
     display: none;
-    overflow:scroll;
+    overflow:auto;
     width:100%;
 }
 
 #wordsColumn {
-width: 150vw;
+    width: 800px;
 }
 
-@media only screen and (min-width: 768px) {
 
-    #wordsHints{
-        overflow: auto;
-    }
+
+@media only screen and (max-width: 768px) {
+    #wordsColumn > .columns {
+        width:auto;
+    } 
+}
+
+@media only screen and (min-width: 1100px) {
     #wordsColumn {
-        width: 100%;
-        }
+        width: inherit;
+    }
 
-    #evaluationContainer>h1 {
+    #evaluationContainer > h1 {
         font-size: 4em;
     }
-
-
 
     #evaluationContainer {
         padding:20px 200px 20px 200px;
@@ -98,14 +102,9 @@ width: 150vw;
     
     #feelingsInput {
         border-width: 10px;
-        height: 150px;
     }
 
     .add-padding-bottom {
         padding-bottom: 50px;
-    }
-
-    .add-padding-left{
-        padding-left: 10px;
     }
 }

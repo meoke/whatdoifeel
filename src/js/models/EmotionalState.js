@@ -22,7 +22,7 @@ export const EmotionHues = Object.freeze({
     [Emotions.Sadness]: 210,
     [Emotions.Disgust]: 120,
     [Emotions.Anger]: 0,
-    [Emotions.Happy]: 160,
+    [Emotions.Happy]: 60,
     [Emotions.Neutral]: 280
 })
 
