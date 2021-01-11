@@ -1,7 +1,7 @@
 {
-  "name": "disanger",
+  "name": "whatdoifeel",
   "version": "1.0.0",
-  "description": "A website to discharge the anger.",
+  "description": "A website to evaluate Emotional State.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./src/js & eslint ./tests",
@@ -14,14 +14,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/meoke/disanger.git"
+    "url": "git+https://github.com/meoke/whatdoifeel.git"
   },
   "author": "Paulina Dziadkiewicz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/meoke/disanger/issues"
+    "url": "https://github.com/meoke/whatdoifeel/issues"
   },
-  "homepage": "https://github.com/meoke/disanger#readme",
+  "homepage": "https://github.com/meoke/whatdoifeel#readme",
   "devDependencies": {
     "@babel/core": "^7.12.1",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
