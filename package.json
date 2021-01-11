@@ -4,8 +4,8 @@
   "description": "A website to discharge the anger.",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint ./src/js",
-    "lint:fix": "eslint ./src/js --fix",
+    "lint": "eslint ./src/js & eslint ./tests",
+    "lint:fix": "eslint ./src/js --fix & eslint ./tests --fix",
     "dev": "webpack --mode development",
     "build": "rd /s /q dist & webpack --mode production",
     "start": "webpack-dev-server --mode development --open",

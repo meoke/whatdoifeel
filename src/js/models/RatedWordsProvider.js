@@ -84,7 +84,7 @@ export async function getNAWLWords() {
     return preevaluatedWordsRows.map(row => {
         let w = Object.values(row)[0];
 
-        const [_, emotion, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness] = _parsers.nawlRowToRowValuesArray(row);
+        const [word, emotion, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness] = _parsers.nawlRowToRowValuesArray(row);  // eslint-disable-line no-unused-vars
         return new RatedWord(w, emotion, WordType.NAWL, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness);
     });
 }

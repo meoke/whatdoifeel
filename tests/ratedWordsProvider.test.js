@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-global-assign
-require = require("esm")(module)
-const t = require('tape-catch')
-const { Emotion } = require("../src/js/models/EmotionalState")
-const wordsRatings = require('../src/js/models/RatedWordsProvider')
+require = require("esm")(module);
+const t = require('tape-catch');
+const { Emotion } = require("../src/js/models/EmotionalState");
+const wordsRatings = require('../src/js/models/RatedWordsProvider');
 
 t.test("Return correct list of stopWords", function (t) {
     const expectedStopWordsCount = 350;
-    const expectedEmotion = Emotion.NEUTRAL
+    const expectedEmotion = Emotion.NEUTRAL;
     const expectedFirst10StopWords = ['a',
         'aby',
         'ach',
@@ -16,19 +16,19 @@ t.test("Return correct list of stopWords", function (t) {
         'albo',
         'ale',
         'alez',
-        'ależ']
+        'ależ'];
 
     wordsRatings.getStopWords().then(actualStopWords => {
-        t.equal(actualStopWords.length, expectedStopWordsCount, 'Correct words count')
+        t.equal(actualStopWords.length, expectedStopWordsCount, 'Correct words count');
         expectedFirst10StopWords.forEach((expectedStopWord, idx) => {
-            t.equal(actualStopWords[idx].word, expectedStopWord, `Expected: ${expectedStopWord}`)
-            t.equal(actualStopWords[idx].emotion, expectedEmotion, `Expected Neutral Emotion`)
-        })
-        t.end()
+            t.equal(actualStopWords[idx].word, expectedStopWord, `Expected: ${expectedStopWord}`);
+            t.equal(actualStopWords[idx].emotion, expectedEmotion, `Expected Neutral Emotion`);
+        });
+        t.end();
     }).catch(error => {
-        t.fail("Unexpected failure when reading stopwords: " + JSON.stringify(error))
-    })
-})
+        t.fail("Unexpected failure when reading stopwords: " + JSON.stringify(error));
+    });
+});
 
 t.test("Return correct list of vulgarWords", function (t) {
     const expectedVulgarWordsCount = 624;
@@ -42,20 +42,20 @@ t.test("Return correct list of vulgarWords", function (t) {
         'chujowy',
         'chujowa',
         'chujowe',
-        'cipa']
+        'cipa'];
 
     wordsRatings.getVulgarWords().then(actualVulgarWords => {
-        t.equal(actualVulgarWords.length, expectedVulgarWordsCount, 'Correct words count')
+        t.equal(actualVulgarWords.length, expectedVulgarWordsCount, 'Correct words count');
         expectedFirst10VulgarWords.forEach((expectedVulgarWord, idx) => {
-            t.equal(actualVulgarWords[idx].word, expectedVulgarWord, `Expected: ${expectedVulgarWord}`)
-            t.equal(actualVulgarWords[idx].emotion, expectedEmotion, `Expected neutral emotion`)
-        })
+            t.equal(actualVulgarWords[idx].word, expectedVulgarWord, `Expected: ${expectedVulgarWord}`);
+            t.equal(actualVulgarWords[idx].emotion, expectedEmotion, `Expected neutral emotion`);
+        });
 
-        t.end()
+        t.end();
     }).catch(error => {
-        t.fail("Unexpected failure when reading vulgarwords: " + JSON.stringify(error))
-    })
-})
+        t.fail("Unexpected failure when reading vulgarwords: " + JSON.stringify(error));
+    });
+});
 
 t.test("Return correct list of NAWL words and their emotion mean ratings.", function (t) {
     const expectedNAWLWordsCount = 2901;
@@ -67,21 +67,21 @@ t.test("Return correct list of NAWL words and their emotion mean ratings.", func
         491: ['obwisły', Emotion.DISGUST],
         536: ['miotła', Emotion.NEUTRAL],
         761: ['świnia', Emotion.DISGUST]
-    }
+    };
 
     wordsRatings.getNAWLWords().then(actualNAWLWords => {
-        t.equal(actualNAWLWords.length, expectedNAWLWordsCount, 'Correct words count')
+        t.equal(actualNAWLWords.length, expectedNAWLWordsCount, 'Correct words count');
 
         for (const [idx, [expectedWord, expectedEmotion]] of Object.entries(exampleExpectedNAWLWords)) {
-            t.equal(actualNAWLWords[idx].word, expectedWord, `Expected: ${expectedWord}`)
-            t.equal(actualNAWLWords[idx].emotion, expectedEmotion, `Correct emotion: ${expectedEmotion}`)
+            t.equal(actualNAWLWords[idx].word, expectedWord, `Expected: ${expectedWord}`);
+            t.equal(actualNAWLWords[idx].emotion, expectedEmotion, `Correct emotion: ${expectedEmotion}`);
         }
 
-        t.end()
+        t.end();
     }).catch(error => {
-        t.fail("Unexpected failure when reading NAWL words: " + error)
-    })
-})
+        t.fail("Unexpected failure when reading NAWL words: " + error);
+    });
+});
 
 t.test("Parse NAWL row", function (t) {
     const row = {
@@ -92,45 +92,45 @@ t.test("Parse NAWL row", function (t) {
         "meanSadness": "1.4814814",
         "meanFear": "1.5555556",
         "meanDisgust": "1.3703704"
-    }
+    };
 
-    const expectedParsedValue = ["rozkoszny", Emotion.HAPPY, 1.4074074, 1.3703704, 1.5555556, 5.296296, 1.4814814]
-    const actualParsedValue = wordsRatings.testAPI._parseNAWLRow(row)
+    const expectedParsedValue = ["rozkoszny", Emotion.HAPPY, 1.4074074, 1.3703704, 1.5555556, 5.296296, 1.4814814];
+    const actualParsedValue = wordsRatings.testAPI._parseNAWLRow(row);
 
-    t.deepEquals(actualParsedValue, expectedParsedValue)
-    t.end()
-})
+    t.deepEquals(actualParsedValue, expectedParsedValue);
+    t.end();
+});
 
 t.test("Return correct list of Rosenberg words and their emotions", function (t) {
     const expectedRosenbergWordsCount = 143;
     const exampleRosenbergWords = {
         0: ['werwa', Emotion.HAPPY],
         86: ['spłoszona', Emotion.FEAR]
-    }
+    };
 
     wordsRatings.getRosenbergWords().then(actualRosenbergWords => {
-        t.equal(actualRosenbergWords.length, expectedRosenbergWordsCount, 'Correct words count')
+        t.equal(actualRosenbergWords.length, expectedRosenbergWordsCount, 'Correct words count');
 
         for (const [idx, [expectedWord, expectedEmotion]] of Object.entries(exampleRosenbergWords)) {
-            t.equal(actualRosenbergWords[idx].word, expectedWord, `Expected: ${expectedWord}`)
-            t.equal(actualRosenbergWords[idx].emotion, expectedEmotion, `Correct emotion`)
+            t.equal(actualRosenbergWords[idx].word, expectedWord, `Expected: ${expectedWord}`);
+            t.equal(actualRosenbergWords[idx].emotion, expectedEmotion, `Correct emotion`);
         }
 
-        t.end()
+        t.end();
     }).catch(error => {
-        t.fail("Unexpected failure when reading Rosenberg words: " + JSON.stringify(error))
-    })
-})
+        t.fail("Unexpected failure when reading Rosenberg words: " + JSON.stringify(error));
+    });
+});
 
 t.test("Parse Rosenberg row", function (t) {
     const row = {
         "word": "apatyczny",
         "hue": "S"
-    }
+    };
 
-    const expectedParsedValue = ["apatyczny", Emotion.SADNESS]
-    const actualParsedValue = wordsRatings.testAPI._parseRosenbergRow(row)
+    const expectedParsedValue = ["apatyczny", Emotion.SADNESS];
+    const actualParsedValue = wordsRatings.testAPI._parseRosenbergRow(row);
 
-    t.deepEquals(actualParsedValue, expectedParsedValue)
-    t.end()
-})
+    t.deepEquals(actualParsedValue, expectedParsedValue);
+    t.end();
+});

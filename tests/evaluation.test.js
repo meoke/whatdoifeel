@@ -1,9 +1,9 @@
 // eslint-disable-next-line no-global-assign
-require = require("esm")(module)
-const t = require('tape-catch')
+require = require("esm")(module);
+const t = require('tape-catch');
 
-const { EmotionalStateEvaluationFactory } = require('../src/js/models/EmotionalStateEvaluation.js')
-const { EmotionHue, Emotion } = require('../src/js/models/EmotionalState.js')
+const { EmotionalStateEvaluationFactory } = require('../src/js/models/EmotionalStateEvaluation.js');
+const { EmotionHue, Emotion } = require('../src/js/models/EmotionalState.js');
 
 async function createEvaluation() {
     return await (new EmotionalStateEvaluationFactory()).createEvaluation(()=>{});
@@ -17,13 +17,13 @@ t.test("Single word affects evaluation state.", async function (t) {
         { name: "Evaluation when gets a rosenberg word it should affect Emotional State HSV", input: "markotny", expectedHSV: { H: 210, S: 75, V: 81 } }
     ];
     for (const tc of testCases) {
-        const g = await createEvaluation()
+        const g = await createEvaluation();
         g.addWord(tc.input);
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
     }
     t.end();
-})
+});
 
 
 t.test("Evaluation when gets multiple words should correctly change the Emotional State", async function (t) {
@@ -48,7 +48,7 @@ t.test("Evaluation when gets multiple words should correctly change the Emotiona
             inputs: ["uskrzydlony", "foo"],
             expectedHSV: { H: EmotionHue[Emotion.HAPPY], S: 37, V: 82 }
         }
-    ]
+    ];
 
     for(const tc of testCases) {
         const g = await createEvaluation();
@@ -59,4 +59,4 @@ t.test("Evaluation when gets multiple words should correctly change the Emotiona
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
     }
     t.end();
-})
+});

@@ -2,7 +2,7 @@
 import _ from 'underscore';
 import config from './config';
 import { Emotion } from './models/EmotionalState';
-import {EmotionHeader} from './views/Evaluation';
+import { EmotionHeader } from './views/Evaluation';
 
 export class Controller {
     constructor(evaluationModelFactory, evaluationView) {
