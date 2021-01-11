@@ -12,7 +12,8 @@ module.exports = {
     'sourceType': 'module',
   },
   'rules': {
-    'eqeqeq': 'error'
+    'eqeqeq': 'error',
+    'semi': [2, 'always']
   },
   'parser': "babel-eslint",
 };

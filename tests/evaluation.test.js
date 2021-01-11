@@ -3,7 +3,7 @@ require = require("esm")(module)
 const t = require('tape-catch')
 
 const { EmotionalStateEvaluationFactory } = require('../src/js/models/EmotionalStateEvaluation.js')
-const { EmotionHues, Emotions } = require('../src/js/models/EmotionalState.js')
+const { EmotionHue, Emotion } = require('../src/js/models/EmotionalState.js')
 
 async function createEvaluation() {
     return await (new EmotionalStateEvaluationFactory()).createEvaluation(()=>{});
@@ -18,7 +18,7 @@ t.test("Single word affects evaluation state.", async function (t) {
     ];
     for (const tc of testCases) {
         const g = await createEvaluation()
-        g.addFeeling(tc.input);
+        g.addWord(tc.input);
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
     }
@@ -31,29 +31,29 @@ t.test("Evaluation when gets multiple words should correctly change the Emotiona
         {
             name: "Anger NAWL, Unknwon Stopword, Disgust Rosenberg, Unknown Vulgar",
             inputs: ["ograniczać", "i", "znudzony", "kurwa"],
-            expectedHSV: { H: EmotionHues[Emotions.Anger], S: 62, V: 84 }
+            expectedHSV: { H: EmotionHue[Emotion.ANGER], S: 62, V: 84 }
         },
         {
             name: "Sadness Rosenberg, Disgust Rosenberg, Unknown Vulgar",
             inputs: ["apatyczna", "znudzony", "jebać"],
-            expectedHSV: { H: EmotionHues[Emotions.Disgust], S: 83, V: 83 }
+            expectedHSV: { H: EmotionHue[Emotion.DISGUST], S: 83, V: 83 }
         },
         {
             name: "Happiness Rosenberg, Happiness Rosenberg, Anger Rosenberg, Unknown Vulgar, Unknown Stopword, Happiness NAWL",
             inputs: ["ożywiony", "podekscytowany", "wzburzony", "kurwa", "i", "gramofon"],
-            expectedHSV: { H: EmotionHues[Emotions.Happy], S: 66, V: 86 }
+            expectedHSV: { H: EmotionHue[Emotion.HAPPY], S: 66, V: 86 }
         },
         {
             name: "Happiness Rosenberg, Unknown Unknown",
             inputs: ["uskrzydlony", "foo"],
-            expectedHSV: { H: EmotionHues[Emotions.Happy], S: 37, V: 82 }
+            expectedHSV: { H: EmotionHue[Emotion.HAPPY], S: 37, V: 82 }
         }
     ]
 
     for(const tc of testCases) {
         const g = await createEvaluation();
         for (const word of tc.inputs) {
-            g.addFeeling(word);
+            g.addWord(word);
         }
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);

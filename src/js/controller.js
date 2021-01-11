@@ -1,8 +1,8 @@
 
 import _ from 'underscore';
-import config from './config'
-import { Emotions } from './models/EmotionalState';
-import {EmotionHeader} from './views/Evaluation'
+import config from './config';
+import { Emotion } from './models/EmotionalState';
+import {EmotionHeader} from './views/Evaluation';
 
 export class Controller {
     constructor(evaluationModelFactory, evaluationView) {
@@ -36,21 +36,21 @@ export class Controller {
     }
 
     _displayWordingHints() {
-        const rosenbergWordsModel = this.evaluationModel.RosenbergWords
-        const rosenbergWordsMap = this._parseRosenbergWordsModelToView(rosenbergWordsModel)
+        const rosenbergWordsModel = this.evaluationModel.RosenbergWords;
+        const rosenbergWordsMap = this._parseRosenbergWordsModelToView(rosenbergWordsModel);
         this.evaluationView.showRosenbergWords(rosenbergWordsMap);
     }
 
     _parseRosenbergWordsModelToView(rosenbergWords) {
         const filterByEmotion = emotion => {
             return rosenbergWords.filter(w => w.emotion === emotion).map(w => w.originalWord);
-        }
+        };
         const rosenbergWordsMap = new Map();
-        rosenbergWordsMap.set(EmotionHeader.Anger, filterByEmotion(Emotions.Anger));
-        rosenbergWordsMap.set(EmotionHeader.Disgust, filterByEmotion(Emotions.Disgust));
-        rosenbergWordsMap.set(EmotionHeader.Fear, filterByEmotion(Emotions.Fear));
-        rosenbergWordsMap.set(EmotionHeader.Happiness, filterByEmotion(Emotions.Happy));
-        rosenbergWordsMap.set(EmotionHeader.Sadness, filterByEmotion(Emotions.Sadness));
+        rosenbergWordsMap.set(EmotionHeader.ANGER, filterByEmotion(Emotion.ANGER));
+        rosenbergWordsMap.set(EmotionHeader.DISGUST, filterByEmotion(Emotion.DISGUST));
+        rosenbergWordsMap.set(EmotionHeader.FEAR, filterByEmotion(Emotion.FEAR));
+        rosenbergWordsMap.set(EmotionHeader.HAPPINESS, filterByEmotion(Emotion.HAPPY));
+        rosenbergWordsMap.set(EmotionHeader.SADNESS, filterByEmotion(Emotion.SADNESS));
         return rosenbergWordsMap;
     }
 
@@ -63,18 +63,18 @@ export class Controller {
     onInputChange = inputValue => {
         const wordsSeparators = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]/g;
 
-        const isWordSeparator = char => char.match(wordsSeparators)
+        const isWordSeparator = char => char.match(wordsSeparators);
         if(!isWordSeparator(_.last(inputValue)))
             return;
 
         const getLastWord = () => {
             return _.chain(inputValue.split(wordsSeparators))
                     .filter(a=>a).last().value();
-        }
+        };
 
         const lastWord = getLastWord(inputValue);
         if(!_.isEmpty(lastWord)){
-            this.evaluationModel.addFeeling(lastWord);
+            this.evaluationModel.addWord(lastWord);
         }
         this.onStateChange();
     }
@@ -90,12 +90,12 @@ export class Controller {
         const lightness = V*(1-S/2);
         const saturation = (lightness === 0 || lightness === 1) ?
                             0 :
-                            (V-lightness) / _.min([lightness, 1-lightness])
+                            (V-lightness) / _.min([lightness, 1-lightness]);
         return {
             H: H,
             S: saturation,
             L: lightness
-        }
+        };
     }
 }
 

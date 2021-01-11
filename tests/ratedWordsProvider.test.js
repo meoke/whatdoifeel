@@ -1,12 +1,12 @@
 // eslint-disable-next-line no-global-assign
 require = require("esm")(module)
 const t = require('tape-catch')
-const { Emotions } = require("../src/js/models/EmotionalState")
+const { Emotion } = require("../src/js/models/EmotionalState")
 const wordsRatings = require('../src/js/models/RatedWordsProvider')
 
 t.test("Return correct list of stopWords", function (t) {
     const expectedStopWordsCount = 350;
-    const expectedEmotion = Emotions.Neutral
+    const expectedEmotion = Emotion.NEUTRAL
     const expectedFirst10StopWords = ['a',
         'aby',
         'ach',
@@ -32,7 +32,7 @@ t.test("Return correct list of stopWords", function (t) {
 
 t.test("Return correct list of vulgarWords", function (t) {
     const expectedVulgarWordsCount = 624;
-    const expectedEmotion = Emotions.Neutral;
+    const expectedEmotion = Emotion.NEUTRAL;
     const expectedFirst10VulgarWords = ['chuj',
         'chuja',
         'chujek',
@@ -60,13 +60,13 @@ t.test("Return correct list of vulgarWords", function (t) {
 t.test("Return correct list of NAWL words and their emotion mean ratings.", function (t) {
     const expectedNAWLWordsCount = 2901;
     const exampleExpectedNAWLWords = {
-        0: ['rozkoszny', Emotions.Happy],
-        194: ['absurd', Emotions.Anger],
-        261: ['pokutny', Emotions.Sadness],
-        325: ['kopalnia', Emotions.Fear],
-        491: ['obwisły', Emotions.Disgust],
-        536: ['miotła', Emotions.Neutral],
-        761: ['świnia', Emotions.Disgust]
+        0: ['rozkoszny', Emotion.HAPPY],
+        194: ['absurd', Emotion.ANGER],
+        261: ['pokutny', Emotion.SADNESS],
+        325: ['kopalnia', Emotion.FEAR],
+        491: ['obwisły', Emotion.DISGUST],
+        536: ['miotła', Emotion.NEUTRAL],
+        761: ['świnia', Emotion.DISGUST]
     }
 
     wordsRatings.getNAWLWords().then(actualNAWLWords => {
@@ -94,7 +94,7 @@ t.test("Parse NAWL row", function (t) {
         "meanDisgust": "1.3703704"
     }
 
-    const expectedParsedValue = ["rozkoszny", Emotions.Happy, 1.4074074, 1.3703704, 1.5555556, 5.296296, 1.4814814]
+    const expectedParsedValue = ["rozkoszny", Emotion.HAPPY, 1.4074074, 1.3703704, 1.5555556, 5.296296, 1.4814814]
     const actualParsedValue = wordsRatings.testAPI._parseNAWLRow(row)
 
     t.deepEquals(actualParsedValue, expectedParsedValue)
@@ -104,8 +104,8 @@ t.test("Parse NAWL row", function (t) {
 t.test("Return correct list of Rosenberg words and their emotions", function (t) {
     const expectedRosenbergWordsCount = 143;
     const exampleRosenbergWords = {
-        0: ['werwa', Emotions.Happy],
-        86: ['spłoszona', Emotions.Fear]
+        0: ['werwa', Emotion.HAPPY],
+        86: ['spłoszona', Emotion.FEAR]
     }
 
     wordsRatings.getRosenbergWords().then(actualRosenbergWords => {
@@ -128,7 +128,7 @@ t.test("Parse Rosenberg row", function (t) {
         "hue": "S"
     }
 
-    const expectedParsedValue = ["apatyczny", Emotions.Sadness]
+    const expectedParsedValue = ["apatyczny", Emotion.SADNESS]
     const actualParsedValue = wordsRatings.testAPI._parseRosenbergRow(row)
 
     t.deepEquals(actualParsedValue, expectedParsedValue)
