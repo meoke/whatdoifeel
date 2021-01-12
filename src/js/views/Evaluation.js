@@ -31,6 +31,7 @@ export class EmotionalStateEvaluationView {
             feelingsInput: $('#feelingsInput'),
             rosenbergFeelings: $('#rosenbergFeelings'),
             wordsHints: $('#wordsHints'),
+            emotionalStateIndicator: $('#emotionalStateIndicator'),
         
             angerHeader: $("#angerHeader"),
             disgustHeader: $("#disgustHeader"),
@@ -176,5 +177,31 @@ export class EmotionalStateEvaluationView {
             borderRightColor: color,
             borderTopColor: color
         }, 1500 );
+    }
+
+    /**
+     * Renders EmotionalState given as percentage breakdown of emotional components.
+     * @param {number} anger - Percentage value range [0,100]
+     * @param {number} disgust - Percentage value range [0,100]
+     * @param {number} fear - Percentage value range [0,100]
+     * @param {number} happiness - Percentage value range [0,100]
+     * @param {number} sadness - Percentage value range [0,100]
+     */
+    renderEmotionalStateBreakDown(anger, disgust, fear, happiness, sadness) {
+        const border1 = happiness; 
+        const border2 = border1 + anger; 
+        const border3 = border2 + disgust; 
+        const border4 = border3 + fear; 
+        const border5 = border4 + sadness; 
+
+        this.elements.emotionalStateIndicator.css('background',
+            `linear-gradient(to right, 
+                             var(--happinessColor) 0% ${border1}%, 
+                             var(--angerColor) ${border1}% ${border2}%,
+                             var(--disgustColor) ${border2}% ${border3}%,
+                             var(--fearColor) ${border3}% ${border4}%,
+                             var(--sadnessColor) ${border4}% ${border5}%,
+                             var(--neutralColor) ${border5}% 100%)`
+        );
     }
 }

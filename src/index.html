@@ -60,57 +60,58 @@
                 </div>
                 <div class="three columns u-max-full-width">
                     <h4>O projekcie</h4>
-                    <p>Repozytorium strony: <a href="github.com/meoke/disanger" target="_blank">github.com/meoke/disanger</a></p>
+                    <p>Repozytorium strony: <a href="github.com/meoke/disanger"
+                            target="_blank">github.com/meoke/disanger</a></p>
                     <p>Słowniki słów nacechowanych emocjonalnie:
-                        <ul>
-                            <li><a href="https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt" target="_blank">Stop-słowa</a>
-                            </li>
-                            <li><a href="http://marcinmazurek.com.pl/polskie-wulgaryzmy" target="_blank">Wulgaryzmy</a></li>
-                            <li><a href="https://exp.lobi.nencki.gov.pl/nawl-analysis" target="_blank">Nencki Affective Word List</a></li>
-                            <li><a href="http://bakcylwiedzy.pl/wp-content/uploads/2015/09/lista-uczu%C4%87_M.Rosenberg.pdf" target="_blank">Emocje
-                                    wg M.Rosenberga</a></li>
-                        </ul>
-                        </p>
+                    <ul>
+                        <li><a href="https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt"
+                                target="_blank">Stop-słowa</a>
+                        </li>
+                        <li><a href="http://marcinmazurek.com.pl/polskie-wulgaryzmy" target="_blank">Wulgaryzmy</a></li>
+                        <li><a href="https://exp.lobi.nencki.gov.pl/nawl-analysis" target="_blank">Nencki Affective Word
+                                List</a></li>
+                        <li><a href="http://bakcylwiedzy.pl/wp-content/uploads/2015/09/lista-uczu%C4%87_M.Rosenberg.pdf"
+                                target="_blank">Emocje
+                                wg M.Rosenberga</a></li>
+                    </ul>
+                    </p>
                 </div>
                 <div class="three columns u-max-full-width">
                     <h4>Kontakt</h4>
                     <p><a href="mailto:pedziadkiewicz@gmail.com">pedziadkiewicz@gmail.com</a></p>
-                    
+
                 </div>
             </div>
             <div id="evaluationContainer">
-                <h1>Co teraz czuję?</h1>
-                <p id="instruction">Użyj słów, o tu:</p>
+                <h1 class="add-padding-bottom">Co teraz czuję?</h1>
+                <p id="instruction">Opisz w poniższej ramce swoje samopoczucie. Pasek emocji zmienia się w zależności od Twoich słów.</p>
                 <div class="add-padding-bottom">
                     <textarea id="feelingsInput" type="text" disabled="true"
                         class="u-full-width add-padding-bottom"></textarea>
+                    <div id="emotionalStateIndicator"></div>
                     <button id="startEvaluationBtn" class="button-primary toggleEvaluationBtn">Start!</button>
                     <button id="restartEvaluationBtn" class="toggleEvaluationBtn"><i class="fas fa-undo"></i></button>
                 </div>
                 <div id="wordsHints">
-                    <div class="row">
-                        <div class="four columns border-bottom">Potrzeby zaspokojone</div>
-                        <div class="eight columns border-bottom">Potrzeby niezaspokojone</div>
-                    </div>
-                    <div id="wordsColumn" class="row">
-                        <div id="happinessColumn1" class="two columns u-max-full-width">
-                            <h3 id="happinessHeader">Szczęście</h3>
-                        </div>
-                        <div id="happinessColumn2" class="two columns u-max-full-width">
-                            <h3 id="happinessHeader2" class="white">Empty</h3>
-                        </div>
-                        <div id="angerColumn" class=" two columns u-max-full-width">
-                            <h3 id="angerHeader">Złość</h3>
-                        </div>
-                        <div id="disgustColumn" class="two columns u-max-full-width">
-                            <h3 id="disgustHeader">Wstręt<h3>
-                        </div>
-                        <div id="fearColumn" class="two columns u-max-full-width">
-                            <h3 id="fearHeader">Strach</h3>
-                        </div>
-                        <div id="sadnessColumn" class="two columns u-max-full-width">
-                            <h3 id="sadnessHeader">Smutek</h3>
-                        </div>
+                    <div id="wordsColumn">
+                            <div id="happinessColumn1" class="two columns u-max-full-width">
+                                <h3 id="happinessHeader">Szczęście</h3>
+                            </div>
+                            <div id="happinessColumn2" class="two columns u-max-full-width">
+                                <h3 id="happinessHeader2" class="white">Empty</h3>
+                            </div>
+                            <div id="angerColumn" class=" two columns u-max-full-width">
+                                <h3 id="angerHeader">Złość</h3>
+                            </div>
+                            <div id="disgustColumn" class="two columns u-max-full-width">
+                                <h3 id="disgustHeader">Wstręt<h3>
+                            </div>
+                            <div id="fearColumn" class="two columns u-max-full-width">
+                                <h3 id="fearHeader">Strach</h3>
+                            </div>
+                            <div id="sadnessColumn" class="two columns u-max-full-width">
+                                <h3 id="sadnessHeader">Smutek</h3>
+                            </div>
                     </div>
                 </div>
             </div>

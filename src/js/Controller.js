@@ -83,6 +83,13 @@ export class Controller {
         const HSV = this.evaluationModel.EmotionalStateHSV;
         const HSL = this._HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
         this.evaluationView.renderEmotionalState(HSL.H, HSL.S, HSL.L);
+
+        const emotionalStateBreakdown = this.evaluationModel.EmotionalStateComponents;
+        this.evaluationView.renderEmotionalStateBreakDown(emotionalStateBreakdown[Emotion.ANGER], 
+                                                          emotionalStateBreakdown[Emotion.DISGUST], 
+                                                          emotionalStateBreakdown[Emotion.FEAR], 
+                                                          emotionalStateBreakdown[Emotion.HAPPY], 
+                                                          emotionalStateBreakdown[Emotion.SADNESS]);
     }
 
     _HSVtoHSL = (H, S, V) => { 

@@ -86,6 +86,33 @@ export class EmotionalState {
     }
 
     /**
+     * @typedef {Object} EmotionalStateComponents
+     * @property {number} anger - the percentage part of anger in EmotionalState
+     * @property {number} disgust - the percentage part of disgust in EmotionalState
+     * @property {number} fear - the percentage part of fear in EmotionalState
+     * @property {number} happiness - the percentage part of happiness in EmotionalState
+     * @property {number} sadness - the percentage part of sadness in EmotionalState
+    */
+    /**
+     * Returns EmotionalState as percentage breakdown of component emotions
+     * @returns {EmotionalStateComponents} percentage values of emotional components of EmotionalState
+     */
+    getEmotionStateComponents() {
+        const notNeutralWords = this.emotionalCharges.filter(el => el.emotion !== Emotion.NEUTRAL);
+        const getCountOfEmotionWords = e => {return notNeutralWords.filter(el => el.emotion === e).length;};
+        const getShare = e => {return notNeutralWords.length === 0 ?
+                                      0 :
+                                      getCountOfEmotionWords(e) / notNeutralWords.length * 100;};
+        return {
+            [Emotion.ANGER]: getShare(Emotion.ANGER),
+            [Emotion.DISGUST]: getShare(Emotion.DISGUST),
+            [Emotion.FEAR]: getShare(Emotion.FEAR),
+            [Emotion.HAPPY]: getShare(Emotion.HAPPY),
+            [Emotion.SADNESS]: getShare(Emotion.SADNESS)
+        };
+    }
+
+    /**
      * @typedef {Object} HSV
      * @property {number} H - Hue from range [0,360]
      * @property {number} S - Saturation from range [0,100]
