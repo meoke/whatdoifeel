@@ -2,9 +2,10 @@
     --mainColor: #33C3F0;
     --happinessColor: hsl(45, 100%, 50%);
     --angerColor: hsl(0, 100%, 50%);
-    --disgustColor: hsl(120, 100%, 50%);
-    --fearColor: hsl(300, 100%, 50%);
-    --sadnessColor: hsl(210, 100%, 50%);
+    --disgustColor: hsl(120, 50%, 50%);
+    --fearColor: hsl(300, 50%, 50%);
+    --sadnessColor: hsl(210, 50%, 50%);
+    --neutralColor: hsl(280, 0%, 50%);
 }
 
 h1 {
@@ -94,8 +95,6 @@ h1 {
     height: 10px;
     border-radius: 5px;
     margin-bottom: 15px;
-    /* background: linear-gradient(to right, grey 0%, #ebf8e1, #f69d3c); */
-    background: linear-gradient(to right,var(--happinessColor) 0% 30%, var(--angerColor) 30% 75%, var(--disgustColor) 75% 80%, var(--fearColor)80% 81%, var(--sadnessColor) 81% 100%);
 }
 
 @media only screen and (min-width: 1100px) {

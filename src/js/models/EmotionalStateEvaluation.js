@@ -43,6 +43,17 @@ export class EmotionalStateEvaluation {
     }
 
     /**
+    * @typedef {import('./EmotionalState.js').EmotionalStateComponents} EmotionalStateComponents
+    */
+     /**
+     * Get emotional state presented as percentage breakdown of emotions.
+     * @returns {EmotionalStateComponents} 
+     */
+    get EmotionalStateComponents() {
+        return this.state.getEmotionStateComponents();
+    }
+
+    /**
      * Get list of Polish emotionally charged words as defined by Marschall Rosenberg.
      * @returns {Array} Array of RatedWordEntry objects of WordType.ROSENBERG. 
      */
