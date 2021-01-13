@@ -14,6 +14,7 @@ export const Emotion = Object.freeze({
     NEUTRAL: 5
 });
 
+
 /**
  * Represents all possible classification of words based on their characteristics.
  * @readonly
@@ -56,11 +57,13 @@ export class EmotionalCharge {
      * @param {string} word - the original Polish word provided to the model
      * @param {Emotion} emotion - emotion being expressed by this word
      * @param {WordType} wordType - word classification
+     * @param {number} wordStrength - word expression strength
      */
-    constructor(word, emotion, wordType) {
+    constructor(word, emotion, wordType, wordStrength) {
         this.word = word;
         this.emotion = emotion;
         this.wordType = wordType;
+        this.strength = wordStrength;
     }
 }
 

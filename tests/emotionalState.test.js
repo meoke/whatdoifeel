@@ -15,7 +15,7 @@ t.test("New EmotionalState is empty.", function (t) {
 
 t.test("EmotionalCharge is added to EmotionalState", function (t) {
     const es = new EmotionalState();
-    const emoCh = new EmotionalCharge("foo", Emotion.NEUTRAL, WordType.VULGAR);
+    const emoCh = new EmotionalCharge("foo", Emotion.NEUTRAL, WordType.VULGAR, 7);
     es.addEmotionalCharge(emoCh);
 
     t.deepEquals(es.emotionalCharges[es.emotionalCharges.length - 1], emoCh);
@@ -37,12 +37,12 @@ t.test("EmotionalState with no EmotionalCharge should return neutral HSV value",
 });
 
 t.test("EmotionalState with one EmotionalCharge should return appropriate HSV value", function (t) {
-    const emoCh1 = [new EmotionalCharge("", Emotion.ANGER, WordType.STOPWORD), {H: EmotionHue[Emotion.ANGER], S: 25, V: 81}];
-    const emoCh2 = [new EmotionalCharge("", Emotion.DISGUST, WordType.ROSENBERG), {H: EmotionHue[Emotion.DISGUST], S: 75, V: 81}];
-    const emoCh3 = [new EmotionalCharge("", Emotion.FEAR, WordType.VULGAR), {H: EmotionHue[Emotion.FEAR], S: 100, V: 81}];
-    const emoCh4 = [new EmotionalCharge("", Emotion.HAPPY, WordType.NAWL), {H: EmotionHue[Emotion.HAPPY], S: 50, V: 81}];
-    const emoCh5 = [new EmotionalCharge("", Emotion.SADNESS, WordType.UNKNOWN), {H: EmotionHue[Emotion.SADNESS], S: 0, V: 81}];
-    const emoCh6 = [new EmotionalCharge("", Emotion.NEUTRAL, WordType.UNKNOWN), {H: EmotionHue[Emotion.NEUTRAL], S: 0, V: 81}];
+    const emoCh1 = [new EmotionalCharge("", Emotion.ANGER, WordType.STOPWORD, 0), {H: EmotionHue[Emotion.ANGER], S: 25, V: 81}];
+    const emoCh2 = [new EmotionalCharge("", Emotion.DISGUST, WordType.ROSENBERG, 6), {H: EmotionHue[Emotion.DISGUST], S: 75, V: 81}];
+    const emoCh3 = [new EmotionalCharge("", Emotion.FEAR, WordType.VULGAR, 7), {H: EmotionHue[Emotion.FEAR], S: 100, V: 81}];
+    const emoCh4 = [new EmotionalCharge("", Emotion.HAPPY, WordType.NAWL, 1.4), {H: EmotionHue[Emotion.HAPPY], S: 50, V: 81}];
+    const emoCh5 = [new EmotionalCharge("", Emotion.SADNESS, WordType.UNKNOWN, 0), {H: EmotionHue[Emotion.SADNESS], S: 0, V: 81}];
+    const emoCh6 = [new EmotionalCharge("", Emotion.NEUTRAL, WordType.UNKNOWN, 0), {H: EmotionHue[Emotion.NEUTRAL], S: 0, V: 81}];
     const testCases = [emoCh1, emoCh2, emoCh3, emoCh4, emoCh5, emoCh6];
 
     for(const [emCh, expectedHSV] of testCases) {

@@ -1,6 +1,7 @@
 import getStem from 'stemmer_pl';
 import { EmotionalCharge, WordType, Emotion } from './EmotionalState';
 import _ from 'underscore';
+import { RatedWord } from './RatedWordsProvider';
 
 /**
  * Element of Rated Words Reference.
@@ -11,12 +12,14 @@ export class RatedWordEntry {
      * @param {string} word - orginal word from the external dictionary
      * @param {Emotion} emotion - emotion assigned to this word
      * @param {WordType} wordType - type of the word
+     * @param {number} wordStrength - expression strength 
      */
-    constructor(word, emotion, wordType) {
+    constructor(word, emotion, wordType, wordStrength) {
         this.originalWord = word;
         this.stem = getStem(word);
         this.emotion = emotion;
         this.wordType = wordType;
+        this.wordStrength = wordStrength;
     }
 }
 
@@ -44,8 +47,23 @@ export class RatedWordsReference {
                          .sortBy("priority")
                          .reverse()
                          .uniq(false, _.iteratee('word'))
-                         .map(w => new RatedWordEntry(w.word, w.emotion, w.wordType))
+                         .map(w => new RatedWordEntry(w.word, w.emotion, w.wordType, this._getRatedWordStrength(w)))
                          .value();
+    }
+
+    /**
+     * Gets strength of the word based on its emotion, type and emotion mean values.
+     * @param {RatedWord} ratedWord 
+     */
+    _getRatedWordStrength(ratedWord) {
+        const strengths = {
+            [WordType.UNKNOWN]: 0,
+            [WordType.STOPWORD]: 0,
+            [WordType.NAWL]: Math.max(ratedWord.meanAnger, ratedWord.meanDisgust, ratedWord.meanFear, ratedWord.meanHappiness, ratedWord.meanHappiness),
+            [WordType.ROSENBERG]: 6,
+            [WordType.VULGAR]: 7,
+        };
+        return strengths[ratedWord.wordType];
     }
 
     /**
@@ -56,8 +74,8 @@ export class RatedWordsReference {
     getEmotionalCharge(word) {
         const entryMatch = this._getMatchedWord(word.toLowerCase());
         return entryMatch === undefined ?
-               new EmotionalCharge(word, Emotion.NEUTRAL, WordType.UNKNOWN)  :
-               new EmotionalCharge(word, entryMatch.emotion, entryMatch.wordType);
+               new EmotionalCharge(word, Emotion.NEUTRAL, WordType.UNKNOWN, 0)  :
+               new EmotionalCharge(word, entryMatch.emotion, entryMatch.wordType, entryMatch.wordStrength);
     }
 
     _getMatchedWord(word) {

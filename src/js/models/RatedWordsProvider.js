@@ -3,7 +3,6 @@ import _ from 'underscore';
 import Papa from 'papaparse';
 
 import {Emotion, WordType} from "./EmotionalState";
-
 let toPapa;
 let fetchFile;
 let server;
@@ -56,7 +55,7 @@ export async function getStopWords() {
     const papaInput = await toPapa(path);
     const stopWordsRows = await _parsers.csvStreamToRow(papaInput);
     return stopWordsRows.map(row => {
-        return new RatedWord(row.word, Emotion.NEUTRAL, WordType.STOPWORD);
+        return new RatedWord(row.word, Emotion.NEUTRAL, WordType.STOPWORD, 0, 0, 0, 0, 0);
     });
 }
 
@@ -69,7 +68,7 @@ export async function getVulgarWords() {
     const papaInput = await toPapa(path);
     const vulgarWordsRows = await _parsers.csvStreamToRow(papaInput);
     return vulgarWordsRows.map(row => {
-        return new RatedWord(row.word, Emotion.NEUTRAL, WordType.VULGAR);
+        return new RatedWord(row.word, Emotion.NEUTRAL, WordType.VULGAR, 0, 0, 0, 0, 0);
     });
 }
 
@@ -82,10 +81,7 @@ export async function getNAWLWords() {
     const papaInput = await toPapa(path);
     const preevaluatedWordsRows = await _parsers.csvStreamToRow(papaInput);
     return preevaluatedWordsRows.map(row => {
-        let w = Object.values(row)[0];
-
-        const [word, emotion, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness] = _parsers.nawlRowToRowValuesArray(row);  // eslint-disable-line no-unused-vars
-        return new RatedWord(w, emotion, WordType.NAWL, meanAnger, meanDisgust, meanFear, meanHappiness, meanSadness);
+        return _parsers.nawlRowToRatedWord(row);
     });
 }
 
@@ -98,14 +94,13 @@ export async function getRosenbergWords() {
     const papaInput = await toPapa(path);
     const rosenbergWordsRows = await _parsers.csvStreamToRow(papaInput);
     return rosenbergWordsRows.map(row => {
-        const [word, emotion] = _parsers.rosenbergRowToRowValuesArray(row);
-        return new RatedWord(word, emotion, WordType.ROSENBERG);
+        return _parsers.rosenbergRowToRatedWord(row);
     });
 }
 
 const _parsers = (() =>{
     return {
-        nawlRowToRowValuesArray: function(row) {
+        nawlRowToRatedWord: function(row) {
             const emotionRates = [
                 {"emotion": Emotion.ANGER, "rate": parseFloat(row["meanAnger"])},
                 {"emotion": Emotion.DISGUST, "rate": parseFloat(row["meanDisgust"])},
@@ -124,18 +119,21 @@ const _parsers = (() =>{
                     .emotion;
         
             const meanEmotionValues = emotionRates.map(x => x.rate);
-            return [row.word, topEmotion, ...meanEmotionValues];
+            const word = Object.values(row)[0];
+            return new RatedWord(word, topEmotion, WordType.NAWL, ...meanEmotionValues);
         },
-        rosenbergRowToRowValuesArray: function (row) {
-            const emotionDict = 
+        rosenbergRowToRatedWord: function (row) {
+            const hueToEmotion = 
             {
                 "H": Emotion.HAPPY,
                 "A": Emotion.ANGER,
                 "S": Emotion.SADNESS,
                 "F": Emotion.FEAR,
-                "D": Emotion.DISGUST,
+                "D": Emotion.DISGUST
             };
-            return [row.word, emotionDict[row.hue]];
+            return new RatedWord(row.word, 
+                                hueToEmotion[row.hue], 
+                                WordType.ROSENBERG);
         },
         csvStreamToRow: function (papaInput) {
             return new Promise((resolve, reject) => {Papa.parse(papaInput, {
@@ -158,6 +156,6 @@ const _parsers = (() =>{
 
 
 export const testAPI = {
-    _parseNAWLRow: _parsers.nawlRowToRowValuesArray,
-    _parseRosenbergRow: _parsers.rosenbergRowToRowValuesArray,
+    nawlRowToRatedWord: _parsers.nawlRowToRatedWord,
+    rosenbergRowToRatedWord: _parsers.rosenbergRowToRatedWord,
 };
