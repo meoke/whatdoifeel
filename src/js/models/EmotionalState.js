@@ -89,6 +89,19 @@ export class EmotionalState {
     }
 
     /**
+     * Returns EmotionalState's intenisty based on word types as value from range [0,7].
+     * @returns {number} 
+     */
+    getEmotionalStateIntensity() {
+        const emotionalChargesCount = this.emotionalCharges.length;
+        return _.chain(this.emotionalCharges)
+                .map(ch => {return ch.strength;})
+                .reduce((memo, num) => {
+                    return memo + num;
+                }, 0) / (emotionalChargesCount === 0 ? 1 : emotionalChargesCount);
+    }
+
+    /**
      * @typedef {Object} EmotionalStateComponents
      * @property {number} anger - the percentage part of anger in EmotionalState
      * @property {number} disgust - the percentage part of disgust in EmotionalState
@@ -100,7 +113,7 @@ export class EmotionalState {
      * Returns EmotionalState as percentage breakdown of component emotions
      * @returns {EmotionalStateComponents} percentage values of emotional components of EmotionalState
      */
-    getEmotionStateComponents() {
+    getEmotionalStateComponents() {
         const notNeutralWords = this.emotionalCharges.filter(el => el.emotion !== Emotion.NEUTRAL);
         const getCountOfEmotionWords = e => {return notNeutralWords.filter(el => el.emotion === e).length;};
         const getShare = e => {return notNeutralWords.length === 0 ?
@@ -121,7 +134,6 @@ export class EmotionalState {
      * @property {number} S - Saturation from range [0,100]
      * @property {number} V - Value from range [80,100]
     */
-
     /**
      * Returns EmotionalState as a color in HSV model
      * @returns {HSV} Color as HSV (Hue, Saturation, Value)

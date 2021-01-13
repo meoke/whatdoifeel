@@ -67,3 +67,25 @@ t.test("EmotionalState with mutiple EmotionalCharges should return appropriate s
     t.deepEquals(state.getEmotionStateAsHSVColor(), expectedHSV);
     t.end();
 });
+
+t.test("EmotionalState/getEmotionalStateIntensity returns correct intensity value.", function(t) {
+    const testCases = [
+        {emotionalCharges: [],
+         expectedIntensity: 0},
+         {emotionalCharges: [new EmotionalCharge("", Emotion.ANGER, WordType.STOPWORD, 6)],
+        expectedIntensity: 6},
+        {emotionalCharges: [new EmotionalCharge("", Emotion.ANGER, WordType.STOPWORD, 0.5),
+                new EmotionalCharge("", Emotion.ANGER, WordType.STOPWORD, 2),
+                new EmotionalCharge("", Emotion.ANGER, WordType.STOPWORD, 2.9), ],
+         expectedIntensity: 1.8}
+    ];
+
+    for(const tc of testCases){
+        const state = new EmotionalState();
+        for(const emotionalCharge of tc.emotionalCharges) {
+            state.addEmotionalCharge(emotionalCharge);
+        }
+        t.equals(state.getEmotionalStateIntensity(), tc.expectedIntensity);
+    }
+    t.end();
+});

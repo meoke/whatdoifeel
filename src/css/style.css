@@ -1,11 +1,18 @@
 :root {
     --mainColor: #33C3F0;
-    --happinessColor: hsl(45, 100%, 50%);
-    --angerColor: hsl(0, 100%, 50%);
-    --disgustColor: hsl(120, 50%, 50%);
-    --fearColor: hsl(300, 50%, 50%);
-    --sadnessColor: hsl(210, 50%, 50%);
-    --neutralColor: hsl(280, 0%, 50%);
+    --happinessHue: 45;
+    --angerHue: 0;
+    --disgustHue: 120;
+    --fearHue: 300;
+    --sadnessHue: 210;
+    --neutralHue: 280;
+
+    --happinessColor: hsl(var(--happinessHue), 100%, 50%);
+    --angerColor: hsl(var(--angerHue), 100%, 50%);
+    --disgustColor: hsl(var(--disgustHue), 50%, 50%);
+    --fearColor: hsl(var(--fearHue), 50%, 50%);
+    --sadnessColor: hsl(var(--sadnessHue), 50%, 50%);
+    --neutralColor: hsl(var(--neutralHue), 0%, 50%);
 }
 
 h1 {
@@ -115,11 +122,12 @@ h1 {
     }
     
     #feelingsInput {
-        /* border-width: 10px; */
-        border-width: 1px;
+        border-width: 10px;
+        margin-bottom: 20px;
     }
 
     .add-padding-bottom {
-        padding-bottom: 50px;
+        padding-bottom: 0px;
     }
+
 }

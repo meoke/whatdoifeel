@@ -169,7 +169,7 @@ export class EmotionalStateEvaluationView {
      * @param {number} S - Saturation from range [0,1]
      * @param {number} L - Lightness from range [0,1]
      */
-    renderEmotionalState(H, S, L) {
+    renderEmotionalStateHSL(H, S, L) {
         const color = $.Color({ hue: H, saturation: S, lightness: L});
         this.elements.feelingsInput.animate( {
             borderBottomColor: color,
@@ -180,28 +180,31 @@ export class EmotionalStateEvaluationView {
     }
 
     /**
-     * Renders EmotionalState given as percentage breakdown of emotional components.
+     * Renders EmotionalState given as its intensity and percentage breakdown of emotional components.
+     * @param {number} intensity - Percentage value from range [0,100], where 0 is 0 intensity and 100 max intensity
      * @param {number} anger - Percentage value range [0,100]
      * @param {number} disgust - Percentage value range [0,100]
      * @param {number} fear - Percentage value range [0,100]
      * @param {number} happiness - Percentage value range [0,100]
      * @param {number} sadness - Percentage value range [0,100]
      */
-    renderEmotionalStateBreakDown(anger, disgust, fear, happiness, sadness) {
+    renderEmotionalState(intensity, anger, disgust, fear, happiness, sadness) {
         const border1 = happiness; 
         const border2 = border1 + anger; 
         const border3 = border2 + disgust; 
         const border4 = border3 + fear; 
         const border5 = border4 + sadness; 
 
+        const col = c => {return `hsl(${c}, ${intensity}%, 50%) `;};
         this.elements.emotionalStateIndicator.css('background',
             `linear-gradient(to right, 
-                             var(--happinessColor) 0% ${border1}%, 
-                             var(--angerColor) ${border1}% ${border2}%,
-                             var(--disgustColor) ${border2}% ${border3}%,
-                             var(--fearColor) ${border3}% ${border4}%,
-                             var(--sadnessColor) ${border4}% ${border5}%,
-                             var(--neutralColor) ${border5}% 100%)`
+                             ${col("var(--happinessHue)")} 0% ${border1}%, 
+                             ${col("var(--angerHue)")} ${border1}% ${border2}%,
+                             ${col("var(--disgustHue)")} ${border2}% ${border3}%,
+                             ${col("var(--fearHue)")} ${border3}% ${border4}%,
+                             ${col("var(--sadnessHue)")} ${border4}% ${border5}%,
+                             ${"hsl(var(--neutralHue), 0%, 50%)"} ${border5}% 100%)`
         );
+        
     }
 }
