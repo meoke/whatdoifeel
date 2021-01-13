@@ -102,7 +102,7 @@ t.test("Parse NAWL row", function (t) {
 });
 
 t.test("Return correct list of Rosenberg words and their emotions", function (t) {
-    const expectedRosenbergWordsCount = 143;
+    const expectedRosenbergWordsCount = 148;
     const exampleRosenbergWords = {
         0: ['werwa', Emotion.HAPPY],
         86: ['spłoszona', Emotion.FEAR]

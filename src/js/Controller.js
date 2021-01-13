@@ -86,7 +86,7 @@ export class Controller {
 
 
         const emotionalStateBreakdown = this.evaluationModel.EmotionalStateComponents;
-        const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+20);
+        const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+10);
         this.evaluationView.renderEmotionalState(intensity,
                                                           emotionalStateBreakdown[Emotion.ANGER], 
                                                           emotionalStateBreakdown[Emotion.DISGUST], 
