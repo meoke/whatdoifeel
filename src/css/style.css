@@ -41,39 +41,30 @@ h1 {
     font-size: 4em;
 }
 
+button, p, textarea {
+    font-size: 2rem;
+}
+
+button {
+    margin: auto;
+    display: block;
+}
+
 /* |   Visibility */
 
 .hide{
     visibility: hidden;
 }
 
+#restartEvaluationBtn {
+    display: none;
+}
+
 /* |   Specific */
 
-#closeAboutBtn {
-    width: 100%;
-}
-
-.emotionDot {
-    position: absolute;
-    border-radius: 50%;
-    z-index: -1;
-}
-
-#titleContainer {
-    position: relative;
-}
-
-#feelingsInput {
-    height: 150px; 
-}
-
-.toggleEvaluationBtn {
-    margin: auto;
+#aboutButton {
+    margin: 20px auto;
     display: block;
-}
-
-#restartEvaluationBtn{
-    display: none;
 }
 
 #aboutContainer {
@@ -81,12 +72,41 @@ h1 {
     padding: 2rem;
 }
 
-#aboutButton {
-    margin-top: 30px;
-    margin-right: 60px;;
-    float: right;
-    font-size: 2rem;
+#closeAboutBtn {
+    width: 100%;
+}
+
+#evaluationContainer {
+    margin: 50px 0px;
     position: relative;
+}
+
+#feelingsInput {
+    height: 150px; 
+    border-color: grey;
+}
+
+#titleContainer {
+    position: relative;
+    height: 100px;
+}
+
+.emotionDot {
+    position: absolute;
+    border-radius: 50%;
+}
+
+#title {
+    position: relative;
+}
+
+#dotsContainer {
+    position: relative;
+    height: 100%;
+}
+
+#instruction {
+    padding: 20px 0px;
 }
 
 #wordsHints {
@@ -99,29 +119,28 @@ h1 {
     width: 760px;
 }
 
+
+
 @media only screen and (max-width: 768px) {
     #wordsColumn .columns {
-        width:auto;
+        width: auto;
     } 
 }
 
-
-#instruction {
-    font-size: 1.5em;
-    margin: 30px;
+.margin-right {
+    margin-right: 20px;
 }
 
 @media only screen and (min-width: 1100px) {
+    #aboutButton {
+        margin-top: 30px;
+        margin-right: 150px;
+    }
+
     #wordsColumn {
         width: inherit;
     }
    
-    #feelingsInput {
-        border-color: grey;
-        margin-bottom: 20px;
-        font-size: 1.2em;
-    }
-
     .add-padding-bottom {
         padding-bottom: 50px;
     }

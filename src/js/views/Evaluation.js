@@ -192,7 +192,7 @@ export class EmotionalStateEvaluationView {
         const maxWidth = 20;
         const pies = v => {return Math.max(10, v*maxWidth/7);};
 
-        const randPos = () => {return `${_.random(30,90)}%`;};
+        const randPos = () => {return `${_.random(0,90)}%`;};
         d.addClass("emotionDot");
         d.css("width", `${pies(strength)}px`);
         d.css("height", `${pies(strength)}px`);
