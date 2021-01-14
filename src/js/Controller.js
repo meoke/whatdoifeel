@@ -1,7 +1,7 @@
 
 import _ from 'underscore';
 import config from './config';
-import { Emotion } from './models/EmotionalState';
+import { Emotion, EmotionHue } from './models/EmotionalState';
 import { EmotionHeader } from './views/Evaluation';
 
 export class Controller {
@@ -57,6 +57,7 @@ export class Controller {
     onEvaluationRestart = () => {
         this.evaluationModel.restartEvaluation();
         this.evaluationView.clearFeelingsInput();
+        this.evaluationView.clearEvaluationStateVisualisation();
         this.onStateChange();
     }
 
@@ -74,25 +75,34 @@ export class Controller {
 
         const lastWord = getLastWord(inputValue);
         if(!_.isEmpty(lastWord)){
-            this.evaluationModel.addWord(lastWord);
+            const emotionalCharge = this.evaluationModel.addWord(lastWord);
+            this.onEmotionalChargeAdded(emotionalCharge);
         }
         this.onStateChange();
     }
 
+    onEmotionalChargeAdded = (emotionalCharge) => {
+        const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+10);
+
+        this.evaluationView.renderNewEmotionalStateComponent(EmotionHue[emotionalCharge.emotion], 
+                                                             intensity,
+                                                             50,
+                                                             emotionalCharge.strength);
+    }
+
+    
     onStateChange = () => {
         const HSV = this.evaluationModel.EmotionalStateHSV;
         const HSL = this._HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
         this.evaluationView.renderEmotionalStateHSL(HSL.H, HSL.S, HSL.L);
 
-
-        const emotionalStateBreakdown = this.evaluationModel.EmotionalStateComponents;
-        const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+10);
-        this.evaluationView.renderEmotionalState(intensity,
-                                                          emotionalStateBreakdown[Emotion.ANGER], 
-                                                          emotionalStateBreakdown[Emotion.DISGUST], 
-                                                          emotionalStateBreakdown[Emotion.FEAR], 
-                                                          emotionalStateBreakdown[Emotion.HAPPY], 
-                                                          emotionalStateBreakdown[Emotion.SADNESS]);
+        // const emotionalStateBreakdown = this.evaluationModel.EmotionalStateComponents;
+        // this.evaluationView.renderEmotionalState(intensity,
+        //                                                   emotionalStateBreakdown[Emotion.ANGER], 
+        //                                                   emotionalStateBreakdown[Emotion.DISGUST], 
+        //                                                   emotionalStateBreakdown[Emotion.FEAR], 
+        //                                                   emotionalStateBreakdown[Emotion.HAPPY], 
+        //                                                   emotionalStateBreakdown[Emotion.SADNESS]);
     }
 
     _HSVtoHSL = (H, S, V) => { 

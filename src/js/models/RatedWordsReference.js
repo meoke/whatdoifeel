@@ -57,8 +57,8 @@ export class RatedWordsReference {
      */
     _getRatedWordStrength(ratedWord) {
         const strengths = {
-            [WordType.UNKNOWN]: 0,
-            [WordType.STOPWORD]: 0,
+            [WordType.UNKNOWN]: 2,
+            [WordType.STOPWORD]: 1,
             [WordType.NAWL]: Math.max(ratedWord.meanAnger, ratedWord.meanDisgust, ratedWord.meanFear, ratedWord.meanHappiness, ratedWord.meanHappiness),
             [WordType.ROSENBERG]: 6,
             [WordType.VULGAR]: 7,

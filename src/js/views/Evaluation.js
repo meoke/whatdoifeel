@@ -24,6 +24,9 @@ export class EmotionalStateEvaluationView {
      */
     constructor() {
         this.elements = {
+            title: $("#title"),
+            titleContainer: $("#titleContainer"),
+            dotsContainer: $("#dotsContainer"),
             evaluationContainer: $('#evaluationContainer'),
             evaluationInstruction: $('#instruction'),
             startEvaluationBtn: $('#startEvaluationBtn'),
@@ -33,18 +36,18 @@ export class EmotionalStateEvaluationView {
             wordsHints: $('#wordsHints'),
             emotionalStateIndicator: $('#emotionalStateIndicator'),
         
-            angerHeader: $("#angerHeader"),
-            disgustHeader: $("#disgustHeader"),
-            fearHeader: $("#fearHeader"),
-            happinessHeader: $("#happinessHeader"),
-            sadnessHeader: $("#sadnessHeader"),
-        
             angerColumn: $("#angerColumn"),
             disgustColumn: $("#disgustColumn"),
             fearColumn: $("#fearColumn"),
             happinessColumn1: $("#happinessColumn1"),
             happinessColumn2: $("#happinessColumn2"),
             sadnessColumn: $("#sadnessColumn"),
+
+            hCircle: $('#hCircle'),
+            aCircle: $('#aCircle'),
+            fCircle: $('#fCircle'),
+            dCircle: $('#dCircle'),
+            sCircle: $('#sCircle')
         };
     }
 
@@ -170,13 +173,46 @@ export class EmotionalStateEvaluationView {
      * @param {number} L - Lightness from range [0,1]
      */
     renderEmotionalStateHSL(H, S, L) {
-        const color = $.Color({ hue: H, saturation: S, lightness: L});
-        this.elements.feelingsInput.animate( {
-            borderBottomColor: color,
-            borderLeftColor: color,
-            borderRightColor: color,
-            borderTopColor: color
+        const c = $.Color({ hue: H, saturation: S, lightness: L});
+        this.elements.title.animate( {
+            color: c
         }, 1500 );
+    }
+
+    /**
+     * Renders new EmotionalState component as a coloured dot.
+     * @param {*} H - Hue from range[0,360] 
+     * @param {*} S - Saturation from range [0,1]
+     * @param {*} L - Lightness from range [0,1]
+     * @param {*} strength - strength of the component
+     */
+    renderNewEmotionalStateComponent(H, S, L, strength){
+        const d = this._createEl("div");
+
+        const maxWidth = 20;
+        const pies = v => {return Math.max(10, v*maxWidth/7);};
+
+        const randPos = () => {return `${_.random(30,90)}%`;};
+        d.addClass("emotionDot");
+        d.css("width", `${pies(strength)}px`);
+        d.css("height", `${pies(strength)}px`);
+        d.css("left", randPos());
+        d.css("top", randPos());
+        d.css("background-color", `hsl(${H}, ${S}%, ${L}%)`);
+        d.css("display", "none");
+        this.elements.dotsContainer.append(d);
+        d.show("slow");
+    }
+
+    /**
+     * Clears all visual elements created during previous Evaluation.
+     */
+    clearEvaluationStateVisualisation() {
+        this.elements.dotsContainer.empty();
+    }
+
+    _createEl(elName) {
+        return $(`<${elName}></${elName}>`);
     }
 
     /**
@@ -205,6 +241,26 @@ export class EmotionalStateEvaluationView {
                              ${col("var(--sadnessHue)")} ${border4}% ${border5}%,
                              ${"hsl(var(--neutralHue), 0%, 50%)"} ${border5}% 100%)`
         );
-        
+        const maxWidth = 30;
+        const pies = v => {return v*maxWidth/100;};
+        this.elements.hCircle.css('width', `${pies(happiness)}px`);
+        this.elements.hCircle.css('height', `${pies(happiness)}px`);
+        this.elements.hCircle.css('backgroundColor', `${col("var(--happinessHue)")}`);
+
+        this.elements.aCircle.css('width', `${pies(anger)}px`);
+        this.elements.aCircle.css('height', `${pies(anger)}px`);
+        this.elements.aCircle.css('backgroundColor', `${col("var(--angerHue)")}`);
+
+        this.elements.dCircle.css('width', `${pies(disgust)}px`);
+        this.elements.dCircle.css('height', `${pies(disgust)}px`);
+        this.elements.dCircle.css('backgroundColor', `${col("var(--disgustHue)")}`);
+
+        this.elements.sCircle.css('width', `${pies(sadness)}px`);
+        this.elements.sCircle.css('height', `${pies(sadness)}px`);
+        this.elements.sCircle.css('backgroundColor', `${col("var(--sadnessHue)")}`);
+
+        this.elements.fCircle.css('width', `${pies(fear)}px`);
+        this.elements.fCircle.css('height', `${pies(fear)}px`);
+        this.elements.fCircle.css('backgroundColor', `${col("var(--fearHue)")}`);
     }
 }

@@ -71,13 +71,14 @@ export class EmotionalStateEvaluation {
     }
 
     /**
-     * Add user's word to the Emotional State.
+     * Add user's word to the Emotional State and return the EmotionalCharge it was assigned as.
      * @param {string} word from the user 
-     * @returns {void}
+     * @returns {EmotionalCharge} EmotionalCharge created from the given input word.
      */
     addWord(word) {
         const emotionalCharge = this.ratedWordsRef.getEmotionalCharge(word);
         this.state.addEmotionalCharge(emotionalCharge);
+        return emotionalCharge;
     }
 
     /**

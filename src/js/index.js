@@ -1,8 +1,8 @@
 import $ from "jquery";
 
-import '../css/style.css';
-import '../css/skeleton.css';
 import '../css/normalize.css';
+import '../css/skeleton.css';
+import '../css/style.css';
 
 import Controller from './Controller';
 import {EmotionalStateEvaluationFactory} from './models/EmotionalStateEvaluation';

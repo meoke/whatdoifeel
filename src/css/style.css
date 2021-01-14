@@ -1,3 +1,4 @@
+/* |  Colors */
 :root {
     --mainColor: #33C3F0;
     --happinessHue: 45;
@@ -6,57 +7,64 @@
     --fearHue: 300;
     --sadnessHue: 210;
     --neutralHue: 280;
-
-    --happinessColor: hsl(var(--happinessHue), 100%, 50%);
-    --angerColor: hsl(var(--angerHue), 100%, 50%);
-    --disgustColor: hsl(var(--disgustHue), 50%, 50%);
-    --fearColor: hsl(var(--fearHue), 50%, 50%);
-    --sadnessColor: hsl(var(--sadnessHue), 50%, 50%);
-    --neutralColor: hsl(var(--neutralHue), 0%, 50%);
 }
+
+.happiness {
+    color: hsl(var(--happinessHue), 100%, 50%);
+}
+
+.anger {
+    color: hsl(var(--angerHue), 100%, 50%);
+}
+
+.disgust {
+    color: hsl(var(--disgustHue), 50%, 50%);
+}
+
+.fear {
+    color: hsl(var(--fearHue), 50%, 50%);
+}
+
+.sadness {
+    color: hsl(var(--sadnessHue), 50%, 50%);
+}
+
+.neutral {
+    color: hsl(var(--neutralHue), 0%, 50%);
+}
+
+/* |   General */
 
 h1 {
-    text-align: center;
     font-family: 'Caveat', cursive;
+    text-align: left;
+    font-size: 4em;
 }
 
-#happinessColumn1 > h3{
-    color: var(--happinessColor);
+/* |   Visibility */
+
+.hide{
+    visibility: hidden;
 }
 
-#angerColumn > h3{
-    color: var(--angerColor);
-}
-#disgustColumn > h3{
-    color: var(--disgustColor);
-}
-#fearColumn > h3{
-    color: var(--fearColor);
-}
-#sadnessColumn > h3{
-    color: var(--sadnessColor);
-}
-
-#evaluationContainer {
-    padding:20px;
-}
+/* |   Specific */
 
 #closeAboutBtn {
     width: 100%;
 }
 
-.white {
-    opacity: 0;
+.emotionDot {
+    position: absolute;
+    border-radius: 50%;
+    z-index: -1;
+}
+
+#titleContainer {
+    position: relative;
 }
 
 #feelingsInput {
-    border-width: 5px;
-    border-radius: 5px;
     height: 150px; 
-}
-
-#feelingsInput:focus{
-    outline: 0px;
 }
 
 .toggleEvaluationBtn {
@@ -68,18 +76,17 @@ h1 {
     display: none;
 }
 
-.border-bottom {
-    border-bottom: solid 1px var(--mainColor);
-}
-
 #aboutContainer {
     display: none;
     padding: 2rem;
 }
 
 #aboutButton {
-    margin: 40px 0px 0px 50px;
+    margin-top: 30px;
+    margin-right: 60px;;
+    float: right;
     font-size: 2rem;
+    position: relative;
 }
 
 #wordsHints {
@@ -97,37 +104,25 @@ h1 {
         width:auto;
     } 
 }
-#emotionalStateIndicator {
-    width: 100%;
-    height: 10px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+
+
+#instruction {
+    font-size: 1.5em;
+    margin: 30px;
 }
 
 @media only screen and (min-width: 1100px) {
     #wordsColumn {
         width: inherit;
     }
-
-    #evaluationContainer > h1 {
-        font-size: 4em;
-    }
-
-    #instruction {
-        font-size: 1.5em;
-    }
-
-    #evaluationContainer {
-        padding:20px 200px 20px 200px;
-    }
-    
+   
     #feelingsInput {
-        border-width: 10px;
+        border-color: grey;
         margin-bottom: 20px;
+        font-size: 1.2em;
     }
 
     .add-padding-bottom {
-        padding-bottom: 0px;
+        padding-bottom: 50px;
     }
-
 }
