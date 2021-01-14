@@ -57,7 +57,7 @@ t.test("_findExactMatch finds exact match", function (t) {
     _buildRatedWordsReference().then(wordsRef => {
         const testCases = [
             { "word": "jeż", "expectedEntry": new RatedWordEntry("jeż", Emotion.HAPPY, WordType.NAWL, 4.076923) },
-            { "word": "jeżeli", "expectedEntry": new RatedWordEntry("jeżeli", Emotion.NEUTRAL, WordType.STOPWORD, 0) }
+            { "word": "jeżeli", "expectedEntry": new RatedWordEntry("jeżeli", Emotion.NEUTRAL, WordType.STOPWORD, 1) }
         ];
 
         for (const tc of testCases) {
