@@ -28,7 +28,6 @@ export class EmotionalStateEvaluationView {
             titleContainer: $("#titleContainer"),
             dotsContainer: $("#dotsContainer"),
             evaluationContainer: $('#evaluationContainer'),
-            evaluationInstruction: $('#instruction'),
             startEvaluationBtn: $('#startEvaluationBtn'),
             restartEvaluationBtn: $('#restartEvaluationBtn'),
             feelingsInput: $('#feelingsInput'),

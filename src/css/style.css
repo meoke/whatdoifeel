@@ -38,11 +38,11 @@
 h1 {
     font-family: 'Caveat', cursive;
     text-align: left;
-    font-size: 4em;
+    font-size: 3em;
 }
 
 button, p, textarea {
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 button {
@@ -88,7 +88,7 @@ button {
 
 #titleContainer {
     position: relative;
-    height: 100px;
+    height: 80px;
 }
 
 .emotionDot {
@@ -103,10 +103,6 @@ button {
 #dotsContainer {
     position: relative;
     height: 100%;
-}
-
-#instruction {
-    padding: 20px 0px;
 }
 
 #wordsHints {
