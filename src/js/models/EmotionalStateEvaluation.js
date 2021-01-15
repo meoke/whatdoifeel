@@ -55,7 +55,7 @@ export class EmotionalStateEvaluation {
 
      /**
      * Get emotional state intensity as value between 0 (no intensity) and 7 (maximum intensity).
-     * @returns {number} from range [0,8] 
+     * @returns {number} from range [0,7] 
      */
     get EmotionalStateIntensity() {
         return this.state.getEmotionalStateIntensity();

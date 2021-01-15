@@ -49,6 +49,10 @@ export class EmotionalStateEvaluationView {
             dCircle: $('#dCircle'),
             sCircle: $('#sCircle')
         };
+
+        this.elements.feelingsInput.on('paste', e => {
+            e.preventDefault();
+        });
     }
 
     /**
@@ -179,6 +183,23 @@ export class EmotionalStateEvaluationView {
         }, 1500 );
     }
 
+    renderNewVulgar(strength) {
+        const d = this._createEl("div");
+
+        const maxWidth = 20;
+        const pies = v => {return Math.max(10, v*maxWidth/7);};
+
+        const randPos = () => {return `${_.random(0,90)}%`;};
+        d.css("width", `${pies(strength)}px`);
+        d.css("height", `${pies(strength)}px`);
+        d.css("left", randPos());
+        d.css("top", randPos());
+        d.css("display", "none");
+        d.addClass('fas fa-asterisk emotionDot');
+        this.elements.dotsContainer.append(d);
+        d.fadeIn("slow");
+    }
+
     /**
      * Renders new EmotionalState component as a coloured dot.
      * @param {*} H - Hue from range[0,360] 
@@ -201,7 +222,18 @@ export class EmotionalStateEvaluationView {
         d.css("background-color", `hsl(${H}, ${S}%, ${L}%)`);
         d.css("display", "none");
         this.elements.dotsContainer.append(d);
-        d.show("slow");
+        d.fadeIn("slow");
+    }
+
+    /**
+     * Shows intensity of curren Emotional State as bubbles oppasity
+     * @param {*} intensity from range [0, 7] 
+     */
+    renderIntensity(intensity) {
+        const opacityMin = 0.3;
+        const translatedIntenisty = intensity/7;
+        const opacity = _.max([translatedIntenisty, opacityMin]);
+        this.elements.dotsContainer.css('opacity', opacity);
     }
 
     /**

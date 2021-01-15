@@ -1,7 +1,7 @@
 
 import _ from 'underscore';
 import config from './config';
-import { Emotion, EmotionHue } from './models/EmotionalState';
+import { Emotion, EmotionHue, WordType } from './models/EmotionalState';
 import { EmotionHeader } from './views/Evaluation';
 
 export class Controller {
@@ -45,6 +45,7 @@ export class Controller {
         const filterByEmotion = emotion => {
             return rosenbergWords.filter(w => w.emotion === emotion).map(w => w.originalWord);
         };
+        // const xs = _.groupBy(rosenbergWords, w => w.emotion,);
         const rosenbergWordsMap = new Map();
         rosenbergWordsMap.set(EmotionHeader.ANGER, filterByEmotion(Emotion.ANGER));
         rosenbergWordsMap.set(EmotionHeader.DISGUST, filterByEmotion(Emotion.DISGUST));
@@ -62,15 +63,14 @@ export class Controller {
     }
 
     onInputChange = inputValue => {
+        const finishedWord = /.+\S+[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]{1}$/g;
         const wordsSeparators = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]/g;
-
-        const isWordSeparator = char => char.match(wordsSeparators);
-        if(!isWordSeparator(_.last(inputValue)))
+        if(!finishedWord.test(inputValue)) {
             return;
-
+        }
         const getLastWord = () => {
             return _.chain(inputValue.split(wordsSeparators))
-                    .filter(a=>a).last().value();
+            .filter(a=>a).last().value();
         };
 
         const lastWord = getLastWord(inputValue);
@@ -82,12 +82,20 @@ export class Controller {
     }
 
     onEmotionalChargeAdded = (emotionalCharge) => {
-        const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+10);
+        // const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+10);
+        const intensity = this.evaluationModel.EmotionalStateIntensity;
+        const s = emotionalCharge.emotion === Emotion.NEUTRAL ? 0 : 100;
+        if(emotionalCharge.wordType === WordType.VULGAR) {
+            this.evaluationView.renderNewVulgar(emotionalCharge.strength);
+        }
+        else {
+            this.evaluationView.renderNewEmotionalStateComponent(EmotionHue[emotionalCharge.emotion], 
+                s,
+                50,
+                emotionalCharge.strength);
+        }
 
-        this.evaluationView.renderNewEmotionalStateComponent(EmotionHue[emotionalCharge.emotion], 
-                                                             intensity,
-                                                             50,
-                                                             emotionalCharge.strength);
+        this.evaluationView.renderIntensity(intensity);
     }
 
     
