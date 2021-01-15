@@ -66,8 +66,8 @@ export class EmotionalStateEvaluation {
      * @returns {Array} Array of RatedWordEntry objects of WordType.ROSENBERG. 
      */
     get RosenbergWords() {
-        return this.ratedWordsRef.entries.filter(emoStem => 
-                                                 emoStem.wordType === WordType.ROSENBERG); 
+        return this.ratedWordsRef.entries.filter(ratedWordEntry => 
+                                                 ratedWordEntry.wordType === WordType.ROSENBERG); 
     }
 
     /**

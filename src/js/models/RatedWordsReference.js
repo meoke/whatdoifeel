@@ -1,7 +1,6 @@
 import getStem from 'stemmer_pl';
 import { EmotionalCharge, WordType, Emotion } from './EmotionalState';
 import _ from 'underscore';
-import { RatedWord } from './RatedWordsProvider';
 
 /**
  * Element of Rated Words Reference.

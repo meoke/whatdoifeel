@@ -2,7 +2,8 @@
 import _ from 'underscore';
 import config from './config';
 import { Emotion, EmotionHue, WordType } from './models/EmotionalState';
-import { EmotionHeader } from './views/Evaluation';
+import { WordsHints, EmotionalStateSummaryViewModel} from './views/Evaluation';
+import convert from 'color-convert';
 
 export class Controller {
     constructor(evaluationModelFactory, evaluationView) {
@@ -16,43 +17,48 @@ export class Controller {
     }
 
     onEvaluationStart = async () => {
-        try{
-            this.evaluationModel = await this.evaluationModelFactory.createEvaluation();
-        }
-        catch(e) {
-            config.mode === "production" ?
-            this.evaluationView.renderError("Problem z pobraniem słownika emocji.") :
-            console.error(`Game creation or refresh issue: ${e.message}`);
-        }
-
-        this._prepareEvaluationBoard();
-        this._displayWordingHints();
-    }
-
-    _prepareEvaluationBoard() {
-        this.evaluationView.activateFeelingsInput();
-        this.evaluationView.replaceStartBtnWithRestartBtn();
-        this.onStateChange();
-    }
-
-    _displayWordingHints() {
-        const rosenbergWordsModel = this.evaluationModel.RosenbergWords;
-        const rosenbergWordsMap = this._parseRosenbergWordsModelToView(rosenbergWordsModel);
-        this.evaluationView.showRosenbergWords(rosenbergWordsMap);
-    }
-
-    _parseRosenbergWordsModelToView(rosenbergWords) {
-        const filterByEmotion = emotion => {
-            return rosenbergWords.filter(w => w.emotion === emotion).map(w => w.originalWord);
+        const initModel = async () => {
+            try {
+                this.evaluationModel = await this.evaluationModelFactory.createEvaluation();
+            }
+            catch (e) {
+                config.mode === "production" ?
+                    this.evaluationView.renderError("Problem z pobraniem słownika emocji.") :
+                    console.error(`Game creation or refresh issue: ${e.message}`);
+            }
         };
-        // const xs = _.groupBy(rosenbergWords, w => w.emotion,);
-        const rosenbergWordsMap = new Map();
-        rosenbergWordsMap.set(EmotionHeader.ANGER, filterByEmotion(Emotion.ANGER));
-        rosenbergWordsMap.set(EmotionHeader.DISGUST, filterByEmotion(Emotion.DISGUST));
-        rosenbergWordsMap.set(EmotionHeader.FEAR, filterByEmotion(Emotion.FEAR));
-        rosenbergWordsMap.set(EmotionHeader.HAPPINESS, filterByEmotion(Emotion.HAPPY));
-        rosenbergWordsMap.set(EmotionHeader.SADNESS, filterByEmotion(Emotion.SADNESS));
-        return rosenbergWordsMap;
+
+        const showWordsHints = () => {
+            const wordsHintsModel = this.evaluationModel.RosenbergWords;
+            const wordsHintsByEmotion = _.chain(wordsHintsModel)
+                .groupBy("emotion")
+                .mapObject((val) => {
+                    return _.map(val, ratedWordEntry => { return ratedWordEntry.originalWord; });
+                })
+                .value();
+            const wordsHintsViewModel = new WordsHints(wordsHintsByEmotion[Emotion.ANGER],
+                wordsHintsByEmotion[Emotion.DISGUST],
+                wordsHintsByEmotion[Emotion.FEAR],
+                wordsHintsByEmotion[Emotion.HAPPY],
+                wordsHintsByEmotion[Emotion.SADNESS]
+            );
+            this.evaluationView.renderWordsHints(wordsHintsViewModel);
+        };
+
+        await initModel();
+        showWordsHints();
+        this._updateEmotionalStateSummary();
+    }
+
+    _updateEmotionalStateSummary() {
+        const stateModel = this.evaluationModel.EmotionalStateHSV;
+        const stateHSL = convert.hsv.hsl(stateModel.H,
+                                         stateModel.S,
+                                         stateModel.V);
+        const stateViewModel = new EmotionalStateSummaryViewModel(stateHSL[0],
+                                                                  stateHSL[1]/100, 
+                                                                  stateHSL[2]/100);
+        this.evaluationView.renderEmotionalStateSummary(stateViewModel);
     }
 
     onEvaluationRestart = () => {
@@ -63,33 +69,30 @@ export class Controller {
     }
 
     onInputChange = inputValue => {
-        const finishedWord = /.+\S+[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]{1}$/g;
-        const wordsSeparators = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]/g;
-        if(!finishedWord.test(inputValue)) {
+        const lastIsWord = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]*\p{Script_Extensions=Latin}+[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]$/gu;
+
+        const lastWordPos = inputValue.search(lastIsWord);
+        if (lastWordPos === -1) {
             return;
         }
-        const getLastWord = () => {
-            return _.chain(inputValue.split(wordsSeparators))
-            .filter(a=>a).last().value();
-        };
 
-        const lastWord = getLastWord(inputValue);
-        if(!_.isEmpty(lastWord)){
-            const emotionalCharge = this.evaluationModel.addWord(lastWord);
-            this.onEmotionalChargeAdded(emotionalCharge);
-        }
-        this.onStateChange();
+        const lastWord = inputValue.substring(lastWordPos).trim();
+        const emotionalCharge = this.evaluationModel.addWord(lastWord);
+        this.onEmotionalChargeAdded(emotionalCharge);
+        console.log(emotionalCharge);
+        this._updateEmotionalStateSummary();
+        // this.onStateChange();
     }
 
     onEmotionalChargeAdded = (emotionalCharge) => {
         // const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+10);
         const intensity = this.evaluationModel.EmotionalStateIntensity;
         const s = emotionalCharge.emotion === Emotion.NEUTRAL ? 0 : 100;
-        if(emotionalCharge.wordType === WordType.VULGAR) {
+        if (emotionalCharge.wordType === WordType.VULGAR) {
             this.evaluationView.renderNewVulgar(emotionalCharge.strength);
         }
         else {
-            this.evaluationView.renderNewEmotionalStateComponent(EmotionHue[emotionalCharge.emotion], 
+            this.evaluationView.renderNewEmotionalStateComponent(EmotionHue[emotionalCharge.emotion],
                 s,
                 50,
                 emotionalCharge.strength);
@@ -98,10 +101,10 @@ export class Controller {
         this.evaluationView.renderIntensity(intensity);
     }
 
-    
+
     onStateChange = () => {
         const HSV = this.evaluationModel.EmotionalStateHSV;
-        const HSL = this._HSVtoHSL(HSV.H, HSV.S/100, HSV.V/100);
+        const HSL = this._HSVtoHSL(HSV.H, HSV.S / 100, HSV.V / 100);
         this.evaluationView.renderEmotionalStateHSL(HSL.H, HSL.S, HSL.L);
 
         // const emotionalStateBreakdown = this.evaluationModel.EmotionalStateComponents;
@@ -113,18 +116,7 @@ export class Controller {
         //                                                   emotionalStateBreakdown[Emotion.SADNESS]);
     }
 
-    _HSVtoHSL = (H, S, V) => { 
-        // H from [0,360], S from [0,1], V from [0,1]
-        const lightness = V*(1-S/2);
-        const saturation = (lightness === 0 || lightness === 1) ?
-                            0 :
-                            (V-lightness) / _.min([lightness, 1-lightness]);
-        return {
-            H: H,
-            S: saturation,
-            L: lightness
-        };
-    }
+
 }
 
 export default Controller;

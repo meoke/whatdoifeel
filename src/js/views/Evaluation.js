@@ -3,17 +3,36 @@ import 'jquery-color';
 import _ from 'underscore';
 
 /**
- * Represents all headers for lists of words connected with a given emotion
- * @readonly
- * @enum {number} Emotion
+ * Describes words displayed for the user to show example of words for expressing different emotions.
+ * @param {Array} angerWords - Array of strings that express anger
+ * @param {Array} disgustWords -Array of strings that express disgust
+ * @param {Array} fearWords -Array of strings that express fear
+ * @param {Array} happinessWords -Array of strings that express happiness
+ * @param {Array} sadnessWords -Array of strings that express sadness
  */
-export const EmotionHeader = Object.freeze({
-    "ANGER": 0,
-    "DISGUST": 1,
-    "FEAR": 2,
-    "HAPPINESS": 3,
-    "SADNESS": 4
-});
+export class WordsHints {
+    constructor(angerWords, disgustWords, fearWords, happinessWords, sadnessWords) {
+        this.angerWords = angerWords;
+        this.disgustWords = disgustWords;
+        this.fearWords = fearWords;
+        this.happinessWords = happinessWords;
+        this.sadnessWords = sadnessWords;
+    }
+}
+
+/**
+ * Describes Emotional State summary as a HSL color.
+ * @param{Number} hue - Integer from range [0,360]
+ * @param{Number} saturation - Float from range [0,1]
+ * @param{Number} lightness - Float from range [0,1]
+ */
+export class EmotionalStateSummaryViewModel {
+    constructor(hue, saturation, lightness) {
+        this.hue = hue;
+        this.saturation = saturation;
+        this.lightness = lightness;
+    }
+}
 
 /**
  * Object responsible for rednering Evauluation of EmotionalState
@@ -25,15 +44,12 @@ export class EmotionalStateEvaluationView {
     constructor() {
         this.elements = {
             title: $("#title"),
-            titleContainer: $("#titleContainer"),
             dotsContainer: $("#dotsContainer"),
             evaluationContainer: $('#evaluationContainer'),
             startEvaluationBtn: $('#startEvaluationBtn'),
             restartEvaluationBtn: $('#restartEvaluationBtn'),
             feelingsInput: $('#feelingsInput'),
-            rosenbergFeelings: $('#rosenbergFeelings'),
             wordsHints: $('#wordsHints'),
-            emotionalStateIndicator: $('#emotionalStateIndicator'),
         
             angerColumn: $("#angerColumn"),
             disgustColumn: $("#disgustColumn"),
@@ -41,12 +57,6 @@ export class EmotionalStateEvaluationView {
             happinessColumn1: $("#happinessColumn1"),
             happinessColumn2: $("#happinessColumn2"),
             sadnessColumn: $("#sadnessColumn"),
-
-            hCircle: $('#hCircle'),
-            aCircle: $('#aCircle'),
-            fCircle: $('#fCircle'),
-            dCircle: $('#dCircle'),
-            sCircle: $('#sCircle')
         };
 
         this.elements.feelingsInput.on('paste', e => {
@@ -66,8 +76,28 @@ export class EmotionalStateEvaluationView {
      */
     bindStartEvaluationBtn(handler) {
         this.elements.startEvaluationBtn.on('click', () => {
+            this._initEvaluationBoard();
+
             handler();
         });
+    }
+
+    /**
+     * Initializes all elements needed for the user to use the appplication.
+     */
+    _initEvaluationBoard() {
+        const activateFeelingsInput = () => {
+            this.elements.feelingsInput.prop('disabled', false);
+            this.elements.feelingsInput.trigger("focus");
+        };
+
+        const replaceStartBtnWithRestartBtn = () => {
+            this.elements.startEvaluationBtn.hide();
+            this.elements.restartEvaluationBtn.css('display', 'block');
+        };
+
+        activateFeelingsInput();
+        replaceStartBtnWithRestartBtn();
     }
 
     /**
@@ -117,47 +147,33 @@ export class EmotionalStateEvaluationView {
         this.elements.evaluationContainer.html(markup);
     }
 
-    /**
-     * Activates feelingsInput and set focus.
-     */
-    activateFeelingsInput() {
-        this.elements.feelingsInput.prop('disabled', false);
-        this.elements.feelingsInput.trigger("focus");
-    }
-
-    /**
-     * Show restartEvaluationBtn instead of startEvaluationBtn
-     */
-    replaceStartBtnWithRestartBtn () {
-        this.elements.startEvaluationBtn.hide();
-        this.elements.restartEvaluationBtn.css('display', 'block');
-    }
-
     _createDiv(text) {
         return $(`<div>${text}</div>`);
     }
 
     /**
-     * Render list of emotional words based on M.Roseneberg source
-     * @param {Map} rosenbergWords EmotionHeader values to Array of String values
+     * Render WordsHints
+     * @param {WordsHints}
      *  
      */
-    showRosenbergWords (rosenbergWords) {
+    renderWordsHints (hints) {
         const getColumnContent = (words) => {
-            return _.map(words, w => this._createDiv(w));
+            return _.map(words, word => this._createEl("div", word));
+        };
+
+        const renderWordsInColumns = (words, columns) => {
+            const wordsChunks = _.chunk(words, Math.floor(words.length/columns.length));
+            columns.forEach((col, i) => {
+                col.append(getColumnContent(wordsChunks[i]));
+            });
         };
         
-        this.elements.angerColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.ANGER)));
-        this.elements.disgustColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.DISGUST)));
-        this.elements.fearColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.FEAR)));
-        this.elements.sadnessColumn.append(getColumnContent(rosenbergWords.get(EmotionHeader.SADNESS)));
-        
-        const happinessWords = rosenbergWords.get(EmotionHeader.HAPPINESS);
-        const happyParts = _.chunk(happinessWords, Math.floor(happinessWords.length/2));
-        if(happyParts.length >=2){
-            this.elements.happinessColumn1.append(getColumnContent(happyParts[0]));
-            this.elements.happinessColumn2.append(getColumnContent(happyParts[1]));
-        }
+        renderWordsInColumns(hints.angerWords, [this.elements.angerColumn]);
+        renderWordsInColumns(hints.disgustWords, [this.elements.disgustColumn]);
+        renderWordsInColumns(hints.fearWords, [this.elements.fearColumn]);
+        renderWordsInColumns(hints.happinessWords, [this.elements.happinessColumn1, 
+                                            this.elements.happinessColumn2]);
+        renderWordsInColumns(hints.sadnessWords, [this.elements.sadnessColumn]);
 
         this.elements.wordsHints.show("slow");
     }
@@ -170,13 +186,14 @@ export class EmotionalStateEvaluationView {
     }
 
     /**
-     * Renders EmotionalState given as HSL color.
-     * @param {number} H - Hue from range [0,360]
-     * @param {number} S - Saturation from range [0,1]
-     * @param {number} L - Lightness from range [0,1]
+     * Renders EmotionalState summary.
+     * @param {EmotionalStateSummaryViewModel}
      */
-    renderEmotionalStateHSL(H, S, L) {
-        const c = $.Color({ hue: H, saturation: S, lightness: L});
+    renderEmotionalStateSummary(emotionalStateSummary) {
+        const c = $.Color({ hue: emotionalStateSummary.hue, 
+                            saturation: emotionalStateSummary.saturation, 
+                            lightness: emotionalStateSummary.lightness});
+        console.log(c);
         this.elements.title.animate( {
             color: c
         }, 1500 );
@@ -242,56 +259,7 @@ export class EmotionalStateEvaluationView {
         this.elements.dotsContainer.empty();
     }
 
-    _createEl(elName) {
-        return $(`<${elName}></${elName}>`);
-    }
-
-    /**
-     * Renders EmotionalState given as its intensity and percentage breakdown of emotional components.
-     * @param {number} intensity - Percentage value from range [0,100], where 0 is 0 intensity and 100 max intensity
-     * @param {number} anger - Percentage value range [0,100]
-     * @param {number} disgust - Percentage value range [0,100]
-     * @param {number} fear - Percentage value range [0,100]
-     * @param {number} happiness - Percentage value range [0,100]
-     * @param {number} sadness - Percentage value range [0,100]
-     */
-    renderEmotionalState(intensity, anger, disgust, fear, happiness, sadness) {
-        const border1 = happiness; 
-        const border2 = border1 + anger; 
-        const border3 = border2 + disgust; 
-        const border4 = border3 + fear; 
-        const border5 = border4 + sadness; 
-
-        const col = c => {return `hsl(${c}, ${intensity}%, 50%) `;};
-        this.elements.emotionalStateIndicator.css('background',
-            `linear-gradient(to right, 
-                             ${col("var(--happinessHue)")} 0% ${border1}%, 
-                             ${col("var(--angerHue)")} ${border1}% ${border2}%,
-                             ${col("var(--disgustHue)")} ${border2}% ${border3}%,
-                             ${col("var(--fearHue)")} ${border3}% ${border4}%,
-                             ${col("var(--sadnessHue)")} ${border4}% ${border5}%,
-                             ${"hsl(var(--neutralHue), 0%, 50%)"} ${border5}% 100%)`
-        );
-        const maxWidth = 30;
-        const pies = v => {return v*maxWidth/100;};
-        this.elements.hCircle.css('width', `${pies(happiness)}px`);
-        this.elements.hCircle.css('height', `${pies(happiness)}px`);
-        this.elements.hCircle.css('backgroundColor', `${col("var(--happinessHue)")}`);
-
-        this.elements.aCircle.css('width', `${pies(anger)}px`);
-        this.elements.aCircle.css('height', `${pies(anger)}px`);
-        this.elements.aCircle.css('backgroundColor', `${col("var(--angerHue)")}`);
-
-        this.elements.dCircle.css('width', `${pies(disgust)}px`);
-        this.elements.dCircle.css('height', `${pies(disgust)}px`);
-        this.elements.dCircle.css('backgroundColor', `${col("var(--disgustHue)")}`);
-
-        this.elements.sCircle.css('width', `${pies(sadness)}px`);
-        this.elements.sCircle.css('height', `${pies(sadness)}px`);
-        this.elements.sCircle.css('backgroundColor', `${col("var(--sadnessHue)")}`);
-
-        this.elements.fCircle.css('width', `${pies(fear)}px`);
-        this.elements.fCircle.css('height', `${pies(fear)}px`);
-        this.elements.fCircle.css('backgroundColor', `${col("var(--fearHue)")}`);
+    _createEl(elName, value = "") {
+        return $(`<${elName}>${value}</${elName}>`);
     }
 }
