@@ -11,9 +11,9 @@ export class Controller {
         this.evaluationModelFactory = evaluationModelFactory;
 
         this.evaluationView = evaluationView;
-        this.evaluationView.bindStartEvaluationBtn(this.onEvaluationStart);
-        this.evaluationView.bindRestartEvaluationBtn(this.onEvaluationRestart);
-        this.evaluationView.bindFeelingsInputChange(this.onInputChange);
+        this.evaluationView.setupStartEvaluationBtn(this.onEvaluationStart);
+        this.evaluationView.setupRestartEvaluationBtn(this.onEvaluationRestart);
+        this.evaluationView.setupFeelingsInput(this.onInputChange);
     }
 
     onEvaluationStart = async () => {
@@ -51,21 +51,24 @@ export class Controller {
     }
 
     _updateEmotionalStateSummary() {
-        const stateModel = this.evaluationModel.EmotionalStateHSV;
-        const stateHSL = convert.hsv.hsl(stateModel.H,
-                                         stateModel.S,
-                                         stateModel.V);
-        const stateViewModel = new EmotionalStateSummaryViewModel(stateHSL[0],
-                                                                  stateHSL[1]/100, 
-                                                                  stateHSL[2]/100);
+        const getStateViewModel = () => {
+            const stateModel = this.evaluationModel.EmotionalStateHSV;
+            const stateHSL = convert.hsv.hsl(stateModel.H,
+                                             stateModel.S,
+                                             stateModel.V);
+            const intensity = this.evaluationModel.EmotionalStateIntensity;
+            return new EmotionalStateSummaryViewModel(stateHSL[0],
+                                                      stateHSL[1]/100, 
+                                                      stateHSL[2]/100,
+                                                      intensity);
+        };
+        const stateViewModel = getStateViewModel();     
         this.evaluationView.renderEmotionalStateSummary(stateViewModel);
     }
 
     onEvaluationRestart = () => {
         this.evaluationModel.restartEvaluation();
-        this.evaluationView.clearFeelingsInput();
-        this.evaluationView.clearEvaluationStateVisualisation();
-        this.onStateChange();
+        this._updateEmotionalStateSummary();
     }
 
     onInputChange = inputValue => {
@@ -79,14 +82,11 @@ export class Controller {
         const lastWord = inputValue.substring(lastWordPos).trim();
         const emotionalCharge = this.evaluationModel.addWord(lastWord);
         this.onEmotionalChargeAdded(emotionalCharge);
-        console.log(emotionalCharge);
         this._updateEmotionalStateSummary();
-        // this.onStateChange();
     }
 
     onEmotionalChargeAdded = (emotionalCharge) => {
         // const intensity = Math.min(100, 100*this.evaluationModel.EmotionalStateIntensity/7+10);
-        const intensity = this.evaluationModel.EmotionalStateIntensity;
         const s = emotionalCharge.emotion === Emotion.NEUTRAL ? 0 : 100;
         if (emotionalCharge.wordType === WordType.VULGAR) {
             this.evaluationView.renderNewVulgar(emotionalCharge.strength);
@@ -97,8 +97,6 @@ export class Controller {
                 50,
                 emotionalCharge.strength);
         }
-
-        this.evaluationView.renderIntensity(intensity);
     }
 
 

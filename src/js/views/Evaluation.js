@@ -25,15 +25,29 @@ export class WordsHints {
  * @param{Number} hue - Integer from range [0,360]
  * @param{Number} saturation - Float from range [0,1]
  * @param{Number} lightness - Float from range [0,1]
+ * @param{Number} intensity - Integer from range [0, 7] 
  */
 export class EmotionalStateSummaryViewModel {
-    constructor(hue, saturation, lightness) {
+    constructor(hue, saturation, lightness, intensity) {
         this.hue = hue;
         this.saturation = saturation;
         this.lightness = lightness;
+        this.intensity = intensity;
     }
 }
 
+/**
+ * Describes Emotional State single Emotional Charge component.
+ * @param{number} - hue - value from range [0,360] representing emotion hue from HSL or HSV color model
+ * @
+ */
+export class EmotionalChargeComponent {
+    constructor(hue, strength, isVulgar) {
+        this.hue = hue;
+        this.strength = strength;
+        this.isVulgar = isVulgar;
+    }
+}
 /**
  * Object responsible for rednering Evauluation of EmotionalState
  */
@@ -50,7 +64,7 @@ export class EmotionalStateEvaluationView {
             restartEvaluationBtn: $('#restartEvaluationBtn'),
             feelingsInput: $('#feelingsInput'),
             wordsHints: $('#wordsHints'),
-        
+
             angerColumn: $("#angerColumn"),
             disgustColumn: $("#disgustColumn"),
             fearColumn: $("#fearColumn"),
@@ -58,15 +72,10 @@ export class EmotionalStateEvaluationView {
             happinessColumn2: $("#happinessColumn2"),
             sadnessColumn: $("#sadnessColumn"),
         };
-
-        this.elements.feelingsInput.on('paste', e => {
-            e.preventDefault();
-        });
     }
 
     /**
      * Callback for startEvaluationBtn.
-     *
      * @callback startEvaluationCallback
      */
 
@@ -74,66 +83,94 @@ export class EmotionalStateEvaluationView {
      * 
      * @param {startEvaluationCallback} Callback to be called when user clicks on the startEvaluationBtn 
      */
-    bindStartEvaluationBtn(handler) {
-        this.elements.startEvaluationBtn.on('click', () => {
-            this._initEvaluationBoard();
+    setupStartEvaluationBtn(startEvaluationCallback) {
+        const initEvaluationBoard = () => {
+            const activateFeelingsInput = () => {
+                this.elements.feelingsInput.prop('disabled', false);
+                this.elements.feelingsInput.trigger("focus");
+            };
 
-            handler();
-        });
-    }
+            const replaceStartBtnWithRestartBtn = () => {
+                this.elements.startEvaluationBtn.hide();
+                this.elements.restartEvaluationBtn.css('display', 'block');
+            };
 
-    /**
-     * Initializes all elements needed for the user to use the appplication.
-     */
-    _initEvaluationBoard() {
-        const activateFeelingsInput = () => {
-            this.elements.feelingsInput.prop('disabled', false);
-            this.elements.feelingsInput.trigger("focus");
+            activateFeelingsInput();
+            replaceStartBtnWithRestartBtn();
         };
 
-        const replaceStartBtnWithRestartBtn = () => {
-            this.elements.startEvaluationBtn.hide();
-            this.elements.restartEvaluationBtn.css('display', 'block');
+        const bindOnClickCallback = (callback) => {
+            this.elements.startEvaluationBtn.on('click', () => {
+                callback();
+            });
         };
 
-        activateFeelingsInput();
-        replaceStartBtnWithRestartBtn();
+        bindOnClickCallback(initEvaluationBoard);
+        bindOnClickCallback(startEvaluationCallback);
     }
 
     /**
      * Callback for restartEvaluationBtn.
-     *
      * @callback restartEvaluationCallback
      */
-
     /**
      * 
      * @param {restartEvaluationCallback} Callback to be called when user clicks on the restartEvaluationBtn 
      */
-    bindRestartEvaluationBtn(handler) {
-        this.elements.restartEvaluationBtn.on('click', () => {
-            handler();
-        });
+    setupRestartEvaluationBtn(restartEvaluationCallback) {
+        const restartEvaluationBoard = () => {
+            const clearFeelingsInput = () => {
+                this.elements.feelingsInput.val("");
+            };
+
+            const clearEvaluationStateVisualisation = () => {
+                this.elements.dotsContainer.empty();
+            };
+
+            clearFeelingsInput();
+            clearEvaluationStateVisualisation();
+
+        };
+
+        const bindOnClickCallback = (callback) => {
+            this.elements.restartEvaluationBtn.on('click', () => {
+                callback();
+            });
+        };
+
+        bindOnClickCallback(restartEvaluationBoard);
+        bindOnClickCallback(restartEvaluationCallback);
     }
+
 
     /**
      * Callback for feelings text input change
-     *
-     * @callback feelingsInputChangeCallback
+     * @callback feelingsInputOnInputCallback
      * @param {string} Whole value of the feelingsInput
      */
 
     /**
      * 
-     * @param {feelingsInputChangeCallback} Callback to be called when user changes feelingInput
+     * @param {feelingsInputOnInputCallback} Callback to be called when user changes feelingInput
      */
-    bindFeelingsInputChange(handler) {
-        this.elements.feelingsInput.on('input', event => {
-            const inputValue = event.target.value;
-            if(_.isEmpty(inputValue))
-                return;
-            handler(inputValue);
-        });
+    setupFeelingsInput(feelingsInputOnInputCallback) {
+        const disablePaste = () => {
+            this.elements.feelingsInput.on('paste', e => {
+                e.preventDefault();
+            });
+        };
+
+        const bindOnInputCallback = (callback) => {
+            this.elements.feelingsInput.on('input', event => {
+                const inputValue = event.target.value;
+                if (_.isEmpty(inputValue))
+                    return;
+                callback(inputValue);
+            });
+        };
+
+        disablePaste();
+        bindOnInputCallback(feelingsInputOnInputCallback);
     }
 
     /**
@@ -147,42 +184,31 @@ export class EmotionalStateEvaluationView {
         this.elements.evaluationContainer.html(markup);
     }
 
-    _createDiv(text) {
-        return $(`<div>${text}</div>`);
-    }
-
     /**
      * Render WordsHints
      * @param {WordsHints}
      *  
      */
-    renderWordsHints (hints) {
+    renderWordsHints(hints) {
         const getColumnContent = (words) => {
             return _.map(words, word => this._createEl("div", word));
         };
 
         const renderWordsInColumns = (words, columns) => {
-            const wordsChunks = _.chunk(words, Math.floor(words.length/columns.length));
+            const wordsChunks = _.chunk(words, Math.floor(words.length / columns.length));
             columns.forEach((col, i) => {
                 col.append(getColumnContent(wordsChunks[i]));
             });
         };
-        
+
         renderWordsInColumns(hints.angerWords, [this.elements.angerColumn]);
         renderWordsInColumns(hints.disgustWords, [this.elements.disgustColumn]);
         renderWordsInColumns(hints.fearWords, [this.elements.fearColumn]);
-        renderWordsInColumns(hints.happinessWords, [this.elements.happinessColumn1, 
-                                            this.elements.happinessColumn2]);
+        renderWordsInColumns(hints.happinessWords, [this.elements.happinessColumn1,
+        this.elements.happinessColumn2]);
         renderWordsInColumns(hints.sadnessWords, [this.elements.sadnessColumn]);
 
         this.elements.wordsHints.show("slow");
-    }
-
-    /**
-     * Clears feelingsInput.
-     */
-    clearFeelingsInput() {
-        this.elements.feelingsInput.val("");
     }
 
     /**
@@ -190,22 +216,35 @@ export class EmotionalStateEvaluationView {
      * @param {EmotionalStateSummaryViewModel}
      */
     renderEmotionalStateSummary(emotionalStateSummary) {
-        const c = $.Color({ hue: emotionalStateSummary.hue, 
-                            saturation: emotionalStateSummary.saturation, 
-                            lightness: emotionalStateSummary.lightness});
-        console.log(c);
-        this.elements.title.animate( {
-            color: c
-        }, 1500 );
+        const changeTitleColor = (hue, saturation, lightness) => {
+            const c = $.Color({
+                hue: hue,
+                saturation: saturation,
+                lightness: lightness
+            });
+            this.elements.title.animate({
+                color: c
+            }, 1500);
+        };
+
+        const changeDotsOpacity = (intensity) => {
+            const minOpacity = 0.3;
+            const intencityInOpacityScale = intensity / 7;
+            const opacity = _.max([intencityInOpacityScale, minOpacity]);
+            this.elements.dotsContainer.css('opacity', opacity);
+        };
+
+        changeTitleColor(emotionalStateSummary.hue, emotionalStateSummary.saturation, emotionalStateSummary.lightness)
+        changeDotsOpacity(emotionalStateSummary.intensity);
     }
 
     renderNewVulgar(strength) {
         const d = this._createEl("div");
 
         const maxWidth = 20;
-        const pies = v => {return Math.max(10, v*maxWidth/7);};
+        const pies = v => { return Math.max(10, v * maxWidth / 7); };
 
-        const randPos = () => {return `${_.random(0,90)}%`;};
+        const randPos = () => { return `${_.random(0, 90)}%`; };
         d.css("width", `${pies(strength)}px`);
         d.css("height", `${pies(strength)}px`);
         d.css("left", randPos());
@@ -223,13 +262,13 @@ export class EmotionalStateEvaluationView {
      * @param {*} L - Lightness from range [0,1]
      * @param {*} strength - strength of the component
      */
-    renderNewEmotionalStateComponent(H, S, L, strength){
+    renderNewEmotionalStateComponent(H, S, L, strength) {
         const d = this._createEl("div");
 
         const maxWidth = 20;
-        const pies = v => {return Math.max(10, v*maxWidth/7);};
+        const pies = v => { return Math.max(10, v * maxWidth / 7); };
 
-        const randPos = () => {return `${_.random(0,90)}%`;};
+        const randPos = () => { return `${_.random(0, 90)}%`; };
         d.addClass("emotionDot");
         d.css("width", `${pies(strength)}px`);
         d.css("height", `${pies(strength)}px`);
@@ -239,24 +278,6 @@ export class EmotionalStateEvaluationView {
         d.css("display", "none");
         this.elements.dotsContainer.append(d);
         d.fadeIn("slow");
-    }
-
-    /**
-     * Shows intensity of curren Emotional State as bubbles oppasity
-     * @param {*} intensity from range [0, 7] 
-     */
-    renderIntensity(intensity) {
-        const opacityMin = 0.3;
-        const translatedIntenisty = intensity/7;
-        const opacity = _.max([translatedIntenisty, opacityMin]);
-        this.elements.dotsContainer.css('opacity', opacity);
-    }
-
-    /**
-     * Clears all visual elements created during previous Evaluation.
-     */
-    clearEvaluationStateVisualisation() {
-        this.elements.dotsContainer.empty();
     }
 
     _createEl(elName, value = "") {
