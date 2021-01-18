@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 /**
- * Represents all possible types of emotions that EmotionalCharge can have assigned.
+ * Represents all possible types of emotions that EmotionalCharge can be assigned.
  * @readonly
  * @enum {number}
  */
@@ -16,20 +16,20 @@ export const Emotion = Object.freeze({
 
 
 /**
- * Represents all possible classification of words based on their characteristics.
+ * Represents all possible classification of words based on their source.
  * @readonly
  * @enum {number}
  */
 export const WordType = Object.freeze({
-    /**Word identified as Polish stop word.*/
+    /** Word identified as a Polish stop word */
     STOPWORD: 0,
-    /**Word that is present in The Nencki Affective Word List*/
+    /** Word that is present in The Nencki Affective Word List */
     NAWL: 1,
-    /**Word that is present in list of emotions presented by M. Rosenberg */
+    /** Word that is present in list of emotions presented by M. Rosenberg */
     ROSENBERG: 2,
-    /**Word identified as Polish vulgar word */
+    /** Word identified as a Polish vulgar word */
     VULGAR: 3,
-    /**Unknown type*/
+    /** Unknown source */
     UNKNOWN: 4
 });
 
@@ -48,30 +48,32 @@ export const EmotionHue = Object.freeze({
 });
 
 /**
- * Class representing EmotionalCharge of a single word provided to the Emotional State model.
+ * Describes emotional charge of a single word.
  */
 export class EmotionalCharge {
     /**
      * Creates EmotionalCharge.
      * @constructor
-     * @param {string} word - the original Polish word provided to the model
-     * @param {Emotion} emotion - emotion being expressed by this word
+     * @param {string} word - a single Polish word
+     * @param {Emotion} emotion - main emotion being expressed by this word
      * @param {WordType} wordType - word classification
-     * @param {number} wordStrength - word expression strength
+     * @param {number} wordPower - word power of expression
      */
-    constructor(word, emotion, wordType, wordStrength) {
+    constructor(word, emotion, wordType, wordPower) {
         this.word = word;
         this.emotion = emotion;
         this.wordType = wordType;
-        this.strength = wordStrength;
+        this.power = wordPower;
     }
 }
 
 /**
- * Class representing Emotional State.
+ * Container of Emotional Charges constituting one's Emotional State. 
+ * Provides different ways of its interpretation e.g as a color.
  */
 export class EmotionalState {
-    /**Creates neutral EmotionalState.
+    /**
+     * Creates neutral EmotionalState.
      */
     constructor() {
         this.emotionalCharges = [];
@@ -89,20 +91,24 @@ export class EmotionalState {
     }
 
     /**
-     * Returns EmotionalState's intenisty based on word types as value from range [0,7].
-     * @returns {number} 
+    * Intensity value from range [0,7]
+    * @typedef {number} Intensity
+    */
+    /**
+     * Returns EmotionalState's Intensity based on word types as value from range [0,7].
+     * @returns {Intensity} 
      */
     getEmotionalStateIntensity() {
         const emotionalChargesCount = this.emotionalCharges.length;
         return _.chain(this.emotionalCharges)
-                .map(ch => {return ch.strength;})
-                .reduce((memo, num) => {
-                    return memo + num;
+                .map(ch => {return ch.power;})
+                .reduce((acc, val) => {
+                    return acc + val;
                 }, 0) / (emotionalChargesCount === 0 ? 1 : emotionalChargesCount);
     }
 
     /**
-     * @typedef {Object} EmotionalStateComponents
+     * @typedef {Object} EmotionalStateShares
      * @property {number} anger - the percentage part of anger in EmotionalState
      * @property {number} disgust - the percentage part of disgust in EmotionalState
      * @property {number} fear - the percentage part of fear in EmotionalState
@@ -111,14 +117,14 @@ export class EmotionalState {
     */
     /**
      * Returns EmotionalState as percentage breakdown of component emotions
-     * @returns {EmotionalStateComponents} percentage values of emotional components of EmotionalState
+     * @returns {EmotionalStateShares} percentage values of emotional components of EmotionalState
      */
-    getEmotionalStateComponents() {
+    getEmotionalStateAsShares() {
         const notNeutralWords = this.emotionalCharges.filter(el => el.emotion !== Emotion.NEUTRAL);
-        const getCountOfEmotionWords = e => {return notNeutralWords.filter(el => el.emotion === e).length;};
+        const getCountOfNotNeutralWords = e => {return notNeutralWords.filter(el => el.emotion === e).length;};
         const getShare = e => {return notNeutralWords.length === 0 ?
                                       0 :
-                                      getCountOfEmotionWords(e) / notNeutralWords.length * 100;};
+                                      getCountOfNotNeutralWords(e) / notNeutralWords.length * 100;};
         return {
             [Emotion.ANGER]: getShare(Emotion.ANGER),
             [Emotion.DISGUST]: getShare(Emotion.DISGUST),

@@ -10,10 +10,10 @@ export class EmotionalStateEvaluationFactory {
      * Creates asynchronously EmotionalStateEvaluation object.
      */
     async createEvaluation() {
-        const e = new EmotionalStateEvaluation();
-        e.state = new EmotionalState();
-        e.ratedWordsRef = await this._buildEmoReference();
-        return e;
+        const evaluation = new EmotionalStateEvaluation();
+        evaluation.state = new EmotionalState();
+        evaluation.ratedWordsRef = await this._buildEmoReference();
+        return evaluation;
     }
 
     async _buildEmoReference() {
@@ -27,7 +27,7 @@ export class EmotionalStateEvaluationFactory {
 }
 
 /**
- * Describes the process of assessment of someone's EmotionalState
+ * Describes the process of assessment of one's EmotionalState
  * based on words he or she provides to the system.
  */
 export class EmotionalStateEvaluation {
@@ -35,27 +35,30 @@ export class EmotionalStateEvaluation {
     * @typedef {import('./EmotionalState.js').HSV} HSV
     */
      /**
-     * Get emotional state presented as color encoded in HSV model.
-     * @returns {HSV} Color as HSV (Hue, Saturation, Value)
+     * Get emotional state presented as a color encoded in HSV model.
+     * @returns {HSV} Color encoded in HSV (Hue, Saturation, Value)
      */
     get EmotionalStateHSV() {
         return this.state.getEmotionStateAsHSVColor();
     }
 
     /**
-    * @typedef {import('./EmotionalState.js').EmotionalStateComponents} EmotionalStateComponents
+    * @typedef {import('./EmotionalState.js').EmotionalStateShares} EmotionalStateShares
     */
      /**
      * Get emotional state presented as percentage breakdown of emotions.
-     * @returns {EmotionalStateComponents} 
+     * @returns {EmotionalStateShares} 
      */
-    get EmotionalStateComponents() {
-        return this.state.getEmotionalStateComponents();
+    get EmotionalStateShares() {
+        return this.state.getEmotionalStateAsShares();
     }
 
+    /**
+    * @typedef {import('./EmotionalState.js').Intensity} Intensity
+    */
      /**
      * Get emotional state intensity as value between 0 (no intensity) and 7 (maximum intensity).
-     * @returns {number} from range [0,7] 
+     * @returns {Intensity} from range [0,7] 
      */
     get EmotionalStateIntensity() {
         return this.state.getEmotionalStateIntensity();
@@ -63,7 +66,7 @@ export class EmotionalStateEvaluation {
 
     /**
      * Get list of Polish emotionally charged words as defined by Marschall Rosenberg.
-     * @returns {Array} Array of RatedWordEntry objects of WordType.ROSENBERG. 
+     * @returns {Array} Array of RatedWordEntry objects of type WordType.ROSENBERG. 
      */
     get RosenbergWords() {
         return this.ratedWordsRef.entries.filter(ratedWordEntry => 
@@ -71,7 +74,10 @@ export class EmotionalStateEvaluation {
     }
 
     /**
-     * Add user's word to the Emotional State and return the EmotionalCharge it was assigned as.
+    * @typedef {import('./EmotionalState.js').EmotionalCharge} EmotionalCharge
+    */
+    /**
+     * Add user's word to the Emotional State and return the EmotionalCharge it was assigned with.
      * @param {string} word from the user 
      * @returns {EmotionalCharge} EmotionalCharge created from the given input word.
      */
@@ -82,8 +88,8 @@ export class EmotionalStateEvaluation {
     }
 
     /**
-     * Clear state of the evaluation.
-     * It is advides to clear state instead of creating new EmotionalStateEvaluation object,
+     * Clear state of the EmotionalStateEvaluation.
+     * It is advised to clear state instead of creating new EmotionalStateEvaluation object,
      * because the creation process requires web traffic to download dictionaries. 
      * @returns {void}
      */
