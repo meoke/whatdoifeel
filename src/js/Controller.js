@@ -2,7 +2,7 @@
 import _ from 'underscore';
 import config from './config';
 import { Emotion, EmotionHue, WordType } from './models/EmotionalState';
-import { WordsHints, EmotionalStateSummaryViewModel, EmotionalChargeComponentViewModel} from './views/Evaluation';
+import { WordsHintsVM, EmotionalStateSummaryVM, EmotionalChargeComponentVM} from './views/EmotionalStateEvaluation';
 import convert from 'color-convert';
 
 class Controller {
@@ -35,7 +35,7 @@ class Controller {
                     return _.map(val, ratedWordEntry => { return ratedWordEntry.originalWord; });
                 })
                 .value();
-            const wordsHintsViewModel = new WordsHints(wordsHintsByEmotion[Emotion.ANGER],
+            const wordsHintsViewModel = new WordsHintsVM(wordsHintsByEmotion[Emotion.ANGER],
                 wordsHintsByEmotion[Emotion.DISGUST],
                 wordsHintsByEmotion[Emotion.FEAR],
                 wordsHintsByEmotion[Emotion.HAPPY],
@@ -56,7 +56,7 @@ class Controller {
                                              stateModel.S,
                                              stateModel.V);
             const intensity = this.evaluationModel.EmotionalStateIntensity;
-            return new EmotionalStateSummaryViewModel(stateHSL[0],
+            return new EmotionalStateSummaryVM(stateHSL[0],
                                                       stateHSL[1]/100, 
                                                       stateHSL[2]/100,
                                                       intensity);
@@ -87,7 +87,7 @@ class Controller {
     onEmotionalChargeAdded = (emotionalCharge) => {
         const saturation = emotionalCharge.emotion === Emotion.NEUTRAL ? 0 : 100;
         const isVulgar = emotionalCharge.wordType === WordType.VULGAR ? true : false;
-        const a = new EmotionalChargeComponentViewModel(EmotionHue[emotionalCharge.emotion], 
+        const a = new EmotionalChargeComponentVM(EmotionHue[emotionalCharge.emotion], 
             saturation,
             emotionalCharge.power,
             isVulgar);

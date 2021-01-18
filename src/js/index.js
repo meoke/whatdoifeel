@@ -6,7 +6,7 @@ import '../css/style.css';
 
 import {Controller} from './Controller';
 import {EmotionalStateEvaluationFactory} from './models/EmotionalStateEvaluation';
-import {EmotionalStateEvaluationView} from './views/Evaluation';
+import {EmotionalStateEvaluationView} from './views/EmotionalStateEvaluation';
 
 _setupEventHandlers();
 

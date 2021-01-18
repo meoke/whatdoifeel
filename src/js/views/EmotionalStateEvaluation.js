@@ -3,6 +3,10 @@ import 'jquery-color';
 import _ from 'underscore';
 
 /**
+ * View models
+ */
+
+/**
  * Describes words displayed for the user to show example of words for expressing different emotions.
  * @param {Array} angerWords - Array of strings that express anger
  * @param {Array} disgustWords -Array of strings that express disgust
@@ -10,7 +14,7 @@ import _ from 'underscore';
  * @param {Array} happinessWords -Array of strings that express happiness
  * @param {Array} sadnessWords -Array of strings that express sadness
  */
-export class WordsHints {
+export class WordsHintsVM {
     constructor(angerWords, disgustWords, fearWords, happinessWords, sadnessWords) {
         this.angerWords = angerWords;
         this.disgustWords = disgustWords;
@@ -27,7 +31,7 @@ export class WordsHints {
  * @param{Number} lightness - Float from range [0,1] - value from HSL color model
  * @param{Number} density - Integer from range [0, 7] - how dense is the input from user
  */
-export class EmotionalStateSummaryViewModel {
+export class EmotionalStateSummaryVM {
     constructor(hue, saturation, lightness, density) {
         this.hue = hue;
         this.saturation = saturation;
@@ -37,15 +41,18 @@ export class EmotionalStateSummaryViewModel {
 }
 
 /**
- * Describes Emotional State single Emotional Charge component.
- * @param{number} - hue - value from range [0,360] representing emotion hue from HSL or HSV color model
+ * Describes single Emotional Charge component which is a part of Emotional State.
+ * @param{number} - hue - Integer from range [0,360] representing emotion hue from HSL or HSV color model
+ * @param{number} - saturation - Float from range [0,1] representing emotipm saturation from HSL model
+ * @param{number} - power - Number from range [0,7] representing emotional charge power (max power is 7, min power is 0)
+ * @param{boolean} - isVulgar - set to true if the Emotional Charge is derived from a Polish vulgar word
  * @
  */
-export class EmotionalChargeComponentViewModel {
-    constructor(hue, saturation, strength, isVulgar) {
+export class EmotionalChargeComponentVM {
+    constructor(hue, saturation, power, isVulgar) {
         this.hue = hue;
         this.saturation = saturation;
-        this.strength = strength;
+        this.power = power;
         this.isVulgar = isVulgar;
     }
 }
@@ -152,7 +159,7 @@ export class EmotionalStateEvaluationView {
 
     /**
      * 
-     * @param {feelingsInputOnInputCallback} Callback to be called when user changes feelingInput
+     * @param {feelingsInputOnInputCallback} Callback to be called when user changes feelingsInput
      */
     setupFeelingsInput(feelingsInputOnInputCallback) {
         const disablePaste = () => {
@@ -187,7 +194,7 @@ export class EmotionalStateEvaluationView {
 
     /**
      * Render WordsHints
-     * @param {WordsHints}
+     * @param {WordsHintsVM}
      *  
      */
     renderWordsHints(hints) {
@@ -214,7 +221,7 @@ export class EmotionalStateEvaluationView {
 
     /**
      * Renders EmotionalState summary.
-     * @param {EmotionalStateSummaryViewModel}
+     * @param {EmotionalStateSummaryVM}
      */
     renderEmotionalStateSummary(emotionalStateSummary) {
         const changeTitleColor = (hue, saturation, lightness) => {
@@ -241,29 +248,41 @@ export class EmotionalStateEvaluationView {
 
     /**
      * Renders EmotionalChargeComponent summary.
-     * @param {EmotionalChargeComponentViewModel}
+     * @param {EmotionalChargeComponentVM}
      */
     renderNewEmotionalChargeComponent(emotionalChargeComponent) {
-        const div = this._createEl("div");
-        const maxWidth = 20;
-        const getElementWidth = v => { return Math.max(10, v * maxWidth / 7); };
-        const randPos = () => { return `${_.random(0, 90)}%`; };
-        div.css("width", `${getElementWidth(emotionalChargeComponent.strength)}px`);
-        div.css("height", `${getElementWidth(emotionalChargeComponent.strength)}px`);
-        div.css("left", randPos());
-        div.css("top", randPos());
-        div.addClass("emotionDot");
 
-        if(emotionalChargeComponent.isVulgar) {
-            div.addClass('fas fa-asterisk');
-        }
-        else {
-            div.css("background-color", `hsl(${emotionalChargeComponent.hue}, ${emotionalChargeComponent.saturation}%, 50%)`);
-        }
+        const getElementWidth = emotionPower => { 
+            const minWidth = 10;
+            const maxWidth = 20;
+            return Math.max(minWidth, emotionPower * maxWidth / 7); 
+        };
 
-        div.css("display", "none");
-        this.elements.dotsContainer.append(div);
-        div.fadeIn("slow");
+        const getRandPosition = () => { return `${_.random(0, 90)}%`; };
+
+        const setCSSProperties = el => {
+            el.addClass("emotionDot");
+
+            el.css("width", `${getElementWidth(emotionalChargeComponent.power)}px`);
+            el.css("height", `${getElementWidth(emotionalChargeComponent.power)}px`);
+            el.css("left", getRandPosition());
+            el.css("top", getRandPosition());
+    
+            if(emotionalChargeComponent.isVulgar) {
+                el.addClass('fas fa-asterisk');
+            }
+            else {
+                el.css("background-color", `hsl(${emotionalChargeComponent.hue}, ${emotionalChargeComponent.saturation}%, 50%)`);
+            }
+    
+            el.css("display", "none");
+            return el;
+        };
+
+        const el = this._createEl("div");
+        const styledEl = setCSSProperties(el);
+        this.elements.dotsContainer.append(styledEl);
+        styledEl.fadeIn("slow");
 
     }
 
