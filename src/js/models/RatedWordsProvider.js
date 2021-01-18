@@ -3,21 +3,27 @@ import _ from 'underscore';
 import Papa from 'papaparse';
 
 import {Emotion, WordType} from "./EmotionalState";
-let toPapa;
-let fetchFile;
-let server;
-if (isNode) {
-    fetchFile = require('node-fetch');
-    toPapa = async path => {
+
+class DownloadHelper{
+    constructor(useLocal) {
+        if (useLocal) {
+            this.server = 'https://raw.githubusercontent.com/meoke/disanger/master';
+            this.readFromSourceForPapa = this._httpPathToPapa;
+        }
+        else {
+            this.server = '.';
+            this.readFromSourceForPapa = this._localPathToPapa;
+        }
+    }
+
+    _localPathToPapa = path => {return path;}
+    _httpPathToPapa = async path => {
+        const fetchFile = require('node-fetch');
         const response = await fetchFile(path);
         return response.body;
     };
-    server = 'https://raw.githubusercontent.com/meoke/disanger/master';
 }
-else {
-    toPapa = path => {return path;};
-    server = '.';
-}
+const downloadHelper = isNode ? new DownloadHelper(true) : new DownloadHelper(false);
 
 /**
  * Describes word originating from emotional words dictionaries with assigned emotion values.
@@ -51,8 +57,8 @@ export class RatedWord {
  * @returns {Array} array of stopwords as RatedWord objects
  */
 export async function getStopWords() {
-    const path = `${server}/dictionaries/stopwords_PL.csv`;
-    const papaInput = await toPapa(path);
+    const path = `${downloadHelper.server}/dictionaries/stopwords_PL.csv`;
+    const papaInput = await downloadHelper.readFromSourceForPapa(path);
     const stopWordsRows = await _parsers.csvStreamToRow(papaInput);
     return stopWordsRows.map(row => {
         return new RatedWord(row.word, Emotion.NEUTRAL, WordType.STOPWORD, 0, 0, 0, 0, 0);
@@ -64,8 +70,8 @@ export async function getStopWords() {
  * @returns {Array} array of vulgar words as RatedWord objects
  */
 export async function getVulgarWords() {
-    const path = `${server}/dictionaries/vulgarWords_PL.csv`;
-    const papaInput = await toPapa(path);
+    const path = `${downloadHelper.server}/dictionaries/vulgarWords_PL.csv`;
+    const papaInput = await downloadHelper.readFromSourceForPapa(path);
     const vulgarWordsRows = await _parsers.csvStreamToRow(papaInput);
     return vulgarWordsRows.map(row => {
         return new RatedWord(row.word, Emotion.NEUTRAL, WordType.VULGAR, 0, 0, 0, 0, 0);
@@ -77,8 +83,8 @@ export async function getVulgarWords() {
  * @returns {Array} array of NAWL words as RatedWord objects
  */
 export async function getNAWLWords() {
-    const path = `${server}/dictionaries/nawlWords_PL.csv`;
-    const papaInput = await toPapa(path);
+    const path = `${downloadHelper.server}/dictionaries/nawlWords_PL.csv`;
+    const papaInput = await downloadHelper.readFromSourceForPapa(path);
     const preevaluatedWordsRows = await _parsers.csvStreamToRow(papaInput);
     return preevaluatedWordsRows.map(row => {
         return _parsers.nawlRowToRatedWord(row);
@@ -90,8 +96,8 @@ export async function getNAWLWords() {
  * @returns {Array} array of Rosenberg's words as RatedWord objects
  */
 export async function getRosenbergWords() {
-    const path = `${server}/dictionaries/rosenbergWords_PL.csv`;
-    const papaInput = await toPapa(path);
+    const path = `${downloadHelper.server}/dictionaries/rosenbergWords_PL.csv`;
+    const papaInput = await downloadHelper.readFromSourceForPapa(path);
     const rosenbergWordsRows = await _parsers.csvStreamToRow(papaInput);
     return rosenbergWordsRows.map(row => {
         return _parsers.rosenbergRowToRatedWord(row);

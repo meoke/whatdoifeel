@@ -10,7 +10,7 @@
     "build": "rd /s /q dist & webpack --mode production",
     "start": "webpack-dev-server --mode development --open",
     "test": "tape tests/**.test.js | tap-summary",
-    "test:web": "webpack --config webpack.test.config.js",
+    "test:web": "webpack --config webpack.test.config.js" 
   },
   "repository": {
     "type": "git",
