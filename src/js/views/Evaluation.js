@@ -21,18 +21,18 @@ export class WordsHints {
 }
 
 /**
- * Describes Emotional State summary as a HSL color.
- * @param{Number} hue - Integer from range [0,360]
- * @param{Number} saturation - Float from range [0,1]
- * @param{Number} lightness - Float from range [0,1]
- * @param{Number} intensity - Integer from range [0, 7] 
+ * Describes Emotional State summary presented for the user.
+ * @param{Number} hue - Integer from range [0,360] - value from HSL color model
+ * @param{Number} saturation - Float from range [0,1] - value from HSL color model
+ * @param{Number} lightness - Float from range [0,1] - value from HSL color model
+ * @param{Number} density - Integer from range [0, 7] - how dense is the input from user
  */
 export class EmotionalStateSummaryViewModel {
-    constructor(hue, saturation, lightness, intensity) {
+    constructor(hue, saturation, lightness, density) {
         this.hue = hue;
         this.saturation = saturation;
         this.lightness = lightness;
-        this.intensity = intensity;
+        this.density = density;
     }
 }
 
@@ -41,15 +41,16 @@ export class EmotionalStateSummaryViewModel {
  * @param{number} - hue - value from range [0,360] representing emotion hue from HSL or HSV color model
  * @
  */
-export class EmotionalChargeComponent {
-    constructor(hue, strength, isVulgar) {
+export class EmotionalChargeComponentViewModel {
+    constructor(hue, saturation, strength, isVulgar) {
         this.hue = hue;
+        this.saturation = saturation;
         this.strength = strength;
         this.isVulgar = isVulgar;
     }
 }
 /**
- * Object responsible for rednering Evauluation of EmotionalState
+ * Object responsible for rendering Evauluation of EmotionalState
  */
 export class EmotionalStateEvaluationView {
     /**
@@ -234,50 +235,36 @@ export class EmotionalStateEvaluationView {
             this.elements.dotsContainer.css('opacity', opacity);
         };
 
-        changeTitleColor(emotionalStateSummary.hue, emotionalStateSummary.saturation, emotionalStateSummary.lightness)
+        changeTitleColor(emotionalStateSummary.hue, emotionalStateSummary.saturation, emotionalStateSummary.lightness);
         changeDotsOpacity(emotionalStateSummary.intensity);
     }
 
-    renderNewVulgar(strength) {
-        const d = this._createEl("div");
-
-        const maxWidth = 20;
-        const pies = v => { return Math.max(10, v * maxWidth / 7); };
-
-        const randPos = () => { return `${_.random(0, 90)}%`; };
-        d.css("width", `${pies(strength)}px`);
-        d.css("height", `${pies(strength)}px`);
-        d.css("left", randPos());
-        d.css("top", randPos());
-        d.css("display", "none");
-        d.addClass('fas fa-asterisk emotionDot');
-        this.elements.dotsContainer.append(d);
-        d.fadeIn("slow");
-    }
-
     /**
-     * Renders new EmotionalState component as a coloured dot.
-     * @param {*} H - Hue from range[0,360] 
-     * @param {*} S - Saturation from range [0,1]
-     * @param {*} L - Lightness from range [0,1]
-     * @param {*} strength - strength of the component
+     * Renders EmotionalChargeComponent summary.
+     * @param {EmotionalChargeComponentViewModel}
      */
-    renderNewEmotionalStateComponent(H, S, L, strength) {
-        const d = this._createEl("div");
-
+    renderNewEmotionalChargeComponent(emotionalChargeComponent) {
+        const div = this._createEl("div");
         const maxWidth = 20;
-        const pies = v => { return Math.max(10, v * maxWidth / 7); };
-
+        const getElementWidth = v => { return Math.max(10, v * maxWidth / 7); };
         const randPos = () => { return `${_.random(0, 90)}%`; };
-        d.addClass("emotionDot");
-        d.css("width", `${pies(strength)}px`);
-        d.css("height", `${pies(strength)}px`);
-        d.css("left", randPos());
-        d.css("top", randPos());
-        d.css("background-color", `hsl(${H}, ${S}%, ${L}%)`);
-        d.css("display", "none");
-        this.elements.dotsContainer.append(d);
-        d.fadeIn("slow");
+        div.css("width", `${getElementWidth(emotionalChargeComponent.strength)}px`);
+        div.css("height", `${getElementWidth(emotionalChargeComponent.strength)}px`);
+        div.css("left", randPos());
+        div.css("top", randPos());
+        div.addClass("emotionDot");
+
+        if(emotionalChargeComponent.isVulgar) {
+            div.addClass('fas fa-asterisk');
+        }
+        else {
+            div.css("background-color", `hsl(${emotionalChargeComponent.hue}, ${emotionalChargeComponent.saturation}%, 50%)`);
+        }
+
+        div.css("display", "none");
+        this.elements.dotsContainer.append(div);
+        div.fadeIn("slow");
+
     }
 
     _createEl(elName, value = "") {
