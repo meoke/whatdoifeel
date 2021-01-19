@@ -1,7 +1,7 @@
 
 import _ from 'underscore';
 import config from './config';
-import { Emotion, WordType } from './models/EmotionalCharge';
+import { Emotion, WordType } from './models/EmotionalState';
 import { EmotionHue } from './models/EmotionalStateSummarizer';
 import { WordsHintsVM, EmotionalStateSummaryVM, EmotionalChargeVM} from './views/EmotionalStateEvaluation';
 import convert from 'color-convert';

@@ -3,7 +3,8 @@ require = require("esm")(module);
 const t = require('tape-catch');
 
 const { EmotionalStateEvaluationFactory } = require('../src/js/models/EmotionalStateEvaluation.js');
-const { EmotionHue, Emotion } = require('../src/js/models/EmotionalState.js');
+const { Emotion } = require('../src/js/models/EmotionalState.js');
+const { EmotionHue } = require('../src/js/models/EmotionalStateSummarizer.js');
 
 async function createEvaluation() {
     return await (new EmotionalStateEvaluationFactory()).createEvaluation(()=>{});
@@ -18,7 +19,7 @@ t.test("Single word affects evaluation state.", async function (t) {
     ];
     for (const tc of testCases) {
         const g = await createEvaluation();
-        g.addWord(tc.input);
+        g.evaluate([tc.input]);
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
     }
@@ -52,9 +53,7 @@ t.test("Evaluation when gets multiple words should correctly change the Emotiona
 
     for(const tc of testCases) {
         const g = await createEvaluation();
-        for (const word of tc.inputs) {
-            g.addWord(word);
-        }
+        g.evaluate(tc.inputs);
         const actualEmoStateHSV = g.EmotionalStateHSV;
         t.deepEquals(actualEmoStateHSV, tc.expectedHSV, tc.name);
     }

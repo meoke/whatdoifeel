@@ -1,5 +1,5 @@
 import _ from 'underscore';
-import {Emotion, WordType} from './EmotionalCharge';
+import {Emotion, WordType} from './EmotionalState';
 
 /**
  * Mapping of emotions to Hue in HSV/HSL color model.
@@ -53,15 +53,15 @@ export class EmotionalStateSummarizer {
     summarizeToShares(emotionalState) {
         const notNeutralWords = emotionalState.EmotionalCharges.filter(el => el.emotion !== Emotion.NEUTRAL);
         const getCountOfNotNeutralWords = e => {return notNeutralWords.filter(el => el.emotion === e).length;};
-        const getShare = e => {return notNeutralWords.length === 0 ?
+        const getShare = e => {return Math.floor(notNeutralWords.length === 0 ?
                                       0 :
-                                      getCountOfNotNeutralWords(e) / notNeutralWords.length * 100;};
+                                      getCountOfNotNeutralWords(e) / notNeutralWords.length * 100);};
         return {
-            [Emotion.ANGER]: getShare(Emotion.ANGER),
-            [Emotion.DISGUST]: getShare(Emotion.DISGUST),
-            [Emotion.FEAR]: getShare(Emotion.FEAR),
-            [Emotion.HAPPY]: getShare(Emotion.HAPPY),
-            [Emotion.SADNESS]: getShare(Emotion.SADNESS)
+            "anger": getShare(Emotion.ANGER),
+            "disgust": getShare(Emotion.DISGUST),
+            "fear": getShare(Emotion.FEAR),
+            "happiness": getShare(Emotion.HAPPY),
+            "sadness": getShare(Emotion.SADNESS)
         };
     }
 

@@ -2,8 +2,7 @@ import _ from 'underscore';
 
 import { RatedWordsReference } from "./RatedWordsReference";
 import { EmotionalStateSummarizer } from "./EmotionalStateSummarizer";
-import { EmotionalState} from "./EmotionalState";
-import { WordType } from "./EmotionalCharge";
+import { EmotionalState, WordType} from "./EmotionalState";
 import * as wordsProvider from './RatedWordsProvider.js';
 
 

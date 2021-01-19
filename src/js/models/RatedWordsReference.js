@@ -1,5 +1,5 @@
 import getStem from 'stemmer_pl';
-import { EmotionalCharge, WordType, Emotion } from './EmotionalCharge';
+import { EmotionalCharge, WordType, Emotion } from './EmotionalState';
 import _ from 'underscore';
 
 /**
