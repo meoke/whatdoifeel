@@ -7,7 +7,7 @@ What Do I Feel is a webpage written for Polish language users who'd like to prac
 
 Your emotional state is detected based on the text you provide on the website. It is visualised as color dots/asterisks appearing above the input field and the changes of website title's color.
 
-![](whatdoifeel1.gif)
+![](howtouse.gif)
 
 
 The website is available at [https://coterazczuje.netlify.app](https://coterazczuje.netlify.app) or you can run in it locally (more information below).

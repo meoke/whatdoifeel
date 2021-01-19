@@ -82,9 +82,14 @@ button {
     border-color: grey;
 }
 
+label {
+    text-align: justify;
+}
+
 #titleContainer {
     position: relative;
     height: 80px;
+    margin-bottom: 2em;
 }
 
 .emotionDot {
@@ -94,6 +99,7 @@ button {
 
 #title {
     position: relative;
+    text-align: center;
 }
 
 #dotsContainer {
@@ -143,4 +149,5 @@ button {
     #feelingsInput {
         height: 150px; 
     }
+
 }

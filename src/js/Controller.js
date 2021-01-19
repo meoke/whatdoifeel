@@ -35,6 +35,9 @@ class Controller {
                 .mapObject((val) => {
                     return _.map(val, ratedWordEntry => { return ratedWordEntry.originalWord; });
                 })
+                .mapObject(words => {
+                    return _.without(words, "szczęście", "złość", "strach", "smutek");
+                })
                 .value();
             const wordsHintsViewModel = new WordsHintsVM(wordsHintsByEmotion[Emotion.ANGER],
                 wordsHintsByEmotion[Emotion.DISGUST],
