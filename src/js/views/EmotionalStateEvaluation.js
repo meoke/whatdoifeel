@@ -68,7 +68,6 @@ export class EmotionalStateEvaluationView {
             title: $("#title"),
             dotsContainer: $("#dotsContainer"),
             evaluationContainer: $('#evaluationContainer'),
-            startEvaluationBtn: $('#startEvaluationBtn'),
             restartEvaluationBtn: $('#restartEvaluationBtn'),
             feelingsInput: $('#feelingsInput'),
             wordsHints: $('#wordsHints'),
@@ -82,40 +81,19 @@ export class EmotionalStateEvaluationView {
         };
     }
 
-    /**
-     * Callback for startEvaluationBtn.
-     * @callback startEvaluationCallback
-     */
-
-    /**
-     * 
-     * @param {startEvaluationCallback} Callback to be called when user clicks on the startEvaluationBtn 
-     */
-    setupStartEvaluationBtn(startEvaluationCallback) {
-        const initEvaluationBoard = () => {
-            const activateFeelingsInput = () => {
-                this.elements.feelingsInput.prop('disabled', false);
-                this.elements.feelingsInput.trigger("focus");
-            };
-
-            const replaceStartBtnWithRestartBtn = () => {
-                this.elements.startEvaluationBtn.hide();
-                this.elements.restartEvaluationBtn.css('display', 'block');
-            };
-
-            activateFeelingsInput();
-            replaceStartBtnWithRestartBtn();
+    initEvaluationBoard = () => {
+        const activateFeelingsInput = () => {
+            this.elements.feelingsInput.prop('disabled', false);
+            this.elements.feelingsInput.trigger("focus");
         };
 
-        const bindOnClickCallback = (callback) => {
-            this.elements.startEvaluationBtn.on('click', () => {
-                callback();
-            });
+        const showRestartBtn = () => {
+            this.elements.restartEvaluationBtn.css('display', 'block');
         };
 
-        bindOnClickCallback(initEvaluationBoard);
-        bindOnClickCallback(startEvaluationCallback);
-    }
+        activateFeelingsInput();
+        showRestartBtn();
+    };
 
     /**
      * Callback for restartEvaluationBtn.

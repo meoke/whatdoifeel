@@ -14,6 +14,14 @@ const evaluationModelFactory = new EmotionalStateEvaluationFactory();
 const evaluationView = new EmotionalStateEvaluationView();
 const app = new Controller(evaluationModelFactory, evaluationView);  // eslint-disable-line no-unused-vars
 
+(async () => {
+    await app.start();
+
+})().catch(e => {
+    app.showError("Nie można uruchomić aplikacji...", e.message);
+});
+
+
 function _setupEventHandlers() {
     $('.closebtn').on('click', () => {
         $("#aboutContainer").hide("slow", () => {

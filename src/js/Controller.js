@@ -10,21 +10,22 @@ class Controller {
         this.evaluationModelFactory = evaluationModelFactory;
 
         this.evaluationView = evaluationView;
-        this.evaluationView.setupStartEvaluationBtn(this.onEvaluationStart);
         this.evaluationView.setupRestartEvaluationBtn(this.onEvaluationRestart);
         this.evaluationView.setupFeelingsInput(this.onInputChange);
     }
 
-    onEvaluationStart = async () => {
+    start = async () => {
         const initModel = async () => {
             try {
                 this.evaluationModel = await this.evaluationModelFactory.createEvaluation();
             }
             catch (e) {
-                config.mode === "production" ?
-                    this.evaluationView.renderError("Problem z pobraniem słownika emocji.") :
-                    console.error(`Game creation or refresh issue: ${e.message}`);
+                this.showError("Problem z pobraniem słownika emocji.", `Game creation or refresh issue: ${e.message}`);
             }
+        };
+
+        const initView = () => {
+            this.evaluationView.initEvaluationBoard();
         };
 
         const showWordsHints = () => {
@@ -45,6 +46,7 @@ class Controller {
         };
 
         await initModel();
+        initView();
         showWordsHints();
         this._updateEmotionalStateSummary();
     }
@@ -92,6 +94,12 @@ class Controller {
             emotionalCharge.power,
             isVulgar);
         this.evaluationView.renderNewEmotionalChargeComponent(a);
+    }
+
+    showError = (productionErrorMessage, developmentErrorMessage) => {
+        config.mode === "production" ?
+                    this.evaluationView.renderErrorMessage(productionErrorMessage) :
+                    console.error(developmentErrorMessage);
     }
 }
 
