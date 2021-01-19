@@ -73,12 +73,12 @@ button {
 }
 
 #evaluationContainer {
-    margin: 50px 0px;
+    margin: 20px 0px;
     position: relative;
 }
 
 #feelingsInput {
-    height: 150px; 
+    height: 50px; 
     border-color: grey;
 }
 
@@ -112,7 +112,6 @@ button {
 }
 
 
-
 @media only screen and (max-width: 768px) {
     #wordsColumn .columns {
         width: auto;
@@ -135,5 +134,13 @@ button {
    
     .add-padding-bottom {
         padding-bottom: 50px;
+    }
+
+    #evaluationContainer {
+        margin: 50px 0px;
+    }
+
+    #feelingsInput {
+        height: 150px; 
     }
 }
