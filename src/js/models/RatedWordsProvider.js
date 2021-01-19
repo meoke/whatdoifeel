@@ -2,7 +2,7 @@ import {isNode} from "browser-or-node";
 import _ from 'underscore';
 import Papa from 'papaparse';
 
-import {Emotion, WordType} from "./EmotionalState";
+import {Emotion, WordType} from "./EmotionalCharge";
 
 class DownloadHelper{
     constructor(useLocal) {

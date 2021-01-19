@@ -1,6 +1,11 @@
+import _ from 'underscore';
+
 import { RatedWordsReference } from "./RatedWordsReference";
-import { EmotionalState, WordType } from "./EmotionalState";
+import { EmotionalStateSummarizer } from "./EmotionalStateSummarizer";
+import { EmotionalState} from "./EmotionalState";
+import { WordType } from "./EmotionalCharge";
 import * as wordsProvider from './RatedWordsProvider.js';
+
 
 /**
  * Factory for creating EmotionalStateEvaluation object
@@ -11,8 +16,9 @@ export class EmotionalStateEvaluationFactory {
      */
     async createEvaluation() {
         const evaluation = new EmotionalStateEvaluation();
-        evaluation.state = new EmotionalState();
+        evaluation.summarizer = new EmotionalStateSummarizer();
         evaluation.ratedWordsRef = await this._buildEmoReference();
+        evaluation.emotionalState = new EmotionalState();
         return evaluation;
     }
 
@@ -26,42 +32,43 @@ export class EmotionalStateEvaluationFactory {
     }
 }
 
+
 /**
- * Describes the process of assessment of one's EmotionalState
- * based on words he or she provides to the system.
+ * Manages evaluation of one's Emotional State based on list of provided words.
+ * Provides different ways of summarizing the emotional state.
  */
 export class EmotionalStateEvaluation {
     /**
-    * @typedef {import('./EmotionalState.js').HSV} HSV
+    * @typedef {import('./EmotionalStateSummarizer.js').HSV} HSV
     */
      /**
      * Get emotional state presented as a color encoded in HSV model.
      * @returns {HSV} Color encoded in HSV (Hue, Saturation, Value)
      */
     get EmotionalStateHSV() {
-        return this.state.getEmotionStateAsHSVColor();
+        return this.summarizer.summarizeToHSVColor(this.emotionalState);
     }
 
     /**
-    * @typedef {import('./EmotionalState.js').EmotionalStateShares} EmotionalStateShares
+    * @typedef {import('./EmotionalStateSummarizer.js').EmotionalStateShares} EmotionalStateShares
     */
      /**
      * Get emotional state presented as percentage breakdown of emotions.
      * @returns {EmotionalStateShares} 
      */
     get EmotionalStateShares() {
-        return this.state.getEmotionalStateAsShares();
+        return this.summarizer.summarizeToShares(this.emotionalState);
     }
 
     /**
-    * @typedef {import('./EmotionalState.js').Intensity} Intensity
+    * @typedef {import('./EmotionalStateSummarizer.js').Intensity} Intensity
     */
      /**
      * Get emotional state intensity as value between 0 (no intensity) and 7 (maximum intensity).
      * @returns {Intensity} from range [0,7] 
      */
     get EmotionalStateIntensity() {
-        return this.state.getEmotionalStateIntensity();
+        return this.summarizer.summarizeToIntensity(this.emotionalState);
     }
 
     /**
@@ -74,27 +81,17 @@ export class EmotionalStateEvaluation {
     }
 
     /**
-    * @typedef {import('./EmotionalState.js').EmotionalCharge} EmotionalCharge
-    */
-    /**
-     * Add user's word to the Emotional State and return the EmotionalCharge it was assigned with.
-     * @param {string} word from the user 
-     * @returns {EmotionalCharge} EmotionalCharge created from the given input word.
+     * Evaluates given words to emotional charges
+     * @param {Array.string} Array of words from the user.
+     * @returns {Array.EmotionalCharge} Array of Emotional Charges created from the given input.
      */
-    addWord(word) {
-        const emotionalCharge = this.ratedWordsRef.getEmotionalCharge(word);
-        this.state.addEmotionalCharge(emotionalCharge);
-        return emotionalCharge;
-    }
+    evaluate(words) {
+        const wordToEmotionalCharge = (word) => {
+            return this.ratedWordsRef.getEmotionalCharge(word);
+        };
 
-    /**
-     * Clear state of the EmotionalStateEvaluation.
-     * It is advised to clear state instead of creating new EmotionalStateEvaluation object,
-     * because the creation process requires web traffic to download dictionaries. 
-     * @returns {void}
-     */
-    restartEvaluation() {
-        this.state = new EmotionalState();
+        this.emotionalState.EmotionalCharges = _.map(words, word => {return wordToEmotionalCharge(word);});
+        return this.emotionalState.EmotionalCharges;
     }
 }
 

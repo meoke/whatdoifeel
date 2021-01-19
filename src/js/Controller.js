@@ -1,8 +1,9 @@
 
 import _ from 'underscore';
 import config from './config';
-import { Emotion, EmotionHue, WordType } from './models/EmotionalState';
-import { WordsHintsVM, EmotionalStateSummaryVM, EmotionalChargeComponentVM} from './views/EmotionalStateEvaluation';
+import { Emotion, WordType } from './models/EmotionalCharge';
+import { EmotionHue } from './models/EmotionalStateSummarizer';
+import { WordsHintsVM, EmotionalStateSummaryVM, EmotionalChargeVM} from './views/EmotionalStateEvaluation';
 import convert from 'color-convert';
 
 class Controller {
@@ -10,7 +11,6 @@ class Controller {
         this.evaluationModelFactory = evaluationModelFactory;
 
         this.evaluationView = evaluationView;
-        this.evaluationView.setupRestartEvaluationBtn(this.onEvaluationRestart);
         this.evaluationView.setupFeelingsInput(this.onInputChange);
     }
 
@@ -67,33 +67,29 @@ class Controller {
         this.evaluationView.renderEmotionalStateSummary(stateViewModel);
     }
 
-    onEvaluationRestart = () => {
-        this.evaluationModel.restartEvaluation();
-        this._updateEmotionalStateSummary();
-    }
-
     onInputChange = inputValue => {
-        const lastIsWord = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]*\p{Script_Extensions=Latin}+[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]$/gu;
-
-        const lastWordPos = inputValue.search(lastIsWord);
-        if (lastWordPos === -1) {
+        const wordsSeparators = /[!"#$%&'()*+,-./:;<=>?@[\]^_`{|}~\s]/g;
+        const inputValues = inputValue.split(wordsSeparators);
+        if(!_.isEmpty(inputValues[inputValues.length-1])){
             return;
         }
-
-        const lastWord = inputValue.substring(lastWordPos).trim();
-        const emotionalCharge = this.evaluationModel.addWord(lastWord);
-        this.onEmotionalChargeAdded(emotionalCharge);
+        const words = inputValues.filter(a=>a);
+        const emotionalCharges = this.evaluationModel.evaluate(words);
+        this.onEmotionalChargesChange(emotionalCharges);
         this._updateEmotionalStateSummary();
     }
 
-    onEmotionalChargeAdded = (emotionalCharge) => {
-        const saturation = emotionalCharge.emotion === Emotion.NEUTRAL ? 0 : 100;
-        const isVulgar = emotionalCharge.wordType === WordType.VULGAR ? true : false;
-        const a = new EmotionalChargeComponentVM(EmotionHue[emotionalCharge.emotion], 
-            saturation,
-            emotionalCharge.power,
-            isVulgar);
-        this.evaluationView.renderNewEmotionalChargeComponent(a);
+    onEmotionalChargesChange = emotionalCharges => {
+        const getEmotionalChargeVM = emotionalCharge => {
+            const saturation = emotionalCharge.emotion === Emotion.NEUTRAL ? 0 : 100;
+            const isVulgar = emotionalCharge.wordType === WordType.VULGAR ? true : false;
+            return new EmotionalChargeVM(EmotionHue[emotionalCharge.emotion], 
+                saturation,
+                emotionalCharge.power,
+                isVulgar);
+        };
+        const emotionalChargesVMs = _.map(emotionalCharges, eCh => getEmotionalChargeVM(eCh));
+        this.evaluationView.renderEmotionalCharges(emotionalChargesVMs);
     }
 
     showError = (productionErrorMessage, developmentErrorMessage) => {

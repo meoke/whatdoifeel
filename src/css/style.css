@@ -56,10 +56,6 @@ button {
     visibility: hidden;
 }
 
-#restartEvaluationBtn {
-    display: none;
-}
-
 /* |   Specific */
 
 #aboutButton {

@@ -48,7 +48,7 @@ export class EmotionalStateSummaryVM {
  * @param{boolean} - isVulgar - set to true if the Emotional Charge is derived from a Polish vulgar word
  * @
  */
-export class EmotionalChargeComponentVM {
+export class EmotionalChargeVM {
     constructor(hue, saturation, power, isVulgar) {
         this.hue = hue;
         this.saturation = saturation;
@@ -68,7 +68,6 @@ export class EmotionalStateEvaluationView {
             title: $("#title"),
             dotsContainer: $("#dotsContainer"),
             evaluationContainer: $('#evaluationContainer'),
-            restartEvaluationBtn: $('#restartEvaluationBtn'),
             feelingsInput: $('#feelingsInput'),
             wordsHints: $('#wordsHints'),
 
@@ -87,46 +86,10 @@ export class EmotionalStateEvaluationView {
             this.elements.feelingsInput.trigger("focus");
         };
 
-        const showRestartBtn = () => {
-            this.elements.restartEvaluationBtn.css('display', 'block');
-        };
 
         activateFeelingsInput();
-        showRestartBtn();
     };
 
-    /**
-     * Callback for restartEvaluationBtn.
-     * @callback restartEvaluationCallback
-     */
-    /**
-     * 
-     * @param {restartEvaluationCallback} Callback to be called when user clicks on the restartEvaluationBtn 
-     */
-    setupRestartEvaluationBtn(restartEvaluationCallback) {
-        const restartEvaluationBoard = () => {
-            const clearFeelingsInput = () => {
-                this.elements.feelingsInput.val("");
-            };
-
-            const clearEvaluationStateVisualisation = () => {
-                this.elements.dotsContainer.empty();
-            };
-
-            clearFeelingsInput();
-            clearEvaluationStateVisualisation();
-
-        };
-
-        const bindOnClickCallback = (callback) => {
-            this.elements.restartEvaluationBtn.on('click', () => {
-                callback();
-            });
-        };
-
-        bindOnClickCallback(restartEvaluationBoard);
-        bindOnClickCallback(restartEvaluationCallback);
-    }
 
 
     /**
@@ -193,7 +156,6 @@ export class EmotionalStateEvaluationView {
         renderWordsInColumns(hints.happinessWords, [this.elements.happinessColumn1,
         this.elements.happinessColumn2]);
         renderWordsInColumns(hints.sadnessWords, [this.elements.sadnessColumn]);
-
         this.elements.wordsHints.show("slow");
     }
 
@@ -214,7 +176,7 @@ export class EmotionalStateEvaluationView {
         };
 
         const changeDotsOpacity = (intensity) => {
-            const minOpacity = 0.3;
+            const minOpacity = 0.5;
             const intencityInOpacityScale = intensity / 7;
             const opacity = _.max([intencityInOpacityScale, minOpacity]);
             this.elements.dotsContainer.css('opacity', opacity);
@@ -225,10 +187,17 @@ export class EmotionalStateEvaluationView {
     }
 
     /**
-     * Renders EmotionalChargeComponent summary.
-     * @param {EmotionalChargeComponentVM}
+     * Renders Emotional Charges as randomly positioned colored dots/astersisks.
+     * @param {Array.EmotionalChargeVM}
      */
-    renderNewEmotionalChargeComponent(emotionalChargeComponent) {
+    renderEmotionalCharges(emotionalChargesVMs) {
+        const fadeVelocity = 1000;
+
+        const clearEvaluationStateVisualisation = () => {
+            for(const el of this.elements.dotsContainer.children()){
+                ($(el)).fadeOut(fadeVelocity, function(){ $(this).remove();});
+            }
+        };
 
         const getElementWidth = emotionPower => { 
             const minWidth = 10;
@@ -238,30 +207,31 @@ export class EmotionalStateEvaluationView {
 
         const getRandPosition = () => { return `${_.random(0, 90)}%`; };
 
-        const setCSSProperties = el => {
+        const emotionalChargeVMToDiv = (emotionalChargeVM) => {
+            const el = this._createEl("div");
             el.addClass("emotionDot");
 
-            el.css("width", `${getElementWidth(emotionalChargeComponent.power)}px`);
-            el.css("height", `${getElementWidth(emotionalChargeComponent.power)}px`);
+            el.css("font-size", `${getElementWidth(emotionalChargeVM.power)}px`);
             el.css("left", getRandPosition());
             el.css("top", getRandPosition());
-    
-            if(emotionalChargeComponent.isVulgar) {
-                el.addClass('fas fa-asterisk');
-            }
-            else {
-                el.css("background-color", `hsl(${emotionalChargeComponent.hue}, ${emotionalChargeComponent.saturation}%, 50%)`);
-            }
+            el.css("color", emotionalChargeVM.isVulgar ? 'black' : `hsl(${emotionalChargeVM.hue}, ${emotionalChargeVM.saturation}%, 50%)`);
+            el.addClass(emotionalChargeVM.isVulgar ? 'fas fa-asterisk' : 'fas fa-circle');
     
             el.css("display", "none");
             return el;
         };
 
-        const el = this._createEl("div");
-        const styledEl = setCSSProperties(el);
-        this.elements.dotsContainer.append(styledEl);
-        styledEl.fadeIn("slow");
+        const getEmotionalChargesDivs = emotionalChargesVMs => {
+            return _.map(emotionalChargesVMs, eChVM => {return emotionalChargeVMToDiv(eChVM);});
+        };
 
+        clearEvaluationStateVisualisation();
+        const emotionalChargesDivs = getEmotionalChargesDivs(emotionalChargesVMs)
+
+        for(const emotionalChargeDiv of emotionalChargesDivs){
+            this.elements.dotsContainer.append(emotionalChargeDiv);
+            emotionalChargeDiv.fadeIn(fadeVelocity);
+        }
     }
 
     _createEl(elName, value = "") {
