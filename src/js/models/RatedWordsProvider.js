@@ -7,7 +7,7 @@ import {Emotion, WordType} from "./EmotionalState";
 class DownloadHelper{
     constructor(useLocal) {
         if (useLocal) {
-            this.server = 'https://raw.githubusercontent.com/meoke/disanger/master';
+            this.server = 'https://raw.githubusercontent.com/meoke/whatdoifeel/master';
             this.readFromSourceForPapa = this._httpPathToPapa;
         }
         else {
