@@ -5,19 +5,18 @@ import Papa from 'papaparse';
 import {Emotion, WordType} from "./EmotionalState";
 
 class DownloadHelper{
-    constructor(useLocal) {
-        if (useLocal) {
-            this.server = 'https://raw.githubusercontent.com/meoke/whatdoifeel/master';
-            this.readFromSourceForPapa = this._httpPathToPapa;
+    constructor(useNode) {
+        this.server = 'https://raw.githubusercontent.com/meoke/whatdoifeel/master';
+        if (useNode) {
+            this.readFromSourceForPapa = this._localPathToPapa;
         }
         else {
-            this.server = '.';
-            this.readFromSourceForPapa = this._localPathToPapa;
+            this.readFromSourceForPapa = this._httpPathToPapa;
         }
     }
 
-    _localPathToPapa = path => {return path;}
-    _httpPathToPapa = async path => {
+    _httpPathToPapa = path => {return path;}
+    _localPathToPapa = async path => {
         const fetchFile = require('node-fetch');
         const response = await fetchFile(path);
         return response.body;

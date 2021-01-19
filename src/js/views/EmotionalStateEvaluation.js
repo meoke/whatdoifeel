@@ -226,7 +226,7 @@ export class EmotionalStateEvaluationView {
         };
 
         clearEvaluationStateVisualisation();
-        const emotionalChargesDivs = getEmotionalChargesDivs(emotionalChargesVMs)
+        const emotionalChargesDivs = getEmotionalChargesDivs(emotionalChargesVMs);
 
         for(const emotionalChargeDiv of emotionalChargesDivs){
             this.elements.dotsContainer.append(emotionalChargeDiv);

@@ -4,14 +4,14 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 var fs = require('fs');
 
 const saveConfig = mode => {
-    const config = `export const Config = {mode: "${mode}"}
-                    export default Config;`
+    const config = `export const Config = {mode: "${mode}"};
+                    export default Config;`;
     fs.writeFile("src/js/config.js", config, function (err) {
         if (err) {
             console.log(err);
         }
     });
-}
+};
 
 module.exports = (env, options) => {
     saveConfig(options.mode);
@@ -34,15 +34,10 @@ module.exports = (env, options) => {
             new CopyWebpackPlugin({
                 patterns: [
                     {
-                        from: "dictionaries",
-                        to: "dictionaries"
-                    },
-                    {
                         from: "src/images",
                         to: "images"
                     }]
-            }),
-        ],
+            }),        ],
         module: {
             rules: [
                 {
