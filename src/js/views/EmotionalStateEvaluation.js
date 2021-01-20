@@ -215,7 +215,7 @@ export class EmotionalStateEvaluationView {
             el.css("left", getRandPosition());
             el.css("top", getRandPosition());
             el.css("color", emotionalChargeVM.isVulgar ? 'black' : `hsl(${emotionalChargeVM.hue}, ${emotionalChargeVM.saturation}%, 50%)`);
-            el.addClass(emotionalChargeVM.isVulgar ? 'fas fa-asterisk' : 'fas fa-circle');
+            el.addClass(emotionalChargeVM.isVulgar ? 'fas fa-meteor' : 'fas fa-feather-alt');
     
             el.css("display", "none");
             return el;

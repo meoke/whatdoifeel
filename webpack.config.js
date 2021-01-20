@@ -29,7 +29,7 @@ module.exports = (env, options) => {
             new HtmlWebpackPlugin({
                 filename: 'index.html',
                 template: './src/index.html',
-                favicon: "./src/images/favicon.png"
+                favicon: "./src/images/feather-alt-solid.svg"
             }),
             new CopyWebpackPlugin({
                 patterns: [

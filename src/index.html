@@ -6,7 +6,7 @@
     <!-- Basic Page Needs
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
     <meta charset="utf-8">
-    <title>Twój stan emocjonalny</title>
+    <title>Co teraz czuję?</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -27,7 +27,7 @@
 
     <!-- Favicon
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="icon" type="image/svg+xml" href="images/feather-alt-solid.svg">
 
     <!-- Java Script 
   --------------------------------------------------->
@@ -48,15 +48,16 @@
             </div>
             <div class="three columns u-max-full-width">
                 <h4>Jak używać?</h4>
-                <p>W miejscu na tekst opisz, co aktualnie czujesz. Użyj własnych słów lub skorzystaj z podpowiedzi na dole strony (pochodzą z opracowania M.Rosenberga). </p>
-                <p>Kolorowa wizualizacja pokazuje, jakie ładunki emocjonalne zostały wykryte w Twoich słowach.</p>
-                <p>To tylko tyle i aż tyle :)</p>
+                <p>W miejscu na tekst opisz, co aktualnie czujesz. Użyj własnych słów lub skorzystaj z podpowiedzi na dole strony. </p>
+                <p>Jednocześnie zaczną pojawiać się kolorowe i szare <i class="fas fa-feather-alt"></i>. Ich kolory symbolizują uczucia, które zostały rozpoznane w Twoich słowach: <span class="happiness">szczęście</span>, <span class="anger">złość</span>, <span class="disgust">wstręt</span>, <span class="fear">strach</span>, <span class="sadness">smutek</span>, <span class="neutral">neutralny/nieznany</span>. </p>
+                <p>Wulgaryzmy otrzymały w wizualizacji własny symbol <i class="fas fa-meteor"></i>.</p>
             </div>
             <div class="three columns u-max-full-width">
                 <h4>O projekcie</h4>
                 <p>Analiza słów jest wykonywana w Twojej przeglądarce (nic nie jest nigdzie wysyłane).</p>
-                <p>Repozytorium projektu dostępne na <a href="https://github.com/meoke/whatdoifeel"
-                        target="_blank">github.com</a>, a wykorzystane słowniki słów nacechowanych emocjonalnie tutaj:
+                <p>Projekt dostępny jest na <a href="https://github.com/meoke/whatdoifeel"
+                        target="_blank">github.com</a>, ikony pochodzą z <a href="https://fontawesome.com/license/free"
+                        target="_blank">Font Awesome</a>, a wykorzystane słowniki słów nacechowanych emocjonalnie stąd:
                 <ul>
                     <li><a href="https://github.com/bieli/stopwords/blob/master/polish.stopwords.txt"
                             target="_blank">Stop-słowa</a>
@@ -78,12 +79,13 @@
         </div>
         <div class="container">
             <div id="evaluationContainer">
+                <div id="instruction">Używając własnych słów lub przykładów z dołu strony, zastanów się, co teraz czujesz. Np. "Jestem zadowolona, bo uratowałam jeża!". Wpisz swoje słowa, a rozpoznane emocje pojawią się na kolorowej wizualizacji - niech jej obraz pomoże Ci w usłyszeniu siebie.</div>
                 <div id="titleContainer" class="row">
                     <h1 id="title" class="five columns">Co teraz czuję?</h1>
                     <div id="dotsContainer" class="seven columns u-full-width"></div>
                 </div>
                 <div>
-                    <label for="feelingsInput">Używając własnych słów lub korzystając z podpowiedzi na dole strony, opisz tu swoje samopoczucie. Np. "Jestem zadowolona, bo uratowałam jeża!".</label>
+                    <label for="feelingsInput">Opisz tutaj swoje samopoczucie:</label>
                     <textarea id="feelingsInput" type="text" disabled="true"
                         class="u-full-width"></textarea>
                 </div>
