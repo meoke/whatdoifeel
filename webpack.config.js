@@ -30,14 +30,7 @@ module.exports = (env, options) => {
                 filename: 'index.html',
                 template: './src/index.html',
                 favicon: "./src/images/feather-alt-solid.svg"
-            }),
-            new CopyWebpackPlugin({
-                patterns: [
-                    {
-                        from: "src/images",
-                        to: "images"
-                    }]
-            }),        ],
+            })],
         module: {
             rules: [
                 {
