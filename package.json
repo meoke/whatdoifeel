@@ -31,7 +31,7 @@
     "browserify": "^17.0.0",
     "copy-webpack-plugin": "^6.4.1",
     "css-loader": "^3.6.0",
-    "eslint": "^7.18.0",
+    "eslint": "^9.39.1",
     "eslint-config-google": "^0.14.0",
     "esm": "^3.2.25",
     "html-webpack-plugin": "^4.5.1",
